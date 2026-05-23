@@ -1,4 +1,4 @@
-# qaduni-theme
+# qu.theme
 
 A general-purpose, bilingual (RTL/LTR-ready) Hugo theme for universities,
 academic departments, faculties, research centers and similar public-sector
@@ -49,7 +49,7 @@ git submodule add https://github.com/qaduni/qu.theme themes/qu.theme
 Then in your `hugo.toml`:
 
 ```toml
-theme = "qaduni-theme"
+theme = "qu.theme"
 ```
 
 ### As a Hugo Module
@@ -77,7 +77,7 @@ set of params unlocks every brand and identity surface — see
 baseURL = "https://your-site.example/"
 defaultContentLanguage = "en"
 title = "Your Organisation"
-theme = "qaduni-theme"
+theme = "qu.theme"
 
 [languages]
   [languages.en]
