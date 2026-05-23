@@ -1,9 +1,8 @@
 # qaduni-theme
 
 A general-purpose, bilingual (RTL/LTR-ready) Hugo theme for universities,
-academic departments, faculties, research centres and similar public-sector
-organisations. Originally built for Al-Qadisiyah University's Quality
-Assurance Department, then refactored to drop site-specific coupling.
+academic departments, faculties, research centers and similar public-sector
+organisations. Originally built for Al-Qadisiyah University.
 
 ![Screenshot](images/screenshot.svg)
 
@@ -44,7 +43,7 @@ formatting and `merge` / `dict` template features).
 
 ```sh
 cd your-site
-git submodule add https://github.com/qu-edu-iq/qaduni-theme themes/qaduni-theme
+git submodule add https://github.com/qaduni/qu.theme themes/qu.theme
 ```
 
 Then in your `hugo.toml`:
@@ -65,7 +64,7 @@ Then in `hugo.toml`:
 ```toml
 [module]
   [[module.imports]]
-    path = "github.com/qu-edu-iq/qaduni-theme"
+    path = "github.com/qaduni/qu.theme"
 ```
 
 ## Minimal site config
