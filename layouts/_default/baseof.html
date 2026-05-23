@@ -1,0 +1,193 @@
+{{ $assets := partialCached "site-assets.html" . }}
+<!DOCTYPE html>
+<html lang="{{ .Language.Lang }}" dir="{{ .Language.Direction | default "ltr" }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+    <title>{{ block "title" . }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/webp" href="{{ $assets.logoWebP }}">
+
+    <!-- PWA -->
+    <link rel="manifest" href="{{ "manifest.webmanifest" | relLangURL }}">
+    <meta name="theme-color" content="{{ .Site.Params.theme.primaryColor | default "#0f4c81" }}">
+    <link rel="apple-touch-icon" href="{{ $assets.logoPNG }}">
+
+    {{/* Preload language-specific fonts. The map is configurable via
+         `Site.Params.theme.preloadFonts.<lang>` (list of woff2 filenames
+         under static/fonts/). Defaults cover Cairo (ar) + Inter (en) — the
+         two font families the theme ships in static/fonts/. */}}
+    {{ $defaultFonts := dict
+        "ar" (slice "cairo-regular.woff2" "cairo-bold.woff2")
+        "en" (slice "inter-regular.woff2" "inter-bold.woff2")
+    }}
+    {{ $configured := .Site.Params.theme.preloadFonts }}
+    {{ $fonts := cond (eq $configured nil) $defaultFonts $configured }}
+    {{ with index $fonts .Language.Lang }}
+        {{ range . }}
+    <link rel="preload" href="/fonts/{{ . }}" as="font" type="font/woff2" crossorigin>
+        {{ end }}
+    {{ end }}
+
+    {{ if .IsHome }}
+    <link rel="preload" href="{{ $assets.hero }}" as="image" fetchpriority="high">
+    {{ end }}
+
+    {{/* Define CSS loading order to ensure correct cascade */}}
+    {{ $cssFiles := slice 
+        "css/_variables.css"
+        "css/_fonts.css"
+        "css/_base.css"
+        "css/_header.css"
+        "css/components/_hero.css"
+        "css/components/_buttons.css"
+        "css/components/_sections.css"
+        "css/components/_cards.css"
+        "css/components/_quick-links.css"
+        "css/components/_news.css"
+        "css/components/_announcements.css"
+        "css/components/_visitor-counter.css"
+        "css/components/_page-header.css"
+        "css/components/_lists.css"
+        "css/components/_pagination.css"
+        "css/components/_content.css"
+        "css/components/_forms.css"
+        "css/components/_contact.css"
+        "css/_footer.css"
+        "css/_responsive.css"
+    }}
+
+    {{ $cssResources := slice }}
+    {{ range $cssFiles }}
+        {{ with resources.Get . }}
+            {{ $cssResources = $cssResources | append . }}
+        {{ end }}
+    {{ end }}
+
+    {{/* Create one global bundle */}}
+    {{ $style := $cssResources | resources.Concat "css/bundle.css" | minify | fingerprint }}
+
+    {{/* Site-configured brand colour overrides — emitted BEFORE the bundle so
+         the bundle's `:root { --color-primary: #0f4c81; }` defaults apply when
+         the site provides no override, and the override here wins when it does. */}}
+    {{ partial "theme-vars.html" . }}
+
+    <!-- Load full CSS synchronously to prevent FOUC -->
+    <link rel="stylesheet" href="{{ $style.RelPermalink }}">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="{{ .Title }}">
+    <meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ .Permalink }}">
+    <meta property="og:site_name" content="{{ .Site.Title }}">
+    <meta property="og:locale" content="{{ .Language.Lang }}">
+    {{ with .Params.image }}<meta property="og:image" content="{{ . | absURL }}">{{ end }}
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ .Title }}">
+    <meta name="twitter:description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+    {{ with .Params.image }}<meta name="twitter:image" content="{{ . | absURL }}">{{ end }}
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ .Permalink }}">
+    
+    <!-- Hreflang for multilingual SEO -->
+    {{ if .IsTranslated }}
+    <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}">
+    {{ range .Translations }}
+    <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}">
+    {{ end }}
+    {{ end }}
+    <link rel="alternate" hreflang="x-default" href="{{ .Site.BaseURL }}">
+    
+    {{/* JSON-LD Structured Data — every field is param-driven so adopting
+         sites describe THEIR own organisation. Defaults to "Organization";
+         set Site.Params.schema.type to "EducationalOrganization",
+         "GovernmentOrganization", "NGO", etc. as appropriate. */}}
+    {{- $schemaType := .Site.Params.schema.type | default "Organization" -}}
+    {{- $orgLd := dict
+        "@context" "https://schema.org"
+        "@type"    $schemaType
+        "name"     .Site.Title
+        "url"      .Site.BaseURL
+        "logo"     $assets.logoPNGAbs
+        "description" .Site.Params.description
+    -}}
+    {{- with .Site.Params.schema.alternateName }}{{ $orgLd = merge $orgLd (dict "alternateName" .) }}{{ end -}}
+    {{- with .Site.Params.schema.address }}
+        {{- $addr := dict "@type" "PostalAddress" -}}
+        {{- with .locality }}{{ $addr = merge $addr (dict "addressLocality" .) }}{{ end -}}
+        {{- with .region   }}{{ $addr = merge $addr (dict "addressRegion"   .) }}{{ end -}}
+        {{- with .country  }}{{ $addr = merge $addr (dict "addressCountry"  .) }}{{ end -}}
+        {{- with .street   }}{{ $addr = merge $addr (dict "streetAddress"   .) }}{{ end -}}
+        {{- with .postal   }}{{ $addr = merge $addr (dict "postalCode"      .) }}{{ end -}}
+        {{- if gt (len $addr) 1 -}}
+            {{- $orgLd = merge $orgLd (dict "address" $addr) -}}
+        {{- end -}}
+    {{- end -}}
+    {{- $cp := dict "@type" "ContactPoint" "contactType" "customer service" -}}
+    {{- with .Site.Params.contact.phone }}{{ $cp = merge $cp (dict "telephone" .) }}{{ end -}}
+    {{- with .Site.Params.contact.email }}{{ $cp = merge $cp (dict "email"     .) }}{{ end -}}
+    {{- if gt (len $cp) 2 }}{{ $orgLd = merge $orgLd (dict "contactPoint" $cp) }}{{ end -}}
+    {{- $sameAs := slice -}}
+    {{- with .Site.Params.social -}}
+        {{- range $k, $v := . -}}{{ with $v }}{{ $sameAs = $sameAs | append . }}{{ end }}{{- end -}}
+    {{- end -}}
+    {{- if $sameAs }}{{ $orgLd = merge $orgLd (dict "sameAs" $sameAs) }}{{ end }}
+    <script type="application/ld+json">{{ $orgLd | jsonify (dict "indent" "  ") | safeJS }}</script>
+    {{ if .IsPage }}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "{{ .Title }}",
+        "description": "{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}",
+        "url": "{{ .Permalink }}",
+        "inLanguage": "{{ .Language.Lang }}",
+        "isPartOf": {
+            "@type": "WebSite",
+            "name": "{{ .Site.Title }}",
+            "url": "{{ .Site.BaseURL }}"
+        }
+    }
+    </script>
+    {{ end }}
+    
+    {{ block "head" . }}{{ end }}
+</head>
+<body data-lang="{{ .Language.Lang }}"{{ if .Site.Params.pwa.enabled }} data-pwa-enabled="true"{{ end }}>
+    {{ partial "icons.html" . }}
+    {{ partial "header.html" . }}
+    
+    <main id="main-content">
+        {{ block "main" . }}{{ end }}
+    </main>
+    
+    {{ partial "footer.html" . }}
+    
+    {{ $jsMain := resources.Get "js/main.js" | minify | fingerprint }}
+    <script src="{{ $jsMain.RelPermalink }}" defer></script>
+
+    {{/* Language metadata for language-redirect.js. Generated server-side so
+         the JS works for any N-language site without hardcoding lang codes
+         or URL prefixes. Format: [{ lang: "ar", url: "/", default: true }, ...]
+         hugo.Sites is ordered by language weight — first entry is the
+         default content language, so its home is "/" and we flag it. */}}
+    {{ $langs := slice }}
+    {{ $first := true }}
+    {{ range hugo.Sites }}
+        {{ $langs = $langs | append (dict "lang" .Language.Lang "url" .Home.RelPermalink "default" $first) }}
+        {{ $first = false }}
+    {{ end }}
+    <script id="theme-languages" type="application/json">{{ $langs | jsonify | safeJS }}</script>
+
+    {{ $jsLang := resources.Get "js/language-redirect.js" | minify | fingerprint }}
+    <script src="{{ $jsLang.RelPermalink }}"></script>
+
+    {{ block "scripts" . }}{{ end }}
+</body>
+</html>

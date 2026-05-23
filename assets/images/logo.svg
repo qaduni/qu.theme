@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="qaduni-theme placeholder logo">
+  <rect width="200" height="200" rx="32" fill="#0f4c81"/>
+  <path d="M40 70h120v8H40zm0 28h120v8H40zm0 28h120v8H40z" fill="#ffd700" opacity="0.55"/>
+  <text x="100" y="115" text-anchor="middle" font-family="system-ui, sans-serif" font-size="64" font-weight="700" fill="#fff" dominant-baseline="middle">Q</text>
+  <text x="100" y="170" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="500" fill="#fff" opacity="0.85">qaduni-theme</text>
+</svg>

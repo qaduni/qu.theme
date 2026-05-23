@@ -1,0 +1,26 @@
+{{/* Homepage quick-links section — driven by the `quick_links` menu.
+     Each entry's name = label, .Params.icon = SVG sprite id.
+     If no menu is defined the section is suppressed entirely. */}}
+{{ with index .Site.Menus "quick_links" }}
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2>{{ i18n "quick_links" }}</h2>
+            <p>{{ i18n "quick_links_subtitle" }}</p>
+        </div>
+
+        <div class="quick-links">
+            {{ range . }}
+            <a href="{{ .URL }}"{{ if .Params.external }} target="_blank" rel="noopener"{{ end }} class="quick-link">
+                {{ with .Params.icon }}
+                <div class="quick-link-icon">
+                    <svg width="24" height="24"><use href="#icon-{{ . }}"></use></svg>
+                </div>
+                {{ end }}
+                <span class="quick-link-text">{{ .Name }}</span>
+            </a>
+            {{ end }}
+        </div>
+    </div>
+</section>
+{{ end }}

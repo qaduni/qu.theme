@@ -1,0 +1,24 @@
+{{- /* Generic redirect page used by translations that contain no real
+       body (e.g. an empty _index.md for a stub language). Resolves the
+       target URL in this priority order:
+         1. The first child page of the current section, if any.
+         2. The current language's home page.
+       This stays language-agnostic — works for any number of languages
+       and any URL prefix scheme configured in hugo.toml. */ -}}
+{{- $redirectURL := .Site.Home.RelPermalink -}}
+{{- with index .Pages 0 -}}
+    {{- $redirectURL = .RelPermalink -}}
+{{- end -}}
+<!DOCTYPE html>
+<html lang="{{ .Language.Lang }}" dir="{{ .Language.Direction | default "ltr" }}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="refresh" content="0; url={{ $redirectURL }}">
+    {{- /* No <link rel="canonical"> on a 0-second meta-refresh page. */ -}}
+    <title>{{ .Title }}</title>
+</head>
+<body>
+    <p>{{ i18n "redirecting" }}</p>
+    <p><a href="{{ $redirectURL }}">{{ i18n "redirect_manual" }}</a></p>
+</body>
+</html>

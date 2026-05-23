@@ -1,0 +1,19 @@
+{{- /* Convert a #RRGGBB hex colour to a comma-separated "R, G, B" triplet
+       (so it can be used inside rgba(var(--color-primary-rgb), 0.5) etc.).
+
+       Accepts both "#0f4c81" and "0f4c81". Returns an empty string for
+       inputs that don't look like a 6-digit hex colour.
+
+       Usage:
+         {{ partial "internal/hex-to-rgb.html" "#0f4c81" }}
+         → "15, 76, 129"
+*/ -}}
+{{- $hex := strings.TrimPrefix "#" (. | string) -}}
+{{- $hex = lower $hex -}}
+{{- if eq (len $hex) 6 -}}
+    {{- $digits := dict "0" 0 "1" 1 "2" 2 "3" 3 "4" 4 "5" 5 "6" 6 "7" 7 "8" 8 "9" 9 "a" 10 "b" 11 "c" 12 "d" 13 "e" 14 "f" 15 -}}
+    {{- $r := add (mul (index $digits (substr $hex 0 1)) 16) (index $digits (substr $hex 1 1)) -}}
+    {{- $g := add (mul (index $digits (substr $hex 2 1)) 16) (index $digits (substr $hex 3 1)) -}}
+    {{- $b := add (mul (index $digits (substr $hex 4 1)) 16) (index $digits (substr $hex 5 1)) -}}
+    {{- printf "%d, %d, %d" $r $g $b -}}
+{{- end -}}

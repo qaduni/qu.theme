@@ -1,0 +1,61 @@
+{{- /*
+  site-assets.html — Resolve theme image assets (logo, hero) through Hugo Pipes
+  and return a dict of permalinks. Lookup order:
+
+    1. <site>/assets/images/{logo.png, logo.webp, hero.webp}     (preferred)
+    2. <theme>/assets/images/{logo.svg, hero.svg}                (shipped fallbacks)
+
+  Hugo's site-overrides-theme `resources.Get` lookup means consumers can drop
+  their own raster assets at the same relative path and they win automatically.
+  When no PNG/WebP is provided, the bundled SVG placeholders are returned so
+  the theme builds out-of-the-box without any binary files in the site repo.
+
+  Use via partialCached so each resource is published once per build:
+
+      {{ $assets := partialCached "site-assets.html" . }}
+      <img src="{{ $assets.logoPNG }}">
+*/ -}}
+
+{{- /* Logo — prefer raster (png/webp), fall back to the theme's SVG. */ -}}
+{{- $logoPNG  := resources.Get "images/logo.png"  -}}
+{{- $logoWebP := resources.Get "images/logo.webp" -}}
+{{- $logoSVG  := resources.Get "images/logo.svg"  -}}
+
+{{- $logoPNGURL  := "" -}}
+{{- $logoPNGAbs  := "" -}}
+{{- $logoWebPURL := "" -}}
+{{- $logoWebPAbs := "" -}}
+
+{{- with $logoPNG }}
+    {{- $logoPNGURL = .RelPermalink -}}
+    {{- $logoPNGAbs = .Permalink -}}
+{{- else }}
+    {{- with $logoSVG }}
+        {{- $logoPNGURL = .RelPermalink -}}
+        {{- $logoPNGAbs = .Permalink -}}
+    {{- end }}
+{{- end -}}
+
+{{- with $logoWebP }}
+    {{- $logoWebPURL = .RelPermalink -}}
+    {{- $logoWebPAbs = .Permalink -}}
+{{- else }}
+    {{- with $logoSVG }}
+        {{- $logoWebPURL = .RelPermalink -}}
+        {{- $logoWebPAbs = .Permalink -}}
+    {{- end }}
+{{- end -}}
+
+{{- /* Hero — prefer raster, fall back to the theme's SVG. */ -}}
+{{- $heroWebP := resources.Get "images/hero.webp" -}}
+{{- $heroSVG  := resources.Get "images/hero.svg"  -}}
+{{- $heroURL := "" -}}
+{{- with $heroWebP }}{{ $heroURL = .RelPermalink }}{{ else }}{{ with $heroSVG }}{{ $heroURL = .RelPermalink }}{{ end }}{{ end -}}
+
+{{- return dict
+    "logoPNG"     $logoPNGURL
+    "logoPNGAbs"  $logoPNGAbs
+    "logoWebP"    $logoWebPURL
+    "logoWebPAbs" $logoWebPAbs
+    "hero"        $heroURL
+-}}

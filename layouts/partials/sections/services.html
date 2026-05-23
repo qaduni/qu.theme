@@ -1,0 +1,32 @@
+{{/* Homepage services section — driven by the `homepage_services` menu.
+     Each menu entry's name = card title, .Params.description = card body,
+     .Params.icon = SVG sprite id ("document", "award", "globe", ...).
+     If no menu is defined the section is suppressed entirely. */}}
+{{ with index .Site.Menus "homepage_services" }}
+<section class="section section-alt">
+    <div class="container">
+        <div class="section-header">
+            <h2>{{ i18n "services_title" }}</h2>
+            <p>{{ i18n "services_subtitle" }}</p>
+        </div>
+
+        <div class="cards-grid">
+            {{ range . }}
+            <div class="card">
+                {{ with .Params.icon }}
+                <div class="card-icon">
+                    <svg width="28" height="28"><use href="#icon-{{ . }}"></use></svg>
+                </div>
+                {{ end }}
+                <h3>{{ .Name }}</h3>
+                {{ with .Params.description }}<p>{{ . }}</p>{{ end }}
+                <a href="{{ .URL }}"{{ if .Params.external }} target="_blank" rel="noopener"{{ end }} class="card-link">
+                    {{ i18n "view_details" }}
+                    <svg width="16" height="16"><use href="#icon-arrow-right"></use></svg>
+                </a>
+            </div>
+            {{ end }}
+        </div>
+    </div>
+</section>
+{{ end }}
