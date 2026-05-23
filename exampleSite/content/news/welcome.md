@@ -1,5 +1,5 @@
 ---
-title: "Welcome to qaduni-theme"
+title: "Welcome to qu.theme"
 description: "A brief introduction to what this theme can do"
 date: 2026-05-23
 type: "news"

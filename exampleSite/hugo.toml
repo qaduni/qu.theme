@@ -1,14 +1,14 @@
 # =============================================================================
-# exampleSite — a minimal, working demo for qaduni-theme
+# exampleSite — a minimal, working demo for qu.theme
 #
-# Build with:   cd themes/qaduni-theme/exampleSite && hugo server --themesDir ../..
+# Build with:   cd exampleSite && hugo server --themesDir ../..
 #               (or copy into your own repo and customise from there)
 # =============================================================================
 
 baseURL = "https://example.org/"
 defaultContentLanguage = "en"
-title = "qaduni-theme demo"
-theme = "qaduni-theme"
+title = "qu.theme demo"
+theme = "qu.theme"
 
 [pagination]
   pagerSize = 10
@@ -22,10 +22,10 @@ theme = "qaduni-theme"
     label = "English"
     weight = 1
     direction = "ltr"
-    title = "qaduni-theme demo"
+    title = "qu.theme demo"
     locale = "en"
     [languages.en.params]
-      description = "A demo of the qaduni-theme — a general-purpose Hugo theme for academic organisations."
+      description = "A demo of the qu.theme — a general-purpose Hugo theme for academic organisations."
       shortTitle  = "qaduni demo"
       parentName  = "Example University"
       parentURL   = "https://example.org"
@@ -36,10 +36,10 @@ theme = "qaduni-theme"
     label = "العربية"
     weight = 2
     direction = "rtl"
-    title = "عرض qaduni-theme"
+    title = "عرض qu.theme"
     locale = "ar"
     [languages.ar.params]
-      description = "عرض توضيحي لقالب qaduni-theme — قالب هيوغو عام للمؤسسات الأكاديمية."
+      description = "عرض توضيحي لقالب qu.theme — قالب هيوغو عام للمؤسسات الأكاديمية."
       shortTitle  = "عرض القالب"
       parentName  = "جامعة المثال"
       parentURL   = "https://example.org"

@@ -1,4 +1,4 @@
-name = "qaduni-theme"
+name = "qu.theme"
 license = "MIT"
 licenselink = "https://github.com/qaduni/qu.theme/blob/main/LICENSE"
 description = "A general-purpose, bilingual (RTL/LTR) Hugo theme for universities, departments, faculties, research centres and similar academic or public-sector organisations. Ships with menu-driven navigation, configurable branding, PWA support and SEO scaffolding."

@@ -1,5 +1,5 @@
 # =============================================================================
-# qaduni-theme — English translations (theme defaults)
+# qu.theme — English translations (theme defaults)
 #
 # Sites adopting this theme can override any key by adding a matching
 # key under <site>/i18n/en.yaml. Hugo merges the site bundle over the

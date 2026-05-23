@@ -1,6 +1,6 @@
 ---
 title: "Theme available now"
-description: "The qaduni-theme is now publicly available"
+description: "The qu.theme is now publicly available"
 date: 2026-05-23
 type: "general"
 important: true
