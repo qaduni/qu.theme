@@ -29,14 +29,22 @@
     z-index: -2;
 }
 
+[dir="ltr"] .hero-gallery {
+    transform: scaleX(-1);
+}
+
 .hero-slide {
     position: absolute;
     inset: 0;
     background-size: cover;
-    background-position: center;
+    background-position: left center;
     opacity: 0;
     will-change: opacity, transform;
     transform: scale(1.04);
+}
+
+[dir="ltr"] .hero-slide {
+    background-position: right center;
 }
 
 /* Single image — no animation, just stay visible. */
@@ -46,9 +54,6 @@
     transform: none;
 }
 
-/* Multi-image gallery — cross-fade with subtle Ken Burns zoom.
-   Cycle = 28s total; each slide is visible ~5s, with ~2s fade overlap.
-   Slide N starts (N-1)/count of the way through the cycle. */
 .hero--gallery .hero-slide {
     animation: heroSlideFade 28s infinite;
 }
@@ -75,20 +80,28 @@
     100% { opacity: 0; transform: scale(1.04); }
 }
 
-/* Brand gradient — top-half coverage that fades to transparent at ~55%, so
-   the bottom half reveals the gallery cleanly. */
 .hero-overlay {
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(
-        to bottom,
-        color-mix(in srgb, var(--color-primary) 92%, transparent) 0%,
-        color-mix(in srgb, var(--color-primary-dark) 78%, transparent) 35%,
-        color-mix(in srgb, var(--color-primary-dark) 30%, transparent) 50%,
-        transparent 60%
-    );
     pointer-events: none;
+    background: linear-gradient(
+        to top left,
+        color-mix(in srgb, var(--color-primary) 92%, transparent) 0%,
+        color-mix(in srgb, var(--color-primary-dark) 78%, transparent) 50%,
+        color-mix(in srgb, var(--color-primary-dark) 30%, transparent) 75%,
+        transparent 90%
+    );
+}
+
+[dir="ltr"] .hero-overlay {
+    background: linear-gradient(
+        to top right,
+        color-mix(in srgb, var(--color-primary) 92%, transparent) 0%,
+        color-mix(in srgb, var(--color-primary-dark) 78%, transparent) 50%,
+        color-mix(in srgb, var(--color-primary-dark) 30%, transparent) 75%,
+        transparent 90%
+    );
 }
 
 .hero .container {
