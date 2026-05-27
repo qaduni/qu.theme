@@ -1,7 +1,23 @@
 {{ $assets := partialCached "site-assets.html" . }}
-<section class="hero" style="--hero-bg-image: url('{{ $assets.hero }}');">
+{{ $slides := $assets.heroImages }}
+{{ $slideCount := len $slides }}
+<section class="hero{{ if gt $slideCount 1 }} hero--gallery{{ end }}" data-slide-count="{{ $slideCount }}">
+    {{/* Background gallery — one .hero-slide per image. When only one image is
+         available the slide stays static; with 2-4 it auto-cycles via CSS. */}}
+    {{ if gt $slideCount 0 }}
+    <div class="hero-gallery" aria-hidden="true">
+        {{ range $i, $url := $slides }}
+        <div class="hero-slide hero-slide--{{ add $i 1 }}" style="background-image: url('{{ $url }}');"></div>
+        {{ end }}
+    </div>
+    {{ end }}
+    {{/* Brand-tinted gradient overlay — only covers the top half of the hero
+         (the text-bearing portion), then fades out so the gallery shows
+         through the bottom half. */}}
+    <div class="hero-overlay" aria-hidden="true"></div>
+
     <div class="container">
-        <div class="hero-content">
+        <div class="hero-content reveal">
             <div class="hero-badge">
                 <svg width="16" height="16"><use href="#icon-award"></use></svg>
                 {{ i18n "internationally_accredited" }}
@@ -31,7 +47,7 @@
                  exists. Sites that don't need stats (departments, research
                  centres, small units) simply omit the data file and the
                  whole block disappears, no extra config required. */}}
-            {{ with site.Data.heroStats }}
+            {{ with hugo.Data.heroStats }}
             <div class="hero-stats">
                 {{ range . }}
                 <div class="stat-item">

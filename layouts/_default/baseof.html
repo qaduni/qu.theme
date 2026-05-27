@@ -1,6 +1,6 @@
 {{ $assets := partialCached "site-assets.html" . }}
 <!DOCTYPE html>
-<html lang="{{ .Language.Lang }}" dir="{{ .Language.Direction | default "ltr" }}">
+<html lang="{{ .Language.Lang }}" dir="{{ .Language.Direction | default "ltr" }}" class="no-js">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,6 +54,7 @@
         "css/components/_pagination.css"
         "css/components/_content.css"
         "css/components/_forms.css"
+        "css/components/_motion.css"
         "css/_footer.css"
         "css/_responsive.css"
     }}

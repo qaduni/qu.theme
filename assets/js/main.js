@@ -1,3 +1,40 @@
+// Flip html.no-js → html.js as early as possible so the .reveal CSS rule
+// only hides content when JS is actually able to un-hide it.
+document.documentElement.classList.remove('no-js');
+document.documentElement.classList.add('js');
+
+// Reveal-on-scroll — adds .is-visible to .reveal elements as they enter the
+// viewport. Single-shot per element. No-ops gracefully when IO isn't
+// available (old browsers just see content immediately).
+(function () {
+    function revealAll() {
+        document.querySelectorAll('.reveal').forEach(function (el) {
+            el.classList.add('is-visible');
+        });
+    }
+
+    if (typeof IntersectionObserver === 'undefined') {
+        document.addEventListener('DOMContentLoaded', revealAll);
+        return;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var targets = document.querySelectorAll('.reveal');
+        if (!targets.length) return;
+
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+        targets.forEach(function (el) { io.observe(el); });
+    });
+})();
+
 // Mobile Navigation Toggle
 document.addEventListener('DOMContentLoaded', function() {
     const navToggle = document.querySelector('.nav-toggle');
