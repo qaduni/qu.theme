@@ -1,7 +1,7 @@
 {{ $annSection := .Site.Params.contentSections.announcements | default "/media/announcements" }}
 <section class="section section-alt">
     <div class="container">
-        <div class="section-header">
+        <div class="section-header reveal">
             <h2>{{ i18n "announcements" }}</h2>
             <p>{{ i18n "announcements_subtitle" }}</p>
         </div>
@@ -9,8 +9,8 @@
         <div class="announcements-grid">
             {{ $announcementsSection := .Site.GetPage $annSection }}
             {{ with $announcementsSection }}
-            {{ range first 4 .Pages.ByDate.Reverse }}
-            <article class="announcement-card {{ if .Params.important }}priority-high{{ end }}">
+            {{ range $i, $e := first 4 .Pages.ByDate.Reverse }}
+            <article class="announcement-card reveal {{ if .Params.important }}priority-high{{ end }}" style="--reveal-delay: {{ mul $i 70 }}ms;">
                 <div class="announcement-card-content">
                     {{ if .Params.important }}
                     <span class="priority-badge">{{ i18n "important" }}</span>
@@ -35,7 +35,7 @@
             </article>
             {{ end }}
             {{ else }}
-            <article class="announcement-card">
+            <article class="announcement-card reveal">
                 <div class="announcement-card-content">
                     <h3>{{ i18n "no_announcements" }}</h3>
                     <p>{{ i18n "stay_tuned_announcements" }}</p>

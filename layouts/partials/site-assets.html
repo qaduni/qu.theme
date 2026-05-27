@@ -46,11 +46,27 @@
     {{- end }}
 {{- end -}}
 
-{{- /* Hero — prefer raster, fall back to the theme's SVG. */ -}}
-{{- $heroWebP := resources.Get "images/hero.webp" -}}
+{{- /* Hero — prefer raster, fall back to the theme's SVG.
+       Returns both the primary hero image (`hero`) and a list of up to four
+       gallery slides (`heroImages`). Sites can drop `hero.webp`, `hero-2.webp`,
+       `hero-3.webp`, `hero-4.webp` under `assets/images/` to enable the
+       background gallery. If only `hero.webp` exists, the gallery degrades to
+       a single static image — no JS or CSS code changes required. */ -}}
 {{- $heroSVG  := resources.Get "images/hero.svg"  -}}
+{{- $heroCandidates := slice "images/hero.webp" "images/hero-2.webp" "images/hero-3.webp" "images/hero-4.webp" -}}
+{{- $heroImages := slice -}}
+{{- range $heroCandidates -}}
+    {{- with resources.Get . -}}
+        {{- $heroImages = $heroImages | append .RelPermalink -}}
+    {{- end -}}
+{{- end -}}
+{{- if eq (len $heroImages) 0 -}}
+    {{- with $heroSVG -}}
+        {{- $heroImages = $heroImages | append .RelPermalink -}}
+    {{- end -}}
+{{- end -}}
 {{- $heroURL := "" -}}
-{{- with $heroWebP }}{{ $heroURL = .RelPermalink }}{{ else }}{{ with $heroSVG }}{{ $heroURL = .RelPermalink }}{{ end }}{{ end -}}
+{{- if gt (len $heroImages) 0 -}}{{- $heroURL = index $heroImages 0 -}}{{- end -}}
 
 {{- return dict
     "logoPNG"     $logoPNGURL
@@ -58,4 +74,5 @@
     "logoWebP"    $logoWebPURL
     "logoWebPAbs" $logoWebPAbs
     "hero"        $heroURL
+    "heroImages"  $heroImages
 -}}

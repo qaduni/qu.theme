@@ -10,10 +10,41 @@
     border-radius: var(--radius-xl);
     padding: var(--spacing-xl);
     box-shadow: var(--shadow-md);
-    transition: all var(--transition-base);
+    transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
     border: 1px solid var(--color-border-light);
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Image-led variant: image hugs the top edge, body holds the text. */
+.card--with-image {
+    padding: 0;
+}
+
+.card--with-image .card-body {
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.card-image {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--color-background-alt);
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.card--with-image:hover .card-image img {
+    transform: scale(1.06);
 }
 
 .card::before {
@@ -26,6 +57,7 @@
     background: var(--color-primary-gradient);
     opacity: 0;
     transition: opacity var(--transition-base);
+    z-index: 2;
 }
 
 .card:hover {
@@ -48,6 +80,11 @@
     margin-bottom: var(--spacing-lg);
     color: var(--color-primary);
     font-size: 1.75rem;
+    transition: transform var(--transition-base);
+}
+
+.card:hover .card-icon {
+    transform: translateY(-2px) scale(1.05);
 }
 
 .card h3 {
@@ -69,6 +106,7 @@
     font-weight: 600;
     font-size: 0.9375rem;
     transition: gap var(--transition-base);
+    margin-top: auto;
 }
 
 .card-link:hover {
