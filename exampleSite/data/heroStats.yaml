@@ -1,0 +1,26 @@
+# Hero stats — optional metrics row rendered inside the hero section.
+# Delete this file (or empty the list) to hide the row entirely. The hero
+# partial self-suppresses when no data is present.
+#
+# Each list entry produces one stat tile in the row. The grid auto-fits,
+# so 1, 2, 3, 4, or more entries all lay out cleanly.
+#
+# Fields:
+#   value     — the number to display. Free-text string so you can format
+#               it however you want: "15,000+", "15K", "120", "98%".
+#   i18nKey   — translation key looked up in i18n/<lang>.yaml. Takes
+#               precedence over `label` when both are set. Use this for
+#               multilingual sites — theme defaults include
+#               stat_students, stat_faculty, stat_programs, stat_years,
+#               stat_alumni, stat_research (see i18n/en.yaml, ar.yaml).
+#   label     — static label, used when no i18nKey is set. Convenient
+#               for single-language sites or one-off labels.
+#
+- value: "15,000+"
+  i18nKey: "stat_students"
+- value: "250"
+  i18nKey: "stat_faculty"
+- value: "30"
+  i18nKey: "stat_programs"
+- value: "50"
+  i18nKey: "stat_years"

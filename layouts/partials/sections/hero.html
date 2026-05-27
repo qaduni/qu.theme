@@ -26,6 +26,23 @@
                 {{ end }}
             </div>
             {{ end }}
+
+            {{/* Optional metrics row — renders only when data/heroStats.yaml
+                 exists. Sites that don't need stats (departments, research
+                 centres, small units) simply omit the data file and the
+                 whole block disappears, no extra config required. */}}
+            {{ with site.Data.heroStats }}
+            <div class="hero-stats">
+                {{ range . }}
+                <div class="stat-item">
+                    <span class="stat-number">{{ .value }}</span>
+                    <span class="stat-label">
+                        {{- with .i18nKey }}{{ i18n . }}{{ else }}{{ .label }}{{ end -}}
+                    </span>
+                </div>
+                {{ end }}
+            </div>
+            {{ end }}
         </div>
     </div>
 </section>

@@ -137,7 +137,7 @@
 .nav-menu > li > a:hover,
 .nav-menu > li > a[aria-current="page"] {
     color: var(--color-primary);
-    background: rgba(var(--color-primary-rgb), 0.08);
+    background: color-mix(in srgb, var(--color-primary) 8%, transparent);
 }
 
 .nav-menu > li > a[aria-current="page"] {
@@ -161,10 +161,20 @@
 
 .nav-menu > li:hover > .nav-label {
     color: var(--color-primary);
-    background: rgba(var(--color-primary-rgb), 0.08);
+    background: color-mix(in srgb, var(--color-primary) 8%, transparent);
 }
 
-/* Nested dropdown labels */
+/* =============================================
+   3rd-level dropdown surface
+   =============================================
+   The theme's layouts/partials/header.html iterates `.Children` once, so
+   it produces 2-level menus only. The rules below (.nav-dropdown-parent,
+   .nav-sub-dropdown, the chevron, and their hover/RTL/mobile companions)
+   are the **extension surface** for adopting sites: override header.html
+   to iterate `.Children.Children` and wrap nested items in
+   `<li class="nav-dropdown-parent">` to light these styles up — no need
+   to fork the CSS. */
+
 .nav-dropdown-parent > .nav-label {
     display: flex;
     align-items: center;
@@ -185,7 +195,7 @@
 
 .nav-dropdown-parent:hover > .nav-label {
     color: var(--color-primary);
-    background: rgba(var(--color-primary-rgb), 0.08);
+    background: color-mix(in srgb, var(--color-primary) 8%, transparent);
 }
 
 /* Dropdown Menu */
@@ -227,7 +237,7 @@
 
 .nav-dropdown a:hover {
     color: var(--color-primary);
-    background: rgba(var(--color-primary-rgb), 0.08);
+    background: color-mix(in srgb, var(--color-primary) 8%, transparent);
 }
 
 /* 3-Level Nested Dropdown */
@@ -296,7 +306,7 @@
 
 .nav-sub-dropdown a:hover {
     color: var(--color-primary);
-    background: rgba(var(--color-primary-rgb), 0.08);
+    background: color-mix(in srgb, var(--color-primary) 8%, transparent);
 }
 
 /* Mobile Nav Toggle */
@@ -311,7 +321,7 @@
 }
 
 .nav-toggle:hover {
-    background: rgba(var(--color-primary-rgb), 0.08);
+    background: color-mix(in srgb, var(--color-primary) 8%, transparent);
 }
 
 .hamburger {

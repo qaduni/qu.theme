@@ -179,6 +179,16 @@ contact_form_unavailable: "The contact form is not currently enabled. Please ema
 graduate_form_unavailable: "The survey is not currently enabled. To participate, please email us at:"
 
 # -----------------------------------------------------------------------------
+# Hero stats (optional, opt-in via data/heroStats.yaml)
+# -----------------------------------------------------------------------------
+stat_students: "Students"
+stat_faculty:  "Faculty"
+stat_programs: "Programs"
+stat_years:    "Years"
+stat_alumni:   "Alumni"
+stat_research: "Research Projects"
+
+# -----------------------------------------------------------------------------
 # Shortcodes
 # -----------------------------------------------------------------------------
 map_title: "Location map"

@@ -1,12 +1,17 @@
 /* =============================================
    Responsive Design
-   ============================================= */
+   =============================================
+   Loaded LAST so media queries override the component defaults.
+   Component files own their own responsive rules where the behaviour
+   is local (e.g. _news.css collapses .news-card stacking) — this file
+   only handles cross-component layout shifts like the header collapse
+   and footer reflow that no single component can express. */
 
 @media (max-width: 1024px) {
     .footer-main {
         grid-template-columns: 1fr 1fr;
     }
-    
+
     .footer-about {
         grid-column: span 2;
     }
@@ -14,38 +19,42 @@
 
 @media (max-width: 768px) {
     :root {
+        /* Tighten the typographic and section-padding scales on phones so
+           there's room for the actual content. The cascade re-derives every
+           clamp() and var(--spacing-…) value automatically. */
         --font-size-base: 15px;
         --spacing-4xl: 4rem;
     }
-    
+
     .top-bar {
         display: none;
     }
-    
-    /* Header container - prevent overflow */
+
+    /* Header: prevent the logo + nav + lang switcher from overflowing
+       a narrow viewport. The container must clip while the header
+       itself stays visible to host the absolutely-positioned dropdown. */
     .site-header {
         overflow: visible;
     }
-    
+
     .site-header .container {
         flex-wrap: nowrap;
         gap: var(--spacing-sm);
         overflow: hidden;
     }
-    
-    /* Logo - hide text on very small screens */
+
     .logo-text {
         display: none;
     }
-    
-    /* Nav toggle - always visible */
+
     .nav-toggle {
         display: flex;
         order: 3;
         z-index: 1001;
     }
-    
-    /* Nav menu - full width dropdown */
+
+    /* Nav menu becomes a full-width dropdown anchored under the header.
+       Hidden by default; JS toggles `.active` when the hamburger fires. */
     .nav-menu {
         display: none;
         position: fixed;
@@ -61,17 +70,20 @@
         overflow-y: auto;
         z-index: 1000;
     }
-    
+
     .nav-menu.active {
         display: flex;
     }
-    
+
     .nav-menu > li > a {
         justify-content: flex-start;
         padding: var(--spacing-md);
         font-size: 1rem;
     }
-    
+
+    /* On mobile dropdowns inline beneath their parent (no floating panel).
+       JS toggles `.dropdown-open` on click instead of using :hover, since
+       touch devices have no hover state. */
     .nav-dropdown,
     .nav-sub-dropdown {
         position: static;
@@ -82,50 +94,41 @@
         padding-inline-start: var(--spacing-lg);
         display: none;
     }
-    
+
     .nav-menu li.dropdown-open > .nav-dropdown,
     .nav-menu li.dropdown-open > .nav-sub-dropdown {
         display: block;
     }
-    
+
     .main-nav {
         order: 3;
         flex: 0;
     }
-    
-    /* Language switcher - compact */
+
     .lang-switcher {
         order: 2;
         flex-shrink: 0;
         padding: 2px;
     }
-    
+
     .lang-switcher a,
     .lang-switcher .current-lang {
         padding: var(--spacing-xs) var(--spacing-sm);
         font-size: 0.75rem;
     }
-    
-    .hero-stats {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .contact-grid {
-        grid-template-columns: 1fr;
-    }
-    
+
     .form-row {
         grid-template-columns: 1fr;
     }
-    
+
     .footer-main {
         grid-template-columns: 1fr;
     }
-    
+
     .footer-about {
         grid-column: auto;
     }
-    
+
     .footer-bottom {
         flex-direction: column;
         text-align: center;
@@ -133,92 +136,21 @@
 }
 
 @media (max-width: 480px) {
-    .hero-stats {
-        grid-template-columns: 1fr;
-    }
-    
     .hero-buttons {
         flex-direction: column;
     }
-    
+
     .hero-buttons .btn {
         width: 100%;
     }
 }
 
 /* =============================================
-   Animations
-   ============================================= */
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-@keyframes pulse {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.7;
-    }
-}
-
-.animate-fade-in-up {
-    animation: fadeInUp 0.6s ease forwards;
-}
-
-.animate-float {
-    animation: float 3s ease-in-out infinite;
-}
-
-/* =============================================
    Utilities
-   ============================================= */
+   =============================================
+   Kept minimal on purpose: only the utility classes actually used by
+   templates and partials live here. Add new ones as templates demand them. */
 
 .text-center { text-align: center; }
-.text-right { text-align: right; }
-.text-left { text-align: left; }
-
-.mt-sm { margin-top: var(--spacing-sm); }
-.mt-md { margin-top: var(--spacing-md); }
-.mt-lg { margin-top: var(--spacing-lg); }
-.mt-xl { margin-top: var(--spacing-xl); }
-.mt-2xl { margin-top: var(--spacing-2xl); }
-
-.mb-sm { margin-bottom: var(--spacing-sm); }
-.mb-md { margin-bottom: var(--spacing-md); }
-.mb-lg { margin-bottom: var(--spacing-lg); }
-.mb-xl { margin-bottom: var(--spacing-xl); }
-.mb-2xl { margin-bottom: var(--spacing-2xl); }
-
-.py-lg { padding-block: var(--spacing-lg); }
-.py-xl { padding-block: var(--spacing-xl); }
-.py-2xl { padding-block: var(--spacing-2xl); }
-
-.visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-}
+.mt-xl       { margin-top: var(--spacing-xl); }
+.mb-2xl      { margin-bottom: var(--spacing-2xl); }
