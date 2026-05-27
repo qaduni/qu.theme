@@ -1,34 +1,187 @@
 {{ define "main" }}
-<section class="list-page">
-    <header class="page-header">
+{{/* data-pagefind-ignore="all" prevents the list page (and its /page/N/ paginated
+     variants) from showing up in Pagefind results — single articles are the only
+     records we want indexed. */}}
+<div data-pagefind-ignore="all">
+<section class="page-header">
+    <div class="container">
         <h1>{{ .Title }}</h1>
-        {{ with .Description }}
-        <p class="description">{{ . }}</p>
-        {{ end }}
-    </header>
-    
-    <div class="page-content">
-        {{ .Content }}
+        <nav aria-label="Breadcrumb">
+            <ol class="breadcrumb">
+                <li><a href="{{ .Site.Home.RelPermalink }}">{{ i18n "home" }}</a></li>
+                {{ if and .Parent (not .Parent.IsHome) }}
+                <li><a href="{{ .Parent.RelPermalink }}">{{ .Parent.Title }}</a></li>
+                {{ end }}
+                <li>{{ .Title }}</li>
+            </ol>
+        </nav>
     </div>
-    
-    {{ if .Pages }}
-    {{ $paginator := .Paginate .Pages }}
-    <ul class="pages-list">
-        {{ range $paginator.Pages }}
-        <li class="page-item">
-            <a href="{{ .RelPermalink }}">
-                <h2>{{ .Title }}</h2>
-                {{ with .Summary }}
-                <p>{{ . }}</p>
-                {{ end }}
-                {{ with .Date }}
-                <time datetime="{{ . }}">{{ . | time.Format ":date_long" }}</time>
-                {{ end }}
-            </a>
-        </li>
-        {{ end }}
-    </ul>
-    {{ template "_internal/pagination.html" . }}
-    {{ end }}
 </section>
+
+<section class="list-page" style="padding-bottom: 1rem;">
+    {{/* Pagefind Component UI. Filter keys are i18n-driven and match the
+         data-pagefind-filter values set in layouts/_default/single.html.
+         The UI's visible strings auto-translate from <html lang>. */}}
+    {{ if .Site.Params.search.pagefind }}
+    {{ $pfTypeKey := i18n "type_label" }}
+    {{ $pfCategoryKey := i18n "category_label" }}
+    {{ $pfPlaceholder := i18n "search_placeholder" }}
+    <div class="container">
+        <div id="search-container" class="search-box-full">
+            <pagefind-config></pagefind-config>
+            <pagefind-input placeholder="{{ $pfPlaceholder }}"></pagefind-input>
+            <pagefind-filter-dropdown filter="{{ $pfTypeKey }}" label="{{ $pfTypeKey }}"></pagefind-filter-dropdown>
+            <pagefind-filter-dropdown filter="{{ $pfCategoryKey }}" label="{{ $pfCategoryKey }}"></pagefind-filter-dropdown>
+            <pagefind-results></pagefind-results>
+        </div>
+    </div>
+    {{ end }}
+
+    <div class="container">
+        {{ with .Content }}
+        <div class="article-content mb-2xl">{{ . }}</div>
+        {{ end }}
+
+        {{ $paginator := .Paginate (.Pages.ByDate.Reverse) }}
+
+        <div class="list-items">
+            {{ range $paginator.Pages }}
+            <article class="list-item {{ if .Params.important }}priority-high{{ end }}"
+                     data-title="{{ .Title | lower }}"
+                     data-description="{{ .Description | lower }}">
+                {{ with .Date }}
+                <div class="list-item-date">
+                    <span class="day">{{ .Format "02" }}</span>
+                    <span class="month">{{ . | time.Format ":date_medium" }}</span>
+                </div>
+                {{ end }}
+                <div class="list-item-content">
+                    {{ with .Params.type }}
+                        {{ $key := printf "category_%s" (. | lower) }}
+                        {{ $localised := i18n $key }}
+                        {{ $displayType := cond (eq $localised "") . $localised }}
+                    <span class="category-badge">{{ $displayType }}</span>
+                    {{ end }}
+                    {{ if .Params.important }}
+                    <span class="priority-badge">{{ i18n "important" }}</span>
+                    {{ end }}
+                    <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+                    <p>{{ with .Description }}{{ . }}{{ else }}{{ .Summary | truncate 200 }}{{ end }}</p>
+                </div>
+            </article>
+            {{ end }}
+        </div>
+
+        {{/* Pagination UI */}}
+        {{ if gt $paginator.TotalPages 1 }}
+        <nav class="pagination" aria-label="{{ i18n "page_navigation" }}">
+            <ul class="pagination-list">
+                {{/* First Page Button */}}
+                {{ if ne $paginator.PageNumber 1 }}
+                <li>
+                    <a href="{{ $paginator.First.URL }}" class="pagination-link pagination-first">
+                        <svg width="16" height="16"><use href="#icon-chevrons-right"></use></svg>
+                    </a>
+                </li>
+                {{ else }}
+                <li>
+                    <span class="pagination-link pagination-first disabled">
+                        <svg width="16" height="16"><use href="#icon-chevrons-right"></use></svg>
+                    </span>
+                </li>
+                {{ end }}
+
+                {{/* Previous button */}}
+                {{ if $paginator.HasPrev }}
+                <li>
+                    <a href="{{ $paginator.Prev.URL }}" class="pagination-link pagination-prev">
+                        <svg width="16" height="16"><use href="#icon-arrow-right"></use></svg>
+                    </a>
+                </li>
+                {{ else }}
+                <li>
+                    <span class="pagination-link pagination-prev disabled">
+                        <svg width="16" height="16"><use href="#icon-arrow-right"></use></svg>
+                    </span>
+                </li>
+                {{ end }}
+
+                {{/* Page numbers — windowed pagination */}}
+                {{ $currentPage := $paginator.PageNumber }}
+                {{ $adjacent_links := 2 }}
+                {{ $max_links := (add (mul $adjacent_links 2) 1) }}
+                {{ $lower_limit := (add $adjacent_links 1) }}
+                {{ $upper_limit := (sub $paginator.TotalPages $adjacent_links) }}
+
+                {{ range $paginator.Pagers }}
+                    {{ $show := false }}
+                    {{ if le $paginator.TotalPages $max_links }}
+                        {{ $show = true }}
+                    {{ else if le $currentPage $lower_limit }}
+                        {{ $show = (le .PageNumber $max_links) }}
+                    {{ else if ge $currentPage $upper_limit }}
+                        {{ $show = (gt .PageNumber (sub $paginator.TotalPages $max_links)) }}
+                    {{ else }}
+                        {{ $show = (and (ge .PageNumber (sub $currentPage $adjacent_links)) (le .PageNumber (add $currentPage $adjacent_links))) }}
+                    {{ end }}
+
+                    {{ if $show }}
+                        {{ if eq .PageNumber $currentPage }}
+                        <li>
+                            <span class="pagination-link current" aria-current="page">{{ .PageNumber }}</span>
+                        </li>
+                        {{ else }}
+                        <li>
+                            <a href="{{ .URL }}" class="pagination-link">{{ .PageNumber }}</a>
+                        </li>
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
+
+                {{/* Next button */}}
+                {{ if $paginator.HasNext }}
+                <li>
+                    <a href="{{ $paginator.Next.URL }}" class="pagination-link pagination-next">
+                        <svg width="16" height="16"><use href="#icon-arrow-right"></use></svg>
+                    </a>
+                </li>
+                {{ else }}
+                <li>
+                    <span class="pagination-link pagination-next disabled">
+                        <svg width="16" height="16"><use href="#icon-arrow-right"></use></svg>
+                    </span>
+                </li>
+                {{ end }}
+
+                {{/* Last Page Button */}}
+                {{ if ne $paginator.PageNumber $paginator.TotalPages }}
+                <li>
+                    <a href="{{ $paginator.Last.URL }}" class="pagination-link pagination-last">
+                        <svg width="16" height="16"><use href="#icon-chevrons-right"></use></svg>
+                    </a>
+                </li>
+                {{ else }}
+                <li>
+                    <span class="pagination-link pagination-last disabled">
+                        <svg width="16" height="16"><use href="#icon-chevrons-right"></use></svg>
+                    </span>
+                </li>
+                {{ end }}
+            </ul>
+
+            <div class="pagination-info">
+                {{ i18n "page_of_total" (dict "Page" $paginator.PageNumber "Total" $paginator.TotalPages) }}
+            </div>
+        </nav>
+        {{ end }}
+    </div>
+</section>
+</div>{{/* /data-pagefind-ignore wrapper */}}
+
+{{/* Pagefind Component UI runtime — only included when the site has run
+     `pagefind` post-build AND set Site.Params.search.pagefind = true. */}}
+{{ if .Site.Params.search.pagefind }}
+<link href="/pagefind/pagefind-component-ui.css" rel="stylesheet">
+<script src="/pagefind/pagefind-component-ui.js" type="module"></script>
+{{ end }}
 {{ end }}

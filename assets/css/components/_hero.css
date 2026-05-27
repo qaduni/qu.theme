@@ -60,9 +60,18 @@
     flex-wrap: wrap;
 }
 
+/* =============================================
+   Hero stats — optional metrics row
+   =============================================
+   Rendered by partials/sections/hero.html only when data/heroStats.yaml
+   exists. Universities and colleges typically use it for "15K students /
+   250 faculty / …"; departments and research centres omit the data
+   file to hide the row entirely. Responsive collapse lives in
+   _responsive.css under the same selectors. */
+
 .hero-stats {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: var(--spacing-lg);
     margin-top: var(--spacing-3xl);
 }

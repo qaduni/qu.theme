@@ -33,16 +33,9 @@
     position: relative;
 }
 
-.announcement-badge {
-    display: inline-block;
-    background: var(--color-accent);
-    color: var(--color-primary-dark);
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-radius: var(--radius-sm);
-    margin-bottom: var(--spacing-sm);
-}
+/* The "Important" badge uses .priority-badge (see _lists.css) so the same
+   accent pill appears identically on the homepage announcement strip and
+   on the list page. */
 
 .announcement-card-date {
     display: flex;

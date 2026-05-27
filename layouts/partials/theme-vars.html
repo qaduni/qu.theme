@@ -1,20 +1,11 @@
-{{- /* theme-vars.html — emit a <style>:root { ... }</style> block that
-       overrides the CSS variables in _variables.css with values from
-       Site.Params.theme.*. Render this immediately BEFORE the main CSS
-       bundle in baseof.html. Only emits variables that the site has
-       actually configured — defaults baked into _variables.css apply
-       otherwise. */ -}}
-{{- $t := .Site.Params.theme -}}
-{{- if $t -}}
-{{- $primary       := $t.primaryColor -}}
-{{- $primaryLight  := $t.primaryColorLight -}}
-{{- $primaryDark   := $t.primaryColorDark -}}
-{{- $accent        := $t.accentColor -}}
-<style>:root{
-{{- with $primary }}--color-primary:{{ . }};--color-primary-rgb:{{ partial "internal/hex-to-rgb.html" . }};{{ end }}
-{{- with $primaryLight }}--color-primary-light:{{ . }};--color-primary-light-rgb:{{ partial "internal/hex-to-rgb.html" . }};{{ end }}
-{{- with $primaryDark  }}--color-primary-dark:{{ . }};--color-primary-dark-rgb:{{ partial "internal/hex-to-rgb.html" . }};{{ end }}
-{{- with $accent }}--color-accent:{{ . }};--color-accent-rgb:{{ partial "internal/hex-to-rgb.html" . }};{{ end }}
-{{- if and $primary $primaryLight }}--color-primary-gradient:linear-gradient(135deg,{{ $primary }} 0%,{{ $primaryLight }} 50%,{{ $primary }} 100%);{{ end }}
-}</style>
-{{- end -}}
+<style>
+:root {
+  {{- with site.Params.theme.primaryColor }}--color-primary: {{ . }};{{ end }}
+  {{- with site.Params.theme.primaryColorLight }}--color-primary-light: {{ . }};{{ end }}
+  {{- with site.Params.theme.primaryColorDark }}--color-primary-dark: {{ . }};{{ end }}
+  {{- with site.Params.theme.accentColor }}--color-accent: {{ . }};{{ end }}
+  {{- if and site.Params.theme.primaryColor site.Params.theme.primaryColorLight }}
+  --color-primary-gradient: linear-gradient(135deg, {{ site.Params.theme.primaryColor }} 0%, {{ site.Params.theme.primaryColorLight }} 50%, {{ site.Params.theme.primaryColor }} 100%);
+  {{- end }}
+}
+</style>

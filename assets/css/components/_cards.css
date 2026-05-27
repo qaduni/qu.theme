@@ -40,7 +40,7 @@
 .card-icon {
     width: 64px;
     height: 64px;
-    background: linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.1), rgba(var(--color-primary-rgb), 0.05));
+    background: linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 10%, transparent), color-mix(in srgb, var(--color-primary) 5%, transparent));
     border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
@@ -73,19 +73,4 @@
 
 .card-link:hover {
     gap: var(--spacing-md);
-}
-
-/* College Cards */
-.college-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: var(--spacing-2xl);
-}
-
-.college-card .card-icon {
-    width: 80px;
-    height: 80px;
-    font-size: 2rem;
 }

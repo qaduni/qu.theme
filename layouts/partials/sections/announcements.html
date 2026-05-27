@@ -13,7 +13,7 @@
             <article class="announcement-card {{ if .Params.important }}priority-high{{ end }}">
                 <div class="announcement-card-content">
                     {{ if .Params.important }}
-                    <span class="announcement-badge">{{ i18n "important" }}</span>
+                    <span class="priority-badge">{{ i18n "important" }}</span>
                     {{ end }}
                     {{ with .Params.type }}
                         {{ $key := printf "category_%s" (. | lower) }}
