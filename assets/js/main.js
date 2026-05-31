@@ -1,11 +1,6 @@
-// Flip html.no-js → html.js as early as possible so the .reveal CSS rule
-// only hides content when JS is actually able to un-hide it.
 document.documentElement.classList.remove('no-js');
 document.documentElement.classList.add('js');
 
-// Reveal-on-scroll — adds .is-visible to .reveal elements as they enter the
-// viewport. Single-shot per element. No-ops gracefully when IO isn't
-// available (old browsers just see content immediately).
 (function () {
     function revealAll() {
         document.querySelectorAll('.reveal').forEach(function (el) {
@@ -35,11 +30,10 @@ document.documentElement.classList.add('js');
     });
 })();
 
-// Mobile Navigation Toggle
 document.addEventListener('DOMContentLoaded', function() {
     const navToggle = document.querySelector('.nav-toggle');
     const navMenu = document.querySelector('.nav-menu');
-    
+
     if (navToggle && navMenu) {
         navToggle.addEventListener('click', function() {
             const isExpanded = this.getAttribute('aria-expanded') === 'true';
@@ -47,8 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
             navMenu.classList.toggle('active');
         });
     }
-    
-    // Header scroll effect (Throttled)
+
     const header = document.querySelector('.site-header');
     if (header) {
         let lastScroll = 0;
@@ -71,8 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
-    // Mobile dropdown handling
+
     const dropdownItems = document.querySelectorAll('.nav-menu li');
 
     dropdownItems.forEach(item => {
@@ -92,14 +84,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Service worker registration — gated on Site.Params.pwa.enabled (the
-    // body carries data-pwa-enabled="true" when enabled). Sites that have
-    // not provided a /sw.js will get a 404, so this stays opt-in.
     if (document.body.dataset.pwaEnabled === 'true' && 'serviceWorker' in navigator) {
         window.addEventListener('load', function () {
-            navigator.serviceWorker.register('/sw.js').catch(function () {
-                // Intentionally silent: SW failure must not surface in console.
-            });
+            navigator.serviceWorker.register('/sw.js').catch(function () {});
         });
     }
 });

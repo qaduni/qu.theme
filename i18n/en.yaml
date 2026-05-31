@@ -1,50 +1,34 @@
-# =============================================================================
-# qu.theme — English translations (theme defaults)
-#
-# Sites adopting this theme can override any key by adding a matching
-# key under <site>/i18n/en.yaml. Hugo merges the site bundle over the
-# theme bundle automatically.
-# =============================================================================
+# qu.theme — English translations (theme defaults).
+# Sites override any key via <site>/i18n/en.yaml.
 
-# -----------------------------------------------------------------------------
-# Hero & generic site copy
-# -----------------------------------------------------------------------------
 welcome_message: "Welcome"
-department_description: "A general-purpose Hugo theme for universities, departments and academic organisations."
+site_description: "A general-purpose Hugo theme for academic and research organisations."
 explore_about: "About"
 learn_more: "Learn More"
-parent_university: "Parent site"
+parent_site: "Parent site"
 internationally_accredited: "Accredited"
 
-# -----------------------------------------------------------------------------
-# Homepage section headers
-# -----------------------------------------------------------------------------
 quick_links: "Quick Links"
 quick_links_subtitle: "Frequently requested pages and resources"
 services_title: "Services"
 services_subtitle: "What we offer"
 
-# Default service-card copy (override per site)
-service_evaluation: "Service One"
-service_evaluation_desc: "Description of service one"
-service_accreditation: "Service Two"
-service_accreditation_desc: "Description of service two"
-service_rankings: "Service Three"
-service_rankings_desc: "Description of service three"
-service_labs: "Service Four"
-service_labs_desc: "Description of service four"
+service_one: "Service One"
+service_one_desc: "Description of service one"
+service_two: "Service Two"
+service_two_desc: "Description of service two"
+service_three: "Service Three"
+service_three_desc: "Description of service three"
+service_four: "Service Four"
+service_four_desc: "Description of service four"
 view_details: "Details"
 
-# Default quick-link labels (override per site)
-ql_evaluation_forms: "Forms"
-ql_guidance_manual: "Guide"
+ql_forms: "Forms"
+ql_guide: "Guide"
 ql_surveys: "Surveys"
-ql_lab_safety: "Safety"
+ql_safety: "Safety"
 ql_standards: "Standards"
 
-# -----------------------------------------------------------------------------
-# News & Announcements (homepage strips + dedicated pages)
-# -----------------------------------------------------------------------------
 latest_news: "Latest News"
 news_subtitle: "Latest activity, events and achievements"
 coming_soon: "Coming Soon"
@@ -58,36 +42,26 @@ no_announcements: "No announcements yet"
 stay_tuned_announcements: "Stay tuned for upcoming announcements"
 all_announcements: "All Announcements"
 
-# Type & category labels (Pagefind filters + on-card badges)
 news_label: "News"
 announcement_label: "Announcement"
 type_label: "Type"
 category_label: "Category"
 search_placeholder: "Search news and announcements..."
 
-# Category labels (used by the news/announcement category map)
 category_administrative: "Administrative"
 category_academic: "Academic"
-category_students: "Students"
+category_research: "Research"
+category_community: "Community"
 category_general: "General"
 
-# -----------------------------------------------------------------------------
-# Contact section (homepage CTA)
-# -----------------------------------------------------------------------------
 have_question: "Have a question?"
 contact_subtitle: "Our team is ready to answer your questions and provide support"
 contact_us: "Contact"
 
-# -----------------------------------------------------------------------------
-# Visitor counter
-# -----------------------------------------------------------------------------
 today_visitors: "Today's Visitors"
 total_visitors: "Total Visitors"
 online_now: "Online Now"
 
-# -----------------------------------------------------------------------------
-# Navigation
-# -----------------------------------------------------------------------------
 home: "Home"
 about: "About"
 nav_main: "Main Navigation"
@@ -95,9 +69,6 @@ menu: "Menu"
 read_more: "Read More"
 lang_switch_label: "Switch language"
 
-# -----------------------------------------------------------------------------
-# Footer
-# -----------------------------------------------------------------------------
 contact_info: "Contact Info"
 all_rights_reserved: "All rights reserved"
 sitemap: "Sitemap"
@@ -110,27 +81,15 @@ related_services: "Related Links"
 privacy_policy: "Privacy Policy"
 sustainability_site: "Sustainability"
 
-# -----------------------------------------------------------------------------
-# Redirect page (used by layouts/_default/redirect.html)
-# -----------------------------------------------------------------------------
 redirecting: "Redirecting..."
 redirect_manual: "Click here if you are not redirected automatically"
 
-# -----------------------------------------------------------------------------
-# Pagination
-# -----------------------------------------------------------------------------
 page_navigation: "Page navigation"
 page_of_total: "Page {{ .Page }} of {{ .Total }}"
 
-# -----------------------------------------------------------------------------
-# 404 page
-# -----------------------------------------------------------------------------
 not_found_title:   "Page not found"
 not_found_message: "The page you were looking for does not exist or has been moved."
 
-# -----------------------------------------------------------------------------
-# Forms — generic labels
-# -----------------------------------------------------------------------------
 form_name: "Full Name"
 form_email: "Email Address"
 form_phone: "Phone Number"
@@ -139,56 +98,44 @@ form_subject_choose: "Select a subject"
 form_message: "Message"
 form_submit_contact: "Send Message"
 form_section_personal: "Personal Information"
-form_section_academic: "Academic Information"
+form_section_affiliation: "Affiliation"
 form_section_employment: "Employment Status"
 form_section_feedback: "Feedback"
-form_graduation_year: "Graduation Year"
+form_year: "Year"
 form_year_choose: "Select Year"
 form_year_older: "Earlier"
-form_college: "Faculty / College"
-form_college_choose: "Select Faculty"
-form_department: "Department"
+form_organization: "Organisation"
+form_organization_choose: "Select Organisation"
+form_unit: "Unit / Department"
 form_employment_status: "Employment Status"
 form_status_choose: "Select Status"
 form_status_employed: "Employed"
 form_status_self_employed: "Self-Employed"
 form_status_unemployed: "Job Seeking"
-form_status_student: "Postgraduate Student"
+form_status_student: "Student"
 form_employer: "Employer (if any)"
 form_job_title: "Job Title"
 form_feedback_label: "Your feedback"
 form_submit_survey: "Submit"
 
-# Form option labels — referenced by data/contactForm.yaml + data/graduateForm.yaml
 form_subject_general:   "General inquiry"
 form_subject_academic:  "Academic"
 form_subject_admission: "Admission"
-form_subject_students:  "Students"
+form_subject_research:  "Research"
 form_subject_technical: "Technical Support"
 form_subject_other:     "Other"
 
-form_college_medicine:    "Medicine"
-form_college_engineering: "Engineering"
-form_college_science:     "Science"
-form_college_cs:          "Computer Science"
-form_college_law:         "Law"
-form_college_education:   "Education"
-form_college_other:       "Other"
+form_organization_other: "Other"
 
 contact_form_unavailable: "The contact form is not currently enabled. Please email us at:"
-graduate_form_unavailable: "The survey is not currently enabled. To participate, please email us at:"
+graduate_form_unavailable: "The form is not currently enabled. To participate, please email us at:"
 
-# -----------------------------------------------------------------------------
-# Hero stats (optional, opt-in via data/heroStats.yaml)
-# -----------------------------------------------------------------------------
-stat_students: "Students"
-stat_faculty:  "Faculty"
-stat_programs: "Programs"
-stat_years:    "Years"
-stat_alumni:   "Alumni"
-stat_research: "Research Projects"
+stat_members:   "Members"
+stat_staff:     "Staff"
+stat_programs:  "Programs"
+stat_years:     "Years"
+stat_partners:  "Partners"
+stat_projects:  "Projects"
+stat_publications: "Publications"
 
-# -----------------------------------------------------------------------------
-# Shortcodes
-# -----------------------------------------------------------------------------
 map_title: "Location map"

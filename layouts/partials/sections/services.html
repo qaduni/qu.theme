@@ -1,9 +1,3 @@
-{{/* Homepage services section — driven by the `homepage_services` menu.
-     Each menu entry's name = card title, .Params.description = card body.
-     Visual lead can be EITHER:
-       - .Params.image  (path or URL — preferred for a richer card)
-       - .Params.icon   (SVG sprite id — used when no image is supplied)
-     If no menu is defined the section is suppressed entirely. */}}
 {{ with index .Site.Menus "homepage_services" }}
 <section class="section section-alt">
     <div class="container">

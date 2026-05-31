@@ -1,13 +1,10 @@
 {{ define "main" }}
-<!-- Page Header -->
 <section class="page-header">
     <div class="container">
         <h1>{{ .Title }}</h1>
         <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
                 <li><a href="{{ .Site.Home.RelPermalink }}">{{ i18n "home" }}</a></li>
-                {{/* Skip the Parent row when it IS the home page — otherwise
-                     a top-level section renders "Home > Home > X". */}}
                 {{ if and .Parent (not .Parent.IsHome) }}
                 <li><a href="{{ .Parent.RelPermalink }}">{{ .Parent.Title }}</a></li>
                 {{ end }}

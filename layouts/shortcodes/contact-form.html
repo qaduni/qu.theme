@@ -1,8 +1,3 @@
-{{- /* Renders a contact form when Site.Params.contactFormEndpoint is set;
-       otherwise renders a mailto fallback so a misconfigured deploy never
-       silently swallows submissions. The subject taxonomy is data-driven
-       via data/contactForm.yaml — sites override that file at their root
-       to publish their own subject list. */ -}}
 {{- $action := .Site.Params.contactFormEndpoint -}}
 {{- $email := .Site.Params.contact.email -}}
 {{- $subjects := (hugo.Data.contactForm | default dict).subjects -}}

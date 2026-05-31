@@ -2,8 +2,6 @@
 {{ $slides := $assets.heroImages }}
 {{ $slideCount := len $slides }}
 <section class="hero{{ if gt $slideCount 1 }} hero--gallery{{ end }}" data-slide-count="{{ $slideCount }}">
-    {{/* Background gallery — one .hero-slide per image. When only one image is
-         available the slide stays static; with 2-4 it auto-cycles via CSS. */}}
     {{ if gt $slideCount 0 }}
     <div class="hero-gallery" aria-hidden="true">
         {{ range $i, $url := $slides }}
@@ -11,9 +9,6 @@
         {{ end }}
     </div>
     {{ end }}
-    {{/* Brand-tinted gradient overlay — only covers the top half of the hero
-         (the text-bearing portion), then fades out so the gallery shows
-         through the bottom half. */}}
     <div class="hero-overlay" aria-hidden="true"></div>
 
     <div class="container">
@@ -24,7 +19,7 @@
             </div>
             <h1>{{ i18n "welcome_message" }}</h1>
             <p class="hero-description">
-                {{ i18n "department_description" }}
+                {{ i18n "site_description" }}
             </p>
             {{ with index .Site.Menus "hero_buttons" }}
             <div class="hero-buttons">
@@ -43,10 +38,6 @@
             </div>
             {{ end }}
 
-            {{/* Optional metrics row — renders only when data/heroStats.yaml
-                 exists. Sites that don't need stats (departments, research
-                 centres, small units) simply omit the data file and the
-                 whole block disappears, no extra config required. */}}
             {{ with hugo.Data.heroStats }}
             <div class="hero-stats">
                 {{ range . }}

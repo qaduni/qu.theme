@@ -1,8 +1,3 @@
-{{- /* Renders a graduate survey form when Site.Params.graduateFormEndpoint
-       is set; otherwise renders a mailto fallback. All option lists are
-       data-driven via data/graduateForm.yaml. Each option may specify a
-       literal `label` (used verbatim) OR an `i18nKey` (resolved through
-       the i18n bundle) — the literal takes priority. */ -}}
 {{- $action := .Site.Params.graduateFormEndpoint -}}
 {{- $email := .Site.Params.contact.email -}}
 {{- $data := hugo.Data.graduateForm | default dict -}}
@@ -30,8 +25,8 @@
       <input type="tel" id="phone" name="phone" required>
     </div>
     <div class="form-group">
-      <label for="graduationYear">{{ i18n "form_graduation_year" }} *</label>
-      <select id="graduationYear" name="graduationYear" required>
+      <label for="year">{{ i18n "form_year" }} *</label>
+      <select id="year" name="year" required>
         <option value="">{{ i18n "form_year_choose" }}</option>
         {{ range $data.graduationYears }}
         {{ $label := .label }}
@@ -43,13 +38,13 @@
     </div>
   </div>
 
-  <h3>{{ i18n "form_section_academic" }}</h3>
+  <h3>{{ i18n "form_section_affiliation" }}</h3>
   <div class="form-row">
     <div class="form-group">
-      <label for="college">{{ i18n "form_college" }} *</label>
-      <select id="college" name="college" required>
-        <option value="">{{ i18n "form_college_choose" }}</option>
-        {{ range $data.colleges }}
+      <label for="organization">{{ i18n "form_organization" }} *</label>
+      <select id="organization" name="organization" required>
+        <option value="">{{ i18n "form_organization_choose" }}</option>
+        {{ range $data.organizations }}
         {{ $label := .label }}
         {{ if not $label }}{{ $label = i18n .i18nKey }}{{ end }}
         {{ if not $label }}{{ $label = .value }}{{ end }}
@@ -58,8 +53,8 @@
       </select>
     </div>
     <div class="form-group">
-      <label for="department">{{ i18n "form_department" }} *</label>
-      <input type="text" id="department" name="department" required>
+      <label for="unit">{{ i18n "form_unit" }} *</label>
+      <input type="text" id="unit" name="unit" required>
     </div>
   </div>
 

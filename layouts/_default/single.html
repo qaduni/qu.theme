@@ -1,5 +1,4 @@
 {{ define "main" }}
-<!-- Page Header -->
 <section class="page-header">
     <div class="container">
         <h1 data-pagefind-body data-pagefind-weight="10" data-pagefind-meta="title">{{ .Title }}</h1>
@@ -19,10 +18,6 @@
 
 <div class="content-wrapper">
     <div class="container">
-        {{/* Determine Type and Category. The announcements section path is
-             configurable via Site.Params.contentSections.announcements so
-             this theme is not married to /media/announcements. Default keeps
-             behaviour identical for sites that don't configure the param. */}}
         {{ $type := "news" }}
         {{ $category := "" }}
         {{ $annSection := .Site.Params.contentSections.announcements | default "/media/announcements" }}
@@ -43,9 +38,6 @@
             {{ end }}
         {{ end }}
 
-        {{/* Pagefind filter values: keys are LANGUAGE-NEUTRAL (stable English)
-             so a multilingual site has unified filters across language builds.
-             Display labels come from i18n. */}}
         {{ $pfTypeKey := i18n "type_label" }}
         {{ $pfCategoryKey := i18n "category_label" }}
         {{ $pfTypeValue := cond (eq $type "announcement") (i18n "announcement_label") (i18n "news_label") }}
@@ -57,7 +49,6 @@
         {{ end }}
 
         <article class="article-content" data-pagefind-body>
-            {{/* Hidden filter spans avoid duplicate attributes on the article tag */}}
             <span hidden data-pagefind-filter="{{ $pfTypeKey }}:{{ $pfTypeValue }}"></span>
             {{ if $pfCategoryValue }}
             <span hidden data-pagefind-filter="{{ $pfCategoryKey }}:{{ $pfCategoryValue }}"></span>

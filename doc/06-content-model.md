@@ -90,7 +90,8 @@ ships:
 ```
 category_administrative
 category_academic
-category_students
+category_research
+category_community
 category_general
 ```
 
@@ -146,9 +147,9 @@ To enable, create `data/heroStats.yaml` at your site root:
 
 ```yaml
 - value: "15,000+"
-  i18nKey: "stat_students"
+  i18nKey: "stat_members"
 - value: "250"
-  i18nKey: "stat_faculty"
+  i18nKey: "stat_staff"
 - value: "30"
   i18nKey: "stat_programs"
 - value: "50"
@@ -166,10 +167,10 @@ self-suppresses when no data is present.
 | `i18nKey`  | string | Translation key looked up in `i18n/<lang>.yaml`. Takes precedence over `label`. |
 | `label`    | string | Static label, used when `i18nKey` is absent. Convenient for single-language sites. |
 
-**Built-in i18n keys** (en + ar provided): `stat_students`,
-`stat_faculty`, `stat_programs`, `stat_years`, `stat_alumni`,
-`stat_research`. Add your own by appending to your site's
-`i18n/<lang>.yaml`.
+**Built-in i18n keys** (en + ar provided): `stat_members`,
+`stat_staff`, `stat_programs`, `stat_years`, `stat_partners`,
+`stat_projects`, `stat_publications`. Add your own by appending to
+your site's `i18n/<lang>.yaml`.
 
 The CSS grid auto-fits, so 1–6+ entries all lay out cleanly.
 

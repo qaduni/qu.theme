@@ -96,9 +96,9 @@ graduationYears:
   - value: "older"
     i18nKey: "form_year_older"
 
-colleges:
-  - value: "medicine"
-    i18nKey: "form_college_medicine"
+organizations:
+  - value: "other"
+    i18nKey: "form_organization_other"
   ...
 
 employmentStatuses:

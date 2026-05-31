@@ -1,14 +1,3 @@
-/* =============================================
-   Hero Section
-   =============================================
-   Layered structure (back→front):
-     .hero                  — positioned container, sets brand-color fallback
-     .hero-gallery          — absolutely positioned wrapper for slides
-       .hero-slide          — one per background image, cross-fades via CSS
-     .hero-overlay          — brand gradient covering ONLY the top half
-     .hero > .container     — content
-*/
-
 .hero {
     position: relative;
     background-color: var(--color-primary);
@@ -20,8 +9,6 @@
     align-items: center;
     isolation: isolate;
 }
-
-/* Background gallery ------------------------------------------------------- */
 
 .hero-gallery {
     position: absolute;
@@ -47,7 +34,6 @@
     background-position: right center;
 }
 
-/* Single image — no animation, just stay visible. */
 .hero:not(.hero--gallery) .hero-slide {
     opacity: 1;
     animation: none;
@@ -63,8 +49,6 @@
 .hero--gallery .hero-slide--3 { animation-delay: 14s; }
 .hero--gallery .hero-slide--4 { animation-delay: 21s; }
 
-/* For a 2- or 3-image gallery, retime the keyframes via shorter duration so
-   each slide gets the same screen-time regardless of count. */
 .hero--gallery[data-slide-count="2"] .hero-slide { animation-duration: 14s; }
 .hero--gallery[data-slide-count="2"] .hero-slide--2 { animation-delay: 7s; }
 
@@ -147,15 +131,6 @@
     flex-wrap: wrap;
 }
 
-/* =============================================
-   Hero stats — optional metrics row
-   =============================================
-   Rendered by partials/sections/hero.html only when data/heroStats.yaml
-   exists. Universities and colleges typically use it for "15K students /
-   250 faculty / …"; departments and research centres omit the data
-   file to hide the row entirely. Responsive collapse lives in
-   _responsive.css under the same selectors. */
-
 .hero-stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -190,7 +165,6 @@
     color: rgba(255, 255, 255, 0.8);
 }
 
-/* Respect users who opt out of motion. */
 @media (prefers-reduced-motion: reduce) {
     .hero--gallery .hero-slide {
         animation: none;

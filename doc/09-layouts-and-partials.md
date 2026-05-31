@@ -199,7 +199,7 @@ Hero section with:
 - Background image from `partials/site-assets.html` (CSS variable
   `--hero-bg-image`, allowing pure-CSS overlay).
 - Accreditation badge.
-- `welcome_message` + `department_description` (i18n).
+- `welcome_message` + `site_description` (i18n).
 - CTA buttons from the `hero_buttons` menu.
 - **Optional metrics row** (`.hero-stats`) driven by
   `data/heroStats.yaml`. Each list entry produces one tile with `value`

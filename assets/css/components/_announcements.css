@@ -1,4 +1,3 @@
-/* Announcements Section */
 .announcements-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -32,10 +31,6 @@
     padding: var(--spacing-lg);
     position: relative;
 }
-
-/* The "Important" badge uses .priority-badge (see _lists.css) so the same
-   accent pill appears identically on the homepage announcement strip and
-   on the list page. */
 
 .announcement-card-date {
     display: flex;

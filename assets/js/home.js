@@ -1,7 +1,3 @@
-// Homepage scripts — currently the visitor-counter animation. Loaded by
-// layouts/index.html behind the same `visitorCounterEndpoint` gate that
-// renders the section markup, so re-checking the section's presence
-// guards against builds where the param is empty.
 document.addEventListener('DOMContentLoaded', function () {
     var counterSection = document.querySelector('.visitor-counter-section');
     if (!counterSection) return;

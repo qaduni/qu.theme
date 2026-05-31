@@ -1,4 +1,3 @@
-/* Form Styles */
 .contact-form {
     background: var(--color-background-alt);
     padding: var(--spacing-2xl);
@@ -35,9 +34,6 @@
     border-color: var(--color-primary);
 }
 
-/* Keyboard focus: keep a visible outline so users in high-contrast mode,
-   custom colour schemes, or with low vision still get a focus signal
-   (WCAG 2.4.7 Focus Visible). */
 .form-group input:focus-visible,
 .form-group textarea:focus-visible,
 .form-group select:focus-visible {
@@ -45,7 +41,6 @@
     outline-offset: 2px;
 }
 
-/* Mouse-only focus stays subtle (border-colour change only). */
 .form-group input:focus:not(:focus-visible),
 .form-group textarea:focus:not(:focus-visible),
 .form-group select:focus:not(:focus-visible) {

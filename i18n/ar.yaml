@@ -1,50 +1,34 @@
-# =============================================================================
-# qu.theme — Arabic translations (theme defaults)
-#
-# Sites adopting this theme can override any key by adding a matching
-# key under <site>/i18n/ar.yaml. Hugo merges the site bundle over the
-# theme bundle automatically.
-# =============================================================================
+# qu.theme — Arabic translations (theme defaults).
+# Sites override any key via <site>/i18n/ar.yaml.
 
-# -----------------------------------------------------------------------------
-# Hero & generic site copy
-# -----------------------------------------------------------------------------
 welcome_message: "مرحباً بكم"
-department_description: "قالب هيوغو عام للجامعات والأقسام والمراكز الأكاديمية."
+site_description: "قالب هيوغو عام للمؤسسات الأكاديمية والبحثية."
 explore_about: "تعرف علينا"
 learn_more: "اقرأ المزيد"
-parent_university: "الموقع الأم"
+parent_site: "الموقع الأم"
 internationally_accredited: "اعتماد"
 
-# -----------------------------------------------------------------------------
-# Homepage section headers
-# -----------------------------------------------------------------------------
 quick_links: "روابط سريعة"
 quick_links_subtitle: "صفحات وموارد يطلبها الزوار بشكل متكرر"
 services_title: "الخدمات"
 services_subtitle: "ما نقدمه"
 
-# Default service-card copy (override per site)
-service_evaluation: "الخدمة الأولى"
-service_evaluation_desc: "وصف الخدمة الأولى"
-service_accreditation: "الخدمة الثانية"
-service_accreditation_desc: "وصف الخدمة الثانية"
-service_rankings: "الخدمة الثالثة"
-service_rankings_desc: "وصف الخدمة الثالثة"
-service_labs: "الخدمة الرابعة"
-service_labs_desc: "وصف الخدمة الرابعة"
+service_one: "الخدمة الأولى"
+service_one_desc: "وصف الخدمة الأولى"
+service_two: "الخدمة الثانية"
+service_two_desc: "وصف الخدمة الثانية"
+service_three: "الخدمة الثالثة"
+service_three_desc: "وصف الخدمة الثالثة"
+service_four: "الخدمة الرابعة"
+service_four_desc: "وصف الخدمة الرابعة"
 view_details: "التفاصيل"
 
-# Default quick-link labels (override per site)
-ql_evaluation_forms: "الاستمارات"
-ql_guidance_manual: "الدليل"
+ql_forms: "الاستمارات"
+ql_guide: "الدليل"
 ql_surveys: "الاستبانات"
-ql_lab_safety: "السلامة"
+ql_safety: "السلامة"
 ql_standards: "المعايير"
 
-# -----------------------------------------------------------------------------
-# News & Announcements
-# -----------------------------------------------------------------------------
 latest_news: "آخر الأخبار"
 news_subtitle: "أحدث الأنشطة والفعاليات والإنجازات"
 coming_soon: "قريباً"
@@ -58,36 +42,26 @@ no_announcements: "لا توجد إعلانات بعد"
 stay_tuned_announcements: "ترقبوا الإعلانات القادمة"
 all_announcements: "جميع الإعلانات"
 
-# Type & category labels
 news_label: "خبر"
 announcement_label: "إعلان"
 type_label: "النوع"
 category_label: "التصنيف"
 search_placeholder: "البحث في الأخبار والإعلانات..."
 
-# Category labels
 category_administrative: "إداري"
 category_academic: "أكاديمي"
-category_students: "طلبة"
+category_research: "بحثي"
+category_community: "مجتمعي"
 category_general: "عام"
 
-# -----------------------------------------------------------------------------
-# Contact section
-# -----------------------------------------------------------------------------
 have_question: "لديكم استفسار؟"
 contact_subtitle: "فريقنا جاهز للإجابة على استفساراتكم وتقديم الدعم"
 contact_us: "تواصلوا معنا"
 
-# -----------------------------------------------------------------------------
-# Visitor counter
-# -----------------------------------------------------------------------------
 today_visitors: "زوار اليوم"
 total_visitors: "إجمالي الزوار"
 online_now: "متصل الآن"
 
-# -----------------------------------------------------------------------------
-# Navigation
-# -----------------------------------------------------------------------------
 home: "الرئيسية"
 about: "عن الموقع"
 nav_main: "القائمة الرئيسية"
@@ -95,9 +69,6 @@ menu: "القائمة"
 read_more: "اقرأ المزيد"
 lang_switch_label: "تغيير اللغة"
 
-# -----------------------------------------------------------------------------
-# Footer
-# -----------------------------------------------------------------------------
 contact_info: "معلومات الاتصال"
 all_rights_reserved: "جميع الحقوق محفوظة"
 sitemap: "خريطة الموقع"
@@ -110,27 +81,15 @@ related_services: "روابط ذات صلة"
 privacy_policy: "سياسة الخصوصية"
 sustainability_site: "الاستدامة"
 
-# -----------------------------------------------------------------------------
-# Redirect page
-# -----------------------------------------------------------------------------
 redirecting: "جاري التحويل..."
 redirect_manual: "اضغط هنا إذا لم يتم التحويل تلقائياً"
 
-# -----------------------------------------------------------------------------
-# Pagination
-# -----------------------------------------------------------------------------
 page_navigation: "التنقل بين الصفحات"
 page_of_total: "صفحة {{ .Page }} من {{ .Total }}"
 
-# -----------------------------------------------------------------------------
-# 404 page
-# -----------------------------------------------------------------------------
 not_found_title:   "الصفحة غير موجودة"
 not_found_message: "الصفحة التي تبحث عنها غير موجودة أو تم نقلها."
 
-# -----------------------------------------------------------------------------
-# Forms
-# -----------------------------------------------------------------------------
 form_name: "الاسم الكامل"
 form_email: "البريد الإلكتروني"
 form_phone: "رقم الهاتف"
@@ -139,56 +98,44 @@ form_subject_choose: "اختر الموضوع"
 form_message: "الرسالة"
 form_submit_contact: "إرسال الرسالة"
 form_section_personal: "البيانات الشخصية"
-form_section_academic: "البيانات الأكاديمية"
+form_section_affiliation: "الانتماء"
 form_section_employment: "الوضع المهني"
 form_section_feedback: "ملاحظات"
-form_graduation_year: "سنة التخرج"
+form_year: "السنة"
 form_year_choose: "اختر السنة"
 form_year_older: "قبل ذلك"
-form_college: "الكلية"
-form_college_choose: "اختر الكلية"
-form_department: "القسم"
+form_organization: "الجهة"
+form_organization_choose: "اختر الجهة"
+form_unit: "الوحدة / القسم"
 form_employment_status: "حالة التوظيف"
 form_status_choose: "اختر الحالة"
 form_status_employed: "موظف"
 form_status_self_employed: "عمل حر"
 form_status_unemployed: "باحث عن عمل"
-form_status_student: "طالب دراسات عليا"
+form_status_student: "طالب"
 form_employer: "جهة العمل (إن وجدت)"
 form_job_title: "المسمى الوظيفي"
 form_feedback_label: "ملاحظاتكم"
 form_submit_survey: "إرسال"
 
-# Form option labels
 form_subject_general:   "استفسار عام"
 form_subject_academic:  "أكاديمي"
 form_subject_admission: "قبول"
-form_subject_students:  "طلبة"
+form_subject_research:  "بحثي"
 form_subject_technical: "الدعم الفني"
 form_subject_other:     "أخرى"
 
-form_college_medicine:    "الطب"
-form_college_engineering: "الهندسة"
-form_college_science:     "العلوم"
-form_college_cs:          "علوم الحاسوب"
-form_college_law:         "القانون"
-form_college_education:   "التربية"
-form_college_other:       "أخرى"
+form_organization_other: "أخرى"
 
 contact_form_unavailable: "نموذج الاتصال غير مفعّل حالياً. يرجى التواصل عبر البريد الإلكتروني:"
-graduate_form_unavailable: "الاستبيان غير مفعّل حالياً. للمشاركة، يرجى التواصل عبر البريد الإلكتروني:"
+graduate_form_unavailable: "النموذج غير مفعّل حالياً. للمشاركة، يرجى التواصل عبر البريد الإلكتروني:"
 
-# -----------------------------------------------------------------------------
-# Hero stats (optional, opt-in via data/heroStats.yaml)
-# -----------------------------------------------------------------------------
-stat_students: "الطلاب"
-stat_faculty:  "الكادر التدريسي"
-stat_programs: "البرامج"
-stat_years:    "سنوات"
-stat_alumni:   "الخريجون"
-stat_research: "المشاريع البحثية"
+stat_members:    "الأعضاء"
+stat_staff:      "الكادر"
+stat_programs:   "البرامج"
+stat_years:      "سنوات"
+stat_partners:   "الشركاء"
+stat_projects:   "المشاريع"
+stat_publications: "المنشورات"
 
-# -----------------------------------------------------------------------------
-# Shortcodes
-# -----------------------------------------------------------------------------
 map_title: "خريطة الموقع"
