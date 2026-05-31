@@ -1,8 +1,3 @@
-{{- /*
-  Usage:
-    {{< google-map >}}                                    # uses Site.Params.campusMapEmbed
-    {{< google-map src="https://..." height="500" >}}     # custom embed and height
-*/ -}}
 {{- $src    := .Get "src"    | default .Site.Params.campusMapEmbed -}}
 {{- $width  := .Get "width"  | default "100%" -}}
 {{- $height := .Get "height" | default "400" -}}

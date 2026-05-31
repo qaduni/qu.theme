@@ -1,8 +1,3 @@
-# Graduate-survey taxonomies (theme defaults).
-# Override at <site>/data/graduateForm.yaml for organisation-specific lists.
-
-# Graduation years. `value` is what's submitted; `label` is shown verbatim if
-# present, otherwise `i18nKey` is resolved.
 graduationYears:
   - value: "2025"
     label: "2025"
@@ -17,24 +12,10 @@ graduationYears:
   - value: "older"
     i18nKey: "form_year_older"
 
-# Faculties / colleges
-colleges:
-  - value: "medicine"
-    i18nKey: "form_college_medicine"
-  - value: "engineering"
-    i18nKey: "form_college_engineering"
-  - value: "science"
-    i18nKey: "form_college_science"
-  - value: "cs"
-    i18nKey: "form_college_cs"
-  - value: "law"
-    i18nKey: "form_college_law"
-  - value: "education"
-    i18nKey: "form_college_education"
+organizations:
   - value: "other"
-    i18nKey: "form_college_other"
+    i18nKey: "form_organization_other"
 
-# Employment status
 employmentStatuses:
   - value: "employed"
     i18nKey: "form_status_employed"

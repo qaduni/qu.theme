@@ -1,8 +1,3 @@
-{{- /* Language switcher — loops hugo.Sites so any N-language site works
-       without template surgery. Shows the OTHER languages (not the
-       current one). Prefers `.Language.Params.label`, then
-       `.Language.Label`, then the bare code. The link target is a
-       translated page if available, otherwise the localised home page. */ -}}
 {{- $page := . -}}
 {{- $current := $page.Language.Lang -}}
 {{- $others := slice -}}
@@ -17,14 +12,12 @@
         {{- $lang := .Language.Lang -}}
         {{- $label := or .Language.Label $lang -}}
         {{- with .Language.Params.label }}{{ $label = . }}{{ end -}}
-        {{/* Find the matching translation of the current page */}}
         {{- $target := "" -}}
         {{- range $page.AllTranslations -}}
             {{- if eq .Language.Lang $lang -}}
                 {{- $target = .Permalink -}}
             {{- end -}}
         {{- end -}}
-        {{/* Fallback: the target language's home page */}}
         {{- if not $target }}{{ $target = .Home.RelPermalink }}{{ end }}
     <a href="{{ $target }}" data-lang-switch="{{ $lang }}" hreflang="{{ $lang }}">{{ $label }}</a>
     {{- end }}

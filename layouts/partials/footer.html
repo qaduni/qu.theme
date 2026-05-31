@@ -12,7 +12,7 @@
                     <span style="font-size: 1.1rem;">{{ .Site.Title }}</span>
                 </a>
                 <p>
-                    {{ .Site.Params.description | default (i18n "department_description") }}
+                    {{ .Site.Params.description | default (i18n "site_description") }}
                 </p>
                 <div class="footer-social">
                     {{ with .Site.Params.social }}

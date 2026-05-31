@@ -1,10 +1,5 @@
 {{ $assets := partialCached "site-assets.html" . }}
 
-{{/* -------------------------------------------------------------------------
-     Top Bar — top_bar menu + contact snippet on the right.
-     If no top_bar menu is defined and no contact is configured, the bar is
-     suppressed entirely.
-   ------------------------------------------------------------------------- */}}
 {{ $topBar := index .Site.Menus "top_bar" }}
 {{ $hasContact := or .Site.Params.contact.email .Site.Params.contact.phone }}
 {{ if or $topBar $hasContact }}
@@ -39,7 +34,6 @@
 </div>
 {{ end }}
 
-<!-- Main Header -->
 <header class="site-header">
     <div class="container">
         <a href="{{ .Site.Home.RelPermalink }}" class="logo">

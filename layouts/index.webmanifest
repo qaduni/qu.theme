@@ -1,7 +1,3 @@
-{{- /* PWA manifest. Prefers a raster `images/logo.png` (resized to 192/512
-       for Lighthouse compliance); falls back to the bundled SVG if no
-       PNG is available. Sites that want full PWA install support should
-       ship `assets/images/logo.png` at ≥512×512. */ -}}
 {{- $icon := resources.Get "images/logo.png" -}}
 {{- $iconSVG := resources.Get "images/logo.svg" -}}
 {{- $shortTitle := .Site.Params.shortTitle | default .Site.Title -}}

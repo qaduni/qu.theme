@@ -1,18 +1,3 @@
-/* =============================================
-   Motion — reveal-on-scroll + ambient micro-animations
-   =============================================
-   Elements marked `.reveal` start slightly offset and faded; an
-   IntersectionObserver in main.js adds `.is-visible` when they enter
-   the viewport, triggering a one-shot entrance.
-
-   For grids whose children should stagger, set `--reveal-delay` per child
-   inline (the partials do this with `mul $i 80 ms`).
-
-   Falls back gracefully:
-   - .no-js html → elements stay visible (CSS rule below)
-   - prefers-reduced-motion → no transform/opacity transition
-*/
-
 .reveal {
     opacity: 0;
     transform: translateY(24px);
@@ -28,14 +13,12 @@
     transform: none;
 }
 
-/* If JS never runs, never leave content invisible. */
 html.no-js .reveal,
 html:not(.js) .reveal {
     opacity: 1;
     transform: none;
 }
 
-/* Reduced motion: keep the fade, drop the slide. */
 @media (prefers-reduced-motion: reduce) {
     .reveal {
         transform: none;
@@ -43,8 +26,6 @@ html:not(.js) .reveal {
     }
 }
 
-/* Section header underline — a gentle width-grow when the header reveals,
-   instead of popping in fully expanded. */
 .section-header h2::after {
     transform: translateX(-50%) scaleX(0.25);
     transform-origin: center;

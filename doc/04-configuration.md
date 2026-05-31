@@ -242,7 +242,7 @@ The theme reads a string like the homepage description with this chain:
 
 1. Page front matter (`description: "..."`).
 2. `Site.Params.description`.
-3. The i18n key for that surface (e.g. `i18n "department_description"`).
+3. The i18n key for that surface (e.g. `i18n "site_description"`).
 
 For colours: a `Site.Params.theme.primaryColor` override emits a `:root`
 `<style>` block in the `<head>`, which beats the bundled

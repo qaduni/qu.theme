@@ -1,6 +1,3 @@
-/* List Page — chronological article list with optional search bar.
-   Used by layouts/_default/list.html. */
-
 .list-page {
     min-height: calc(100vh - 200px);
 }

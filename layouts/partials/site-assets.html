@@ -1,22 +1,3 @@
-{{- /*
-  site-assets.html — Resolve theme image assets (logo, hero) through Hugo Pipes
-  and return a dict of permalinks. Lookup order:
-
-    1. <site>/assets/images/{logo.png, logo.webp, hero.webp}     (preferred)
-    2. <theme>/assets/images/{logo.svg, hero.svg}                (shipped fallbacks)
-
-  Hugo's site-overrides-theme `resources.Get` lookup means consumers can drop
-  their own raster assets at the same relative path and they win automatically.
-  When no PNG/WebP is provided, the bundled SVG placeholders are returned so
-  the theme builds out-of-the-box without any binary files in the site repo.
-
-  Use via partialCached so each resource is published once per build:
-
-      {{ $assets := partialCached "site-assets.html" . }}
-      <img src="{{ $assets.logoPNG }}">
-*/ -}}
-
-{{- /* Logo — prefer raster (png/webp), fall back to the theme's SVG. */ -}}
 {{- $logoPNG  := resources.Get "images/logo.png"  -}}
 {{- $logoWebP := resources.Get "images/logo.webp" -}}
 {{- $logoSVG  := resources.Get "images/logo.svg"  -}}
@@ -46,12 +27,6 @@
     {{- end }}
 {{- end -}}
 
-{{- /* Hero — prefer raster, fall back to the theme's SVG.
-       Returns both the primary hero image (`hero`) and a list of up to four
-       gallery slides (`heroImages`). Sites can drop `hero.webp`, `hero-2.webp`,
-       `hero-3.webp`, `hero-4.webp` under `assets/images/` to enable the
-       background gallery. If only `hero.webp` exists, the gallery degrades to
-       a single static image — no JS or CSS code changes required. */ -}}
 {{- $heroSVG  := resources.Get "images/hero.svg"  -}}
 {{- $heroCandidates := slice "images/hero.webp" "images/hero-2.webp" "images/hero-3.webp" "images/hero-4.webp" -}}
 {{- $heroImages := slice -}}
