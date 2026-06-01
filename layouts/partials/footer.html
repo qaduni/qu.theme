@@ -4,12 +4,12 @@
         <div class="footer-main">
             <!-- About Column -->
             <div class="footer-about">
-                <a href="{{ .Site.Home.RelPermalink }}" class="logo">
+                <a href="{{ .Site.Home.RelPermalink }}" class="logo" aria-label="{{ .Site.Title }} — {{ i18n "home" }}">
                     <picture>
                         <source srcset="{{ $assets.logoWebP }}" type="image/webp">
-                        <img src="{{ $assets.logoPNG }}" alt="" aria-hidden="true" style="height: 50px;" loading="lazy">
+                        <img src="{{ $assets.logoPNG }}" alt="" aria-hidden="true" width="50" height="50" style="height: 50px;" loading="lazy" decoding="async">
                     </picture>
-                    <span style="font-size: 1.1rem;">{{ .Site.Title }}</span>
+                    <span aria-hidden="true" style="font-size: 1.1rem;">{{ .Site.Title }}</span>
                 </a>
                 <p>
                     {{ .Site.Params.description | default (i18n "site_description") }}
@@ -31,7 +31,7 @@
             <!-- Useful Links -->
             {{ with index .Site.Menus "footer_useful" }}
             <div class="footer-column">
-                <h4>{{ i18n "useful_links" }}</h4>
+                <h2>{{ i18n "useful_links" }}</h2>
                 <ul class="footer-links">
                     {{ range . }}
                     <li>
@@ -45,7 +45,7 @@
             <!-- Related Services -->
             {{ with index .Site.Menus "footer_services" }}
             <div class="footer-column">
-                <h4>{{ i18n "related_services" }}</h4>
+                <h2>{{ i18n "related_services" }}</h2>
                 <ul class="footer-links">
                     {{ range . }}
                     <li>
@@ -58,7 +58,7 @@
 
             <!-- Contact Info -->
             <div class="footer-column">
-                <h4>{{ i18n "contact_info" }}</h4>
+                <h2>{{ i18n "contact_info" }}</h2>
                 <div class="footer-contact">
                     {{ with .Site.Params.contact }}
                     {{ $addr := .address }}
