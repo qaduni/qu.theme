@@ -36,12 +36,12 @@
 
 <header class="site-header">
     <div class="container">
-        <a href="{{ .Site.Home.RelPermalink }}" class="logo">
+        <a href="{{ .Site.Home.RelPermalink }}" class="logo" aria-label="{{ .Site.Title }} — {{ i18n "home" }}">
             <picture>
                 <source srcset="{{ $assets.logoWebP }}" type="image/webp">
-                <img src="{{ $assets.logoPNG }}" alt="" aria-hidden="true" style="height: 50px;" loading="lazy">
+                <img src="{{ $assets.logoPNG }}" alt="" aria-hidden="true" width="50" height="50" style="height: 50px;" decoding="async" fetchpriority="high">
             </picture>
-            <div class="logo-text">
+            <div class="logo-text" aria-hidden="true">
                 <span class="university-name">{{ .Site.Params.shortTitle | default .Site.Title }}</span>
                 {{ with .Site.Params.parentName }}
                 <span class="university-name-en">{{ . }}</span>
