@@ -32,3 +32,17 @@
     border-radius: var(--radius-lg);
     margin: var(--spacing-xl) 0;
 }
+
+.article-content p a,
+.article-content li a,
+.form-disabled-note a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+}
+
+.article-content p a:hover,
+.article-content li a:hover,
+.form-disabled-note a:hover {
+    text-decoration-thickness: 2px;
+}
