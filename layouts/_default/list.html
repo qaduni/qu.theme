@@ -5,6 +5,7 @@
     (hasPrefix .RelPermalink (printf "/%s%s" .Language.Lang $annSection))
 }}
 {{ $bundle := cond $isAnn "/pagefind-announcements/" "/pagefind-news/" }}
+
 <div data-pagefind-ignore="all">
 <section class="page-header">
     <div class="container">
@@ -28,12 +29,7 @@
     <div class="container" style="padding-top: 2.5rem; padding-bottom: 1.5rem; display: flex; justify-content: center;">
         <pagefind-modal-trigger placeholder="{{ $pfPlaceholder }}"></pagefind-modal-trigger>
     </div>
-    <pagefind-modal placeholder="{{ $pfPlaceholder }}">
-        {{ if $isAnn }}
-        {{ $pfCategoryKey := i18n "category_label" }}
-        <pagefind-filter-dropdown filter="{{ $pfCategoryKey }}" label="{{ $pfCategoryKey }}"></pagefind-filter-dropdown>
-        {{ end }}
-    </pagefind-modal>
+    <pagefind-modal placeholder="{{ $pfPlaceholder }}"></pagefind-modal>
     {{ end }}
 
     <div class="container">
@@ -55,12 +51,6 @@
                 </div>
                 {{ end }}
                 <div class="list-item-content">
-                    {{ with .Params.type }}
-                        {{ $key := printf "category_%s" (. | lower) }}
-                        {{ $localised := i18n $key }}
-                        {{ $displayType := cond (eq $localised "") . $localised }}
-                    <span class="category-badge">{{ $displayType }}</span>
-                    {{ end }}
                     {{ if .Params.important }}
                     <span class="priority-badge">{{ i18n "important" }}</span>
                     {{ end }}
@@ -74,7 +64,6 @@
         {{ if gt $paginator.TotalPages 1 }}
         <nav class="pagination" aria-label="{{ i18n "page_navigation" }}">
             <ul class="pagination-list">
-                <!-- first page -->
                 {{ if ne $paginator.PageNumber 1 }}
                 <li>
                     <a href="{{ $paginator.First.URL }}" class="pagination-link pagination-first">
@@ -89,7 +78,6 @@
                 </li>
                 {{ end }}
 
-                <!-- previous -->
                 {{ if $paginator.HasPrev }}
                 <li>
                     <a href="{{ $paginator.Prev.URL }}" class="pagination-link pagination-prev">
@@ -104,7 +92,6 @@
                 </li>
                 {{ end }}
 
-                <!-- windowed page numbers -->
                 {{ $currentPage := $paginator.PageNumber }}
                 {{ $adjacent_links := 2 }}
                 {{ $max_links := (add (mul $adjacent_links 2) 1) }}
@@ -136,7 +123,6 @@
                     {{ end }}
                 {{ end }}
 
-                <!-- next -->
                 {{ if $paginator.HasNext }}
                 <li>
                     <a href="{{ $paginator.Next.URL }}" class="pagination-link pagination-next">
@@ -151,7 +137,6 @@
                 </li>
                 {{ end }}
 
-                <!-- last page -->
                 {{ if ne $paginator.PageNumber $paginator.TotalPages }}
                 <li>
                     <a href="{{ $paginator.Last.URL }}" class="pagination-link pagination-last">
