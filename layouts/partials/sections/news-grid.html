@@ -16,12 +16,12 @@
                     {{ if .Params.image }}
                     <picture>
                         <source srcset="{{ .Params.image }}" type="image/webp">
-                        <img src="{{ .Params.image }}" alt="{{ with .Params.imageAlt }}{{ . }}{{ else }}{{ .Title }}{{ end }}" style="width: 400px;" loading="lazy">
+                        <img src="{{ .Params.image }}" alt="{{ with .Params.imageAlt }}{{ . }}{{ else }}{{ .Title }}{{ end }}" width="1600" height="900" loading="lazy">
                     </picture>
                     {{ else }}
                     <picture>
                         <source srcset="{{ $assets.logoWebP }}" type="image/webp">
-                        <img src="{{ $assets.logoPNG }}" alt="" aria-hidden="true" style="width: 400px;" loading="lazy">
+                        <img src="{{ $assets.logoPNG }}" alt="" aria-hidden="true" width="1600" height="900" loading="lazy">
                     </picture>
                     {{ end }}
                 </div>
