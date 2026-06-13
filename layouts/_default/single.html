@@ -19,7 +19,6 @@
 <div class="content-wrapper">
     <div class="container">
         {{ $type := "news" }}
-        {{ $category := "" }}
         {{ $annSection := .Site.Params.contentSections.announcements | default "/media/announcements" }}
 
         {{ with .CurrentSection }}
@@ -31,28 +30,11 @@
             {{ end }}
         {{ end }}
 
-        {{ with .Params.type }}
-            {{ $lowerType := . | lower }}
-            {{ if ne $lowerType "news" }}
-                {{ $category = $lowerType }}
-            {{ end }}
-        {{ end }}
-
         {{ $pfTypeKey := i18n "type_label" }}
-        {{ $pfCategoryKey := i18n "category_label" }}
         {{ $pfTypeValue := cond (eq $type "announcement") (i18n "announcement_label") (i18n "news_label") }}
-        {{ $pfCategoryValue := "" }}
-        {{ with $category }}
-            {{ $key := printf "category_%s" . }}
-            {{ $localised := i18n $key }}
-            {{ $pfCategoryValue = cond (eq $localised "") . $localised }}
-        {{ end }}
 
         <article class="article-content" data-pagefind-body>
             <span hidden data-pagefind-filter="{{ $pfTypeKey }}:{{ $pfTypeValue }}"></span>
-            {{ if $pfCategoryValue }}
-            <span hidden data-pagefind-filter="{{ $pfCategoryKey }}:{{ $pfCategoryValue }}"></span>
-            {{ end }}
 
             {{ .Content }}
         </article>
