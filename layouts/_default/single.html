@@ -5,11 +5,13 @@
         <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
                 <li><a href="{{ .Site.Home.RelPermalink }}">{{ i18n "home" }}</a></li>
-                {{ with .CurrentSection }}
-                {{ if ne .Title $.Title }}
-                <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+                
+                {{ range .Ancestors.Reverse }}
+                    {{ if and .Title (ne . $.Site.Home) }}
+                    <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+                    {{ end }}
                 {{ end }}
-                {{ end }}
+                
                 <li>{{ .Title }}</li>
             </ol>
         </nav>
