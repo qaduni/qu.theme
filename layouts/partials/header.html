@@ -1,5 +1,3 @@
-{{ $assets := partialCached "site-assets.html" . }}
-
 {{ $topBar := index .Site.Menus "top_bar" }}
 {{ $hasContact := or .Site.Params.contact.email .Site.Params.contact.phone }}
 {{ if or $topBar $hasContact }}
@@ -37,10 +35,20 @@
 <header class="site-header">
     <div class="container">
         <a href="{{ .Site.Home.RelPermalink }}" class="logo" aria-label="{{ .Site.Title }} — {{ i18n "home" }}">
-            <picture>
-                <source srcset="{{ $assets.logoWebP }}" type="image/webp">
-                <img src="{{ $assets.logoPNG }}" alt="" aria-hidden="true" width="50" height="50" style="height: 50px;" decoding="async" fetchpriority="high">
-            </picture>
+            {{ $logo := resources.Get "images/logo.webp" }}
+            {{ if $logo }}
+            {{ $logo1x := $logo.Resize "65x webp q60" }}
+            {{ $logo2x := $logo.Resize "130x webp q60" }}
+            
+            <img 
+                src="{{ $logo1x.RelPermalink }}" 
+                srcset="{{ $logo1x.RelPermalink }} 1x, {{ $logo2x.RelPermalink }} 2x"
+                width="63" 
+                height="63" 
+                class="header-logo-img" 
+                alt="Logo"
+                fetchpriority="high">
+            {{ end }}
             <div class="logo-text" aria-hidden="true">
                 <span class="university-name">{{ .Site.Params.shortTitle | default .Site.Title }}</span>
                 {{ with .Site.Params.parentName }}
