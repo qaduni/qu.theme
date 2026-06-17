@@ -14,12 +14,10 @@
     <link rel="manifest" href="{{ "manifest.webmanifest" | relLangURL }}">
     <meta name="theme-color" content="{{ .Site.Params.theme.primaryColor | default "#0f4c81" }}">
 
-    {{ $defaultFonts := dict
-        "ar" (slice "cairo-regular.woff2" "cairo-bold.woff2")
-        "en" (slice "inter-regular.woff2" "inter-bold.woff2")
+    {{ $fonts := dict
+        "ar" (slice "cairo-regular.woff2" "cairo-semibold.woff2" "cairo-bold.woff2")
+        "en" (slice "inter-regular.woff2" "inter-semibold.woff2" "inter-medium.woff2" "inter-bold.woff2")
     }}
-    {{ $configured := .Site.Params.theme.preloadFonts }}
-    {{ $fonts := cond (eq $configured nil) $defaultFonts $configured }}
     {{ with index $fonts .Language.Lang }}
         {{ range . }}
     <link rel="preload" href="/fonts/{{ . }}" as="font" type="font/woff2" crossorigin>
