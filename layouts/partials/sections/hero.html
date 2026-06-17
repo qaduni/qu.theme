@@ -1,11 +1,23 @@
-{{ $assets := partialCached "site-assets.html" . }}
-{{ $slides := $assets.heroImages }}
+{{ $slides := .Site.Params.heroImages | default (slice "images/hero.webp" "images/hero-2.webp" "images/hero-3.webp" "images/hero-4.webp") }}
 {{ $slideCount := len $slides }}
 <section class="hero{{ if gt $slideCount 1 }} hero--gallery{{ end }}" data-slide-count="{{ $slideCount }}">
     {{ if gt $slideCount 0 }}
     <div class="hero-gallery" aria-hidden="true">
-        {{ range $i, $url := $slides }}
-        <div class="hero-slide hero-slide--{{ add $i 1 }}" style="background-image: url('{{ $url }}');"></div>
+        {{ range $i, $path := $slides }}
+        <div class="hero-slide hero-slide--{{ add $i 1 }}">
+            {{ if resources.Get $path }}
+                {{ $loadingType := "lazy" }}
+                {{ if eq $i 0 }}{{ $loadingType = "eager" }}{{ end }}
+                
+                {{ partial "responsive-img.html" (dict 
+                    "src" $path 
+                    "alt" "Hero background" 
+                    "class" "hero-bg-img" 
+                    "loading" $loadingType
+                    "fetchpriority" "high"
+                ) }}
+            {{ end }}
+        </div>
         {{ end }}
     </div>
     {{ end }}

@@ -1,14 +1,23 @@
-{{ $assets := partialCached "site-assets.html" . }}
 <footer class="site-footer">
     <div class="container">
         <div class="footer-main">
             <!-- About Column -->
             <div class="footer-about">
                 <a href="{{ .Site.Home.RelPermalink }}" class="logo" aria-label="{{ .Site.Title }} — {{ i18n "home" }}">
-                    <picture>
-                        <source srcset="{{ $assets.logoWebP }}" type="image/webp">
-                        <img src="{{ $assets.logoPNG }}" alt="" aria-hidden="true" width="50" height="50" style="height: 50px;" loading="lazy" decoding="async">
-                    </picture>
+                    {{ $logo := resources.Get "images/logo.webp" }}
+                    {{ if $logo }}
+                    {{ $logo1x := $logo.Resize "65x webp q60" }}
+                    {{ $logo2x := $logo.Resize "130x webp q60" }}
+                    
+                    <img 
+                        src="{{ $logo1x.RelPermalink }}" 
+                        srcset="{{ $logo1x.RelPermalink }} 1x, {{ $logo2x.RelPermalink }} 2x"
+                        width="63" 
+                        height="63" 
+                        class="header-logo-img" 
+                        alt="Logo"
+                        fetchpriority="high">
+                    {{ end }}
                     <span aria-hidden="true" style="font-size: 1.1rem;">{{ .Site.Title }}</span>
                 </a>
                 <p>

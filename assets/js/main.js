@@ -1,6 +1,3 @@
-document.documentElement.classList.remove('no-js');
-document.documentElement.classList.add('js');
-
 (function () {
     function revealAll() {
         document.querySelectorAll('.reveal').forEach(function (el) {
