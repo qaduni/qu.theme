@@ -20,16 +20,7 @@
     }}
     {{ with index $fonts .Language.Lang }}
         {{ range . }}
-    <link rel="preload" href="/fonts/{{ . }}" as="font" type="font/woff2" crossorigin>
-        {{ end }}
-    {{ end }}
-
-    {{ if .IsHome }}
-        {{ $heroPath := "images/hero.webp" }} 
-        {{ $heroImg := resources.Get $heroPath }}
-        
-        {{ with $heroImg }}
-            <link rel="preload" href="{{ .RelPermalink }}" as="image" fetchpriority="high" type="image/webp">
+        <link rel="prefetch" href="/fonts/{{ . }}" as="font" type="font/woff2" crossorigin>
         {{ end }}
     {{ end }}
 
@@ -67,7 +58,7 @@
 
     {{ partial "theme-vars.html" . }}
 
-    <link rel="stylesheet" href="{{ $style.RelPermalink }}" fetchpriority="high">
+    <link rel="preload" href="{{ $style.RelPermalink }}" as="style" onload="this.rel='stylesheet'">
 
     <meta property="og:title" content="{{ .Title }}">
     <meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
