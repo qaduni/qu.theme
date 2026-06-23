@@ -58,7 +58,7 @@
 
     {{ partial "theme-vars.html" . }}
 
-    <link rel="preload" href="{{ $style.RelPermalink }}" as="style" onload="this.rel='stylesheet'">
+    <link rel="stylesheet" href="{{ $style.RelPermalink }}">
 
     <meta property="og:title" content="{{ .Title }}">
     <meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
