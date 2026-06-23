@@ -7,8 +7,8 @@
     {{ partial "sections/contact.html" . }}
     {{ with .Site.Params.visitorCounterEndpoint }}
     {{ partial "sections/visitor-counter.html" $ }}
-    {{ end }}
+{{ end }}
 
-    {{ $jsHome := resources.Get "js/home.js" | minify | fingerprint }}
+{{ $jsHome := resources.Get "js/home.js" | minify | fingerprint }}
     <script src="{{ $jsHome.RelPermalink }}" defer></script>
 {{ end }}

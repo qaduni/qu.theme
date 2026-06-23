@@ -8,7 +8,7 @@
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1230px) {
     :root {
         --font-size-base: 15px;
         --spacing-4xl: 4rem;
