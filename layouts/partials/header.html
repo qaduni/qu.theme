@@ -104,7 +104,10 @@
                 {{ end }}
             </ul>
         </nav>
-
-        {{ partial "lang-switcher.html" . }}
+        <div class="lang-switcher">
+            {{ range .Translations}}
+            <a href="{{ .Permalink }}" data-lang-switch="{{ .Lang }}" hreflang="{{ .Lang }}" lang="{{ .Lang }}">{{ .Language.Label }}</a>
+            {{ end }}
+        </div>
     </div>
 </header>

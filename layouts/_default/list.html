@@ -23,7 +23,7 @@
 </section>
 
 <section class="list-page list-page--with-search">
-    {{ if and .Site.Params.search.pagefind .Pages }}
+    {{ if .Pages }}
     {{ $pfPlaceholder := cond $isAnn (i18n "search_announcements_placeholder") (i18n "search_news_placeholder") }}
     <pagefind-config bundle-path="{{ $bundle }}"></pagefind-config>
     <div class="container" style="padding-top: 2.5rem; padding-bottom: 1.5rem; display: flex; justify-content: center;">
@@ -161,7 +161,7 @@
 </section>
 </div>
 
-{{ if and .Site.Params.search.pagefind .Pages }}
+{{ if .Pages }}
 <link href="{{ $bundle }}pagefind-component-ui.css" rel="stylesheet">
 <script src="{{ $bundle }}pagefind-component-ui.js" type="module"></script>
 {{ end }}
