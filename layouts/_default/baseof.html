@@ -29,7 +29,7 @@
     {{ with $logoPNG }}<link rel="apple-touch-icon" href="{{ .RelPermalink }}">{{ end }}
 
     <link rel="manifest" href="{{ "manifest.webmanifest" | relLangURL }}">
-    <meta name="theme-color" content="{{ .Site.Params.theme.primaryColor | default "#0f4c81" }}">
+    <meta name="theme-color" content="#0f4c81">
 
     {{ $fonts := dict
         "ar" (slice "cairo-regular.woff2" "cairo-semibold.woff2" "cairo-bold.woff2")
