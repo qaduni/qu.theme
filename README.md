@@ -4,8 +4,6 @@ A general-purpose, bilingual (RTL/LTR-ready) Hugo theme for universities,
 academic departments, faculties, research centers and similar public-sector
 organisations. Originally built for Al-Qadisiyah University.
 
-![Screenshot](images/screenshot.svg)
-
 ## Features
 
 - **Menu-driven navigation** — every nav surface (header, footer, quick links,
@@ -95,11 +93,6 @@ theme = "qu.theme"
   [params.contact]
     email = "info@your-site.example"
     phone = "+1 555 0100"
-  [params.theme]
-    primaryColor      = "#0f4c81"
-    primaryColorLight = "#1a6bb5"
-    primaryColorDark  = "#0a3459"
-    accentColor       = "#ffd700"
 ```
 
 ## Menus
