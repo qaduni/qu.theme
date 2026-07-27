@@ -1,0 +1,77 @@
+{{/* 1. Cache top-level context */}}
+{{ $dot := . }}
+{{ $site := .Site }}
+
+{{/* 2. Logo Setup */}}
+{{ $logoPNG := resources.Get "images/logo.png" }}
+{{ $logoUrl := "" }}
+{{ with $logoPNG }}
+  {{ $logoUrl = .Permalink }}
+{{ end }}
+
+{{/* 3. Build Organization Schema */}}
+{{ $schemaType := $site.Params.schema.type | default "Organization" }}
+{{ $orgLd := dict
+    "@context"    "https://schema.org"
+    "@type"       $schemaType
+    "name"        $site.Title
+    "url"         $site.BaseURL
+    "logo"        $logoUrl
+    "description" $site.Params.description
+}}
+
+{{ with $site.Params.schema.alternateName }}
+  {{ $orgLd = merge $orgLd (dict "alternateName" .) }}
+{{ end }}
+
+{{/* Address */}}
+{{ with $site.Params.schema.address }}
+  {{ $addr := dict "@type" "PostalAddress" }}
+  {{ with .locality }}{{ $addr = merge $addr (dict "addressLocality" .) }}{{ end }}
+  {{ $region := .region }}{{ with $region }}{{ $addr = merge $addr (dict "addressRegion" .) }}{{ end }}
+  {{ with .country  }}{{ $addr = merge $addr (dict "addressCountry" .) }}{{ end }}
+  {{ with .street   }}{{ $addr = merge $addr (dict "streetAddress" .) }}{{ end }}
+  {{ with .postal   }}{{ $addr = merge $addr (dict "postalCode" .) }}{{ end }}
+  
+  {{ if gt (len $addr) 1 }}
+    {{ $orgLd = merge $orgLd (dict "address" $addr) }}
+  {{ end }}
+{{ end }}
+
+{{/* Contact Point */}}
+{{ with $site.Params.contact }}
+  {{ if or .phone .email }}
+    {{ $cp := dict "@type" "ContactPoint" "contactType" "customer service" }}
+    {{ with .phone }}{{ $cp = merge $cp (dict "telephone" .) }}{{ end }}
+    {{ with .email }}{{ $cp = merge $cp (dict "email" .) }}{{ end }}
+    {{ $orgLd = merge $orgLd (dict "contactPoint" $cp) }}
+  {{ end }}
+{{ end }}
+
+{{/* Social Profiles (sameAs) */}}
+{{ $sameAs := slice }}
+{{ with $site.Params.social }}
+  {{ range $k, $v := . }}
+    {{ with $v }}{{ $sameAs = $sameAs | append . }}{{ end }}
+  {{ end }}
+{{ end }}
+{{ if gt (len $sameAs) 0 }}
+  {{ $orgLd = merge $orgLd (dict "sameAs" $sameAs) }}
+{{ end }}
+
+<script type="application/ld+json">{{ $orgLd | jsonify (dict "indent" "  ") | safeJS }}</script>
+
+{{/* 4. Build WebPage Schema Safely (No string interpolation bugs) */}}
+{{ if $dot.IsPage }}
+  {{ $pageDesc := $dot.Description | default $site.Params.description }}
+  {{ $pageLd := dict
+      "@context"   "https://schema.org"
+      "@type"      "WebPage"
+      "name"       $dot.Title
+      "description" $pageDesc
+      "url"        $dot.Permalink
+      "inLanguage" $dot.Language.Lang
+      "isPartOf"   (dict "@type" "WebSite" "name" $site.Title "url" $site.BaseURL)
+  }}
+<script type="application/ld+json">{{ $pageLd | jsonify (dict "indent" "  ") | safeJS }}</script>
+{{ end }}

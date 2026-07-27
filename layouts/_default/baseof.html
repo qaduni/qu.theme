@@ -1,23 +1,38 @@
 <!DOCTYPE html>
 <html lang="{{ .Language.Lang }}" dir="{{ .Language.Direction }}">
 <head>
-    <script>
+    <!-- <script>
         (function () {
-            var savedLang = localStorage.getItem('theme_lang_preference');
-            var currentPath = window.location.pathname;
-            var browserLang = (navigator.language || navigator.userLanguage || 'ar').toLowerCase();
-            var targetLang = savedLang;
-            if (!targetLang) {
-                targetLang = browserLang.startsWith('en') ? 'en' : 'ar';
-            }
-            if (targetLang === 'en' && !currentPath.startsWith('/en')) {
-                window.location.href = '/en' + currentPath;
-            } else if (targetLang === 'ar' && currentPath.startsWith('/en/')) {
-                var newPath = currentPath.replace(/^\/en/, '') || '/';
-                window.location.href = newPath;
-            }
-        })();
-    </script>
+        var savedLang = localStorage.getItem('theme_lang_preference');
+        var currentPath = window.location.pathname; // e.g. "/", "/about", "/en", "/en/about"
+        var browserLang = (navigator.language || navigator.userLanguage || 'ar').toLowerCase();
+        
+        var targetLang = savedLang;
+        if (!targetLang) {
+            targetLang = browserLang.startsWith('en') ? 'en' : 'ar';
+            console.log("Target language determined:", targetLang);
+        }
+
+        // Check if current URL is under the English route (/en or /en/...)
+        var isCurrentlyEn = currentPath === '/en' || currentPath.startsWith('/en/');
+
+        if (targetLang === 'en' && !isCurrentlyEn) {
+            // Normalize leading slash to prevent double slashes like "/en//about"
+            var formattedPath = currentPath.startsWith('/') ? currentPath : '/' + currentPath;
+            var targetUrl = '/en' + (formattedPath === '/' ? '' : formattedPath);
+            
+            console.log("Redirecting to English:", targetUrl);
+            window.location.href = targetUrl;
+
+        } else if (targetLang === 'ar' && isCurrentlyEn) {
+            // Strip out leading /en or /en/
+            var newPath = currentPath.replace(/^\/en(\/|$)/, '/') || '/';
+            
+            console.log("Redirecting to Arabic:", newPath);
+            window.location.href = newPath;
+        }
+    })();
+    </script> -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
@@ -97,60 +112,7 @@
     {{ end }}
     {{ end }}
     <link rel="alternate" hreflang="x-default" href="{{ .Site.BaseURL }}">
-
-    {{- $schemaType := .Site.Params.schema.type | default "Organization" -}}
-    {{- $logoPNG := resources.Get "images/logo.png" -}}
-    {{- $logoUrl := "" -}}
-    {{- with $logoPNG }}{{ $logoUrl = .Permalink }}{{ end -}}
-
-    {{- $orgLd := dict
-        "@context" "https://schema.org"
-        "@type"    $schemaType
-        "name"     .Site.Title
-        "url"      .Site.BaseURL
-        "logo"     $logoUrl
-        "description" .Site.Params.description
-    -}}
-    {{- with .Site.Params.schema.alternateName }}{{ $orgLd = merge $orgLd (dict "alternateName" .) }}{{ end -}}
-    {{- with .Site.Params.schema.address }}
-        {{- $addr := dict "@type" "PostalAddress" -}}
-        {{- with .locality }}{{ $addr = merge $addr (dict "addressLocality" .) }}{{ end -}}
-        {{- with .region   }}{{ $addr = merge $addr (dict "addressRegion"   .) }}{{ end -}}
-        {{- with .country  }}{{ $addr = merge $addr (dict "addressCountry"  .) }}{{ end -}}
-        {{- with .street   }}{{ $addr = merge $addr (dict "streetAddress"   .) }}{{ end -}}
-        {{- with .postal   }}{{ $addr = merge $addr (dict "postalCode"      .) }}{{ end -}}
-        {{- if gt (len $addr) 1 -}}
-            {{- $orgLd = merge $orgLd (dict "address" $addr) -}}
-        {{- end -}}
-    {{- end -}}
-    {{- $cp := dict "@type" "ContactPoint" "contactType" "customer service" -}}
-    {{- with .Site.Params.contact.phone }}{{ $cp = merge $cp (dict "telephone" .) }}{{ end -}}
-    {{- with .Site.Params.contact.email }}{{ $cp = merge $cp (dict "email"     .) }}{{ end -}}
-    {{- if gt (len $cp) 2 }}{{ $orgLd = merge $orgLd (dict "contactPoint" $cp) }}{{ end -}}
-    {{- $sameAs := slice -}}
-    {{- with .Site.Params.social -}}
-        {{- range $k, $v := . -}}{{ with $v }}{{ $sameAs = $sameAs | append . }}{{ end }}{{- end -}}
-    {{- end -}}
-    {{- if $sameAs }}{{ $orgLd = merge $orgLd (dict "sameAs" $sameAs) }}{{ end }}
-    <script type="application/ld+json">{{ $orgLd | jsonify (dict "indent" "  ") | safeJS }}</script>
-    {{ if .IsPage }}
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebPage",
-        "name": "{{ .Title }}",
-        "description": "{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}",
-        "url": "{{ .Permalink }}",
-        "inLanguage": "{{ .Language.Lang }}",
-        "isPartOf": {
-            "@type": "WebSite",
-            "name": "{{ .Site.Title }}",
-            "url": "{{ .Site.BaseURL }}"
-        }
-    }
-    </script>
-    {{ end }}
-
+    {{ partial "schema.html" . }}
     {{ block "head" . }}{{ end }}
 </head>
 <body data-lang="{{ .Language.Lang }}" data-pwa-enabled="true">
