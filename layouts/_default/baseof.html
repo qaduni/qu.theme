@@ -56,39 +56,9 @@
         {{ end }}
     {{ end }}
 
-    {{ $cssFiles := slice
-        "css/_variables.css"
-        "css/_fonts.css"
-        "css/_base.css"
-        "css/_header.css"
-        "css/components/_hero.css"
-        "css/components/_buttons.css"
-        "css/components/_sections.css"
-        "css/components/_cards.css"
-        "css/components/_quick-links.css"
-        "css/components/_news.css"
-        "css/components/_announcements.css"
-        "css/components/_visitor-counter.css"
-        "css/components/_page-header.css"
-        "css/components/_lists.css"
-        "css/components/_pagination.css"
-        "css/components/_content.css"
-        "css/components/_forms.css"
-        "css/components/_motion.css"
-        "css/_footer.css"
-        "css/_responsive.css"
-    }}
-
-    {{ $cssResources := slice }}
-    {{ range $cssFiles }}
-        {{ with resources.Get . }}
-            {{ $cssResources = $cssResources | append . }}
-        {{ end }}
+    {{ with resources.Get "css/main.css" | css.Build (dict "minify" true) | fingerprint }}
+    <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
     {{ end }}
-
-    {{ $style := $cssResources | resources.Concat "css/bundle.css" | minify | fingerprint }}
-
-    <link rel="stylesheet" href="{{ $style.RelPermalink }}">
 
     <meta property="og:title" content="{{ .Title }}">
     <meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
