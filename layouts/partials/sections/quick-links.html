@@ -1,20 +1,21 @@
-{{ with index .Site.Menus "quick_links" }}
+{{ $data := index hugo.Data.homepage .Language.Lang "quick_links" }}
+{{ with $data }}
 <section class="section">
     <div class="container">
         <div class="section-header reveal">
-            <h2>{{ i18n "quick_links" }}</h2>
-            <p>{{ i18n "quick_links_subtitle" }}</p>
+            {{ with .title }}<h2>{{ . }}</h2>{{ end }}
+            {{ with .sub_title }}<p>{{ . }}</p>{{ end }}
         </div>
 
         <div class="quick-links">
-            {{ range $i, $e := . }}
-            <a href="{{ .URL }}"{{ if .Params.external }} target="_blank" rel="noopener"{{ end }} class="quick-link reveal" style="--reveal-delay: {{ mul $i 60 }}ms;">
-                {{ with .Params.icon }}
+            {{ range $i, $e := .items }}
+            <a href="{{ .url }}"{{ if .params.external }} target="_blank" rel="noopener"{{ end }} class="quick-link reveal" style="--reveal-delay: {{ mul $i 60 }}ms;">
+                {{ with .params.icon }}
                 <div class="quick-link-icon">
                     <svg width="24" height="24"><use href="#icon-{{ . }}"></use></svg>
                 </div>
                 {{ end }}
-                <span class="quick-link-text">{{ .Name }}</span>
+                <span class="quick-link-text">{{ .name }}</span>
             </a>
             {{ end }}
         </div>

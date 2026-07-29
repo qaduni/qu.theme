@@ -33,10 +33,11 @@
         }
     })();
     </script> -->
+    {{ $siteData := index hugo.Data.site .Language.Lang }}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
-    <title>{{ block "title" . }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+    <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ $siteData.description }}{{ end }}">
+    <title>{{ block "title" (dict "Page" . "SiteData" $siteData) }}{{ .Page.Title }} | {{ .SiteData.title }}{{ end }}</title>
 
     {{ $logoWebP := resources.Get "images/logo.webp" }}
     {{ $logoPNG := resources.Get "images/logo.png" }}
@@ -52,7 +53,7 @@
     }}
     {{ with index $fonts .Language.Lang }}
         {{ range . }}
-        <link rel="prefetch" href="/fonts/{{ . }}" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/fonts/{{ . }}" as="font" type="font/woff2" crossorigin>
         {{ end }}
     {{ end }}
 
@@ -61,16 +62,16 @@
     {{ end }}
 
     <meta property="og:title" content="{{ .Title }}">
-    <meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+    <meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{ $siteData.description }}{{ end }}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ .Permalink }}">
-    <meta property="og:site_name" content="{{ .Site.Title }}">
-    <meta property="og:locale" content="{{ .Language.Lang }}">
+    <meta property="og:site_name" content="{{ $siteData.title }}">
+    <meta property="og:locale" content="{{ if eq .Language.Lang `ar` }}ar_IQ{{ else }}en_US{{ end }}">
     {{ with .Params.image }}<meta property="og:image" content="{{ . | absURL }}">{{ end }}
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ .Title }}">
-    <meta name="twitter:description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+    <meta name="twitter:description" content="{{ with .Description }}{{ . }}{{ else }}{{ $siteData.description }}{{ end }}">
     {{ with .Params.image }}<meta name="twitter:image" content="{{ . | absURL }}">{{ end }}
 
     <link rel="canonical" href="{{ .Permalink }}">

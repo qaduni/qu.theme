@@ -1,17 +1,18 @@
-{{ with index .Site.Menus "homepage_services" }}
+{{ $data := index hugo.Data.homepage .Language.Lang "services" }}
+{{ with $data}}
 <section class="section section-alt">
     <div class="container">
         <div class="section-header reveal">
-            <h2>{{ i18n "services_title" }}</h2>
-            <p>{{ i18n "services_subtitle" }}</p>
+            {{ with .title }}<h2>{{ . }}</h2>{{ end }}
+            {{ with .sub_title }}<p>{{ . }}</p>{{ end }}
         </div>
 
         <div class="cards-grid">
-            {{ range $i, $e := . }}
-            <div class="card{{ if .Params.image }} card--with-image{{ end }} reveal" style="--reveal-delay: {{ mul $i 80 }}ms;">
-                {{ with .Params.image }}
+            {{ range $i, $e := .items }}
+            <div class="card{{ if .params.image }} card--with-image{{ end }} reveal" style="--reveal-delay: {{ mul $i 80 }}ms;">
+                {{ with .params.image }}
                 <div class="card-image">
-                    {{ $altText := $e.Params.imageAlt | default $e.Name }}
+                    {{ $altText := $e.name }}
                     
                     {{ $imgPath := strings.TrimPrefix "/" . }}
                     
@@ -22,19 +23,21 @@
                     ) }}
                 </div>
                 {{ else }}
-                {{ with .Params.icon }}
+                {{ with .params.icon }}
                 <div class="card-icon">
                     <svg width="28" height="28"><use href="#icon-{{ . }}"></use></svg>
                 </div>
                 {{ end }}
                 {{ end }}
                 <div class="card-body">
-                    <h3>{{ .Name }}</h3>
-                    {{ with .Params.description }}<p>{{ . }}</p>{{ end }}
-                    <a href="{{ .URL }}"{{ if .Params.external }} target="_blank" rel="noopener"{{ end }} class="card-link">
+                    <h3>{{ .name }}</h3>
+                    {{ with .params.description }}<p>{{ . }}</p>{{ end }}
+                    {{ with .url}}
+                    <a href="{{ . }}"{{ if .params.external }} target="_blank" rel="noopener"{{ end }} class="card-link">
                         {{ i18n "view_details" }}
                         <svg width="16" height="16"><use href="#icon-arrow-right"></use></svg>
                     </a>
+                    {{ end }}
                 </div>
             </div>
             {{ end }}

@@ -1,9 +1,9 @@
-{{- $src    := .Get "src"    | default .Site.Params.campusMapEmbed -}}
-{{- $width  := .Get "width"  | default "100%" -}}
-{{- $height := .Get "height" | default "400" -}}
-{{- $title  := .Get "title"  | default (i18n "map_title") -}}
-{{- if $src }}
-<div class="map-embed">
+{{ $src    := .Get "src"    | default hugo.Data.site.global.campus_map_embed }}
+{{ $width  := .Get "width"  | default "100%" }}
+{{ $height := .Get "height" | default "400" }}
+{{ $title  := .Get "title"  | default (i18n "map_title") }}
+{{ if $src }}
+<div class="mapembed">
   <iframe
     src="{{ $src | safeURL }}"
     width="{{ $width }}"
@@ -12,6 +12,6 @@
     style="border:0;"
     allowfullscreen=""
     loading="lazy"
-    referrerpolicy="no-referrer-when-downgrade"></iframe>
+    referrerpolicy="noreferrerwhendowngrade"></iframe>
 </div>
-{{- end }}
+{{ end }}

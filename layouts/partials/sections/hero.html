@@ -1,5 +1,12 @@
-{{ $slides := .Site.Params.heroImages | default (slice "images/hero.webp" "images/hero-2.webp" "images/hero-3.webp" "images/hero-4.webp") }}
+{{/* Fetch global site configuration & localized home page data */}}
+{{ $lang := .Language.Lang }}
+{{ $homepageData := index hugo.Data.homepage $lang }}
+{{ $heroStatsData := index hugo.Data.heroStats $lang }}
+
+{{/* Slides: pulled from data/homepage/[ar,en].yml with fallback defaults */}}
+{{ $slides := $homepageData.slides | default (slice "images/hero.webp" "images/hero-2.webp" "images/hero-3.webp" "images/hero-4.webp") }}
 {{ $slideCount := len $slides }}
+
 <section class="hero{{ if gt $slideCount 1 }} hero--gallery{{ end }}" data-slide-count="{{ $slideCount }}">
     {{ if gt $slideCount 0 }}
     <div class="hero-gallery" aria-hidden="true">
@@ -27,37 +34,31 @@
         <div class="hero-content">
             <div class="hero-badge">
                 <svg width="16" height="16"><use href="#icon-award"></use></svg>
-                {{ i18n "internationally_accredited" }}
+                {{ $homepageData.hero.badge }}
             </div>
-            <h1>{{ i18n "welcome_message" }}</h1>
-            <p class="hero-description">
-                {{ i18n "site_description" }}
-            </p>
-            {{ with index .Site.Menus "hero_buttons" }}
-            <div class="hero-buttons">
-                {{ range . }}
-                {{ $style := .Params.style | default "primary" }}
-                <a href="{{ .URL }}"{{ if .Params.external }} target="_blank" rel="noopener"{{ end }} class="btn btn-{{ $style }} btn-lg">
-                    {{ with .Params.icon }}
-                    <svg width="20" height="20"><use href="#icon-{{ . }}"></use></svg>
-                    {{ end }}
-                    {{ .Name }}
-                    {{ if eq $style "secondary" }}
-                    <svg width="16" height="16"><use href="#icon-arrow-right"></use></svg>
-                    {{ end }}
-                </a>
-                {{ end }}
-            </div>
-            {{ end }}
 
-            {{ with hugo.Data.heroStats }}
+            <h1>{{ $homepageData.hero.title }}</h1>
+            <p class="hero-description">
+                {{ $homepageData.hero.description }}
+            </p>
+
+            <div class="hero-buttons">
+                <a href="{{ $homepageData.hero.buttons.primary_url }}" class="btn btn-accent btn-lg">
+                    <svg width="20" height="20"><use href="#icon-building"></use></svg>
+                    {{ $homepageData.hero.buttons.primary_name }}
+                </a>
+                <a href="{{ $homepageData.hero.buttons.secondary_url }}" class="btn btn-secondary btn-lg">
+                    {{ $homepageData.hero.buttons.secondary_name }}
+                    <svg width="16" height="16"><use href="#icon-arrow-right"></use></svg>
+                </a>
+            </div>
+
+            {{ with $heroStatsData }}
             <div class="hero-stats">
                 {{ range . }}
                 <div class="stat-item">
                     <span class="stat-number">{{ .value }}</span>
-                    <span class="stat-label">
-                        {{- with .i18nKey }}{{ i18n . }}{{ else }}{{ .label }}{{ end -}}
-                    </span>
+                    <span class="stat-label">{{ .label }}</span>
                 </div>
                 {{ end }}
             </div>

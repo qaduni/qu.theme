@@ -2,10 +2,6 @@ welcome_message: "مرحباً بكم"
 site_description: "قالب هيوغو عام للمؤسسات الأكاديمية والبحثية."
 internationally_accredited: "اعتماد"
 
-quick_links: "روابط سريعة"
-quick_links_subtitle: "صفحات وموارد يطلبها الزوار بشكل متكرر"
-services_title: "الخدمات"
-services_subtitle: "ما نقدمه"
 view_details: "التفاصيل"
 
 latest_news: "آخر الأخبار"
@@ -52,3 +48,6 @@ page_navigation: "التنقل بين الصفحات"
 page_of_total: "صفحة {{ .Page }} من {{ .Total }}"
 
 map_title: "خريطة الموقع"
+
+404_title: "الصفحة غير موجودة"
+404_sub_title: "الصفحة التي تبحث عنها غير موجودة أو تم نقلها."

@@ -1,5 +1,5 @@
 {{ define "main" }}
-{{ $annSection := .Site.Params.contentSections.announcements | default "/media/announcements" }}
+{{ $annSection := "/media/announcements" }}
 {{ $isAnn := or
     (hasPrefix .RelPermalink $annSection)
     (hasPrefix .RelPermalink (printf "/%s%s" .Language.Lang $annSection))

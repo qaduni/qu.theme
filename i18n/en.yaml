@@ -5,10 +5,6 @@ welcome_message: "Welcome"
 site_description: "A general-purpose Hugo theme for academic and research organisations."
 internationally_accredited: "Accredited"
 
-quick_links: "Quick Links"
-quick_links_subtitle: "Frequently requested pages and resources"
-services_title: "Services"
-services_subtitle: "What we offer"
 view_details: "Details"
 
 latest_news: "Latest News"
@@ -55,3 +51,6 @@ page_navigation: "Page navigation"
 page_of_total: "Page {{ .Page }} of {{ .Total }}"
 
 map_title: "Location map"
+
+404_title: "Page not found"
+404_sub_title: "The page you were looking for does not exist or has been moved."
