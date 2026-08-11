@@ -1,20 +1,20 @@
-{{ $site := index hugo.Data.site .Language.Lang }}
-{{ $icon := resources.Get "images/logo.png" }}
-{{ $iconSVG := resources.Get "images/logo.svg" }}
-{{ $icons := slice }}
+{{- $site := index hugo.Data.site .Language.Lang -}}
+{{- $icon := resources.Get "images/logo.webp" -}}
+{{- $iconSVG := resources.Get "images/logo.svg" -}}
+{{- $icons := slice -}}
 
-{{ with $icon }}
-    {{ $i192 := .Resize "192x192" }}
-    {{ $i512 := .Resize "512x512" }}
-    {{ $icons = $icons | append (dict "src" $i192.RelPermalink "sizes" "192x192" "type" "image/png") }}
-    {{ $icons = $icons | append (dict "src" $i512.RelPermalink "sizes" "512x512" "type" "image/png") }}
-{{ else }}
-    {{ with $iconSVG }}
-        {{ $icons = $icons | append (dict "src" .RelPermalink "sizes" "any" "type" "image/svg+xml") }}
-    {{ end }}
-{{ end }}
+{{- with $icon -}}
+    {{- $i192 := .Resize "192x192" -}}
+    {{- $i512 := .Resize "512x512" -}}
+    {{- $icons = $icons | append (dict "src" $i192.RelPermalink "sizes" "192x192" "type" "image/webp") -}}
+    {{- $icons = $icons | append (dict "src" $i512.RelPermalink "sizes" "512x512" "type" "image/webp") -}}
+{{- else -}}
+    {{- with $iconSVG -}}
+        {{- $icons = $icons | append (dict "src" .RelPermalink "sizes" "any" "type" "image/svg+xml") -}}
+    {{- end -}}
+{{- end -}}
 
-{{ $manifest := dict
+{{- $manifest := dict
     "name"             ($site.title | default site.Title)
     "short_name"       ($site.short_title | default $site.title)
     "lang"             .Language.Lang
@@ -26,5 +26,5 @@
     "theme_color"      ($site.theme.primaryColor | default "#0f4c81")
     "display"          "standalone"
     "icons"            $icons
-}}
-{{ $manifest | jsonify (dict "indent" "    ") }}
+-}}
+{{- $manifest | jsonify (dict "indent" "    ") -}}

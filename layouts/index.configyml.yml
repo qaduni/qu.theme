@@ -1,0 +1,355 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+
+backend:
+  name: github
+  repo: qaduni/scr.qu.edu.iq
+  branch: main
+  auth_methods:
+    - token
+
+media_folder: "static/media"
+public_folder: "/media"
+
+i18n:
+  structure: multiple_files
+  locales:
+    - ar
+    - en
+  default_locale: ar
+
+media_libraries:
+  all:
+    max_file_size: 5120000
+    slugify_filename: true
+    transformations:
+      raster_image:
+        format: webp
+        quality: 85
+      svg:
+        optimize: true
+
+site_url: {{ .Site.BaseURL }}
+display_url: {{ .Site.BaseURL }}
+
+collections:
+  - name: "news"
+    label: "الأخبار"
+    label_singular: "خبر"
+    description: "الاخبار تظهر في الصفحة الرئيسية ومركز الاخبار وتحتوي على غلاف."
+    i18n: true
+    folder: "content/media/news"
+    path: "{{ `{{year}}/{{month}}/{{day}}/{{slug}}` }}"
+    preview_path: "media/news/{{ `{{year}}/{{month}}/{{day}}/{{slug}}` }}"
+    slug: "{{ `{{uuid_shorter}}` }}"
+    create: true
+    sortable_fields:
+      - "date"
+      - "title"
+    media_folder: "/static/media"
+    public_folder: "/media"
+    fields:
+      - label: "العنوان"
+        name: "title"
+        widget: "string"
+        required: true
+        i18n: true
+        pattern: &title_pattern
+          - "^[a-zA-Z0-9\\u0600-\\u06FF\\s-]{10,75}$"
+          - "يجب أن يكون الوصف بين 10 و 75 حرفًا."
+      - label: "الوصف"
+        name: "description"
+        widget: "text"
+        required: true
+        i18n: true
+        pattern: &description_pattern
+          - "^[a-zA-Z0-9\\u0600-\\u06FF\\s-]{30,120}$"
+          - "يجب أن يكون الوصف بين 30 و 120 حرفًا."
+      - label: "الصورة"
+        name: "image"
+        widget: "image"
+        required: false
+        i18n: duplicate
+      - label: "المحتوى"
+        name: "body"
+        widget: "markdown"
+        i18n: true
+      - label: "التاريخ"
+        name: "date"
+        widget: "datetime"
+        format: "YYYY-MM-DD"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        default: "{{ `{{now}}` }}"
+        required: true
+        i18n: duplicate
+
+  - name: "announcements"
+    label: "الإعلانات"
+    label_singular: "إعلان"
+    description: "الإعلانات تظهر في الصفحة الرئيسية ومركز الاخبار ولا تحتوي على غلاف."
+    i18n: true
+    folder: "content/media/announcements"
+    path: "{{ `{{year}}/{{month}}/{{day}}/{{slug}}` }}"
+    slug: "{{ `{{uuid_shorter}}` }}"
+    create: true
+    sortable_fields:
+      - "date"
+      - "title"
+    media_folder: "/static/media"
+    public_folder: "/media"
+    fields:
+      - label: "العنوان"
+        name: "title"
+        widget: "string"
+        required: true
+        i18n: true
+        pattern: *title_pattern
+      - label: "هل الاعلان مهم؟"
+        name: "important"
+        widget: "boolean"
+        default: false
+        i18n: duplicate
+      - label: "الوصف"
+        name: "description"
+        widget: "text"
+        required: true
+        i18n: true
+        pattern: *description_pattern
+      - label: "المحتوى"
+        name: "body"
+        widget: "markdown"
+        i18n: true
+      - label: "التاريخ"
+        name: "date"
+        widget: "datetime"
+        format: "YYYY-MM-DD"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        default: "{{ `{{now}}` }}"
+        required: true
+        i18n: duplicate
+
+  - name: "about_pages"
+    label: "حول"
+    folder: "content/about"
+    create: false
+    i18n: true
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{ `{{slug}}` }}"
+    fields: &default_fields
+      - label: "Title"
+        name: "title"
+        widget: "string"
+        i18n: true
+      - label: "Description"
+        name: "description"
+        widget: "string"
+        required: true
+        i18n: true
+      - label: "Body"
+        name: "body"
+        widget: "markdown"
+        i18n: true
+
+  - name: "policies"
+    label: "السياسات"
+    folder: "content/policies"
+    create: false
+    i18n: true
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{ `{{slug}}` }}"
+    fields: *default_fields
+
+  # - name: "footer"
+  #   label: "تذييل الصفحة (Footer)"
+  #   folder: "data/footer"
+  #   create: false
+  #   i18n: true
+  #   extension: "yml"
+  #   format: "yaml"
+  #   fields:
+  #     - label: "Useful Links (روابط مفيدة)"
+  #       name: "footer_useful"
+  #       widget: "list"
+  #       i18n: true
+  #       fields:
+  #         - { label: "Name", name: "name", widget: "string", i18n: true }
+  #         - { label: "Weight", name: "weight", widget: "number", value_type: "int", i18n: duplicate }
+  #         - { label: "URL", name: "url", widget: "string", i18n: true }
+  #     - label: "Services (الخدمات)"
+  #       name: "footer_services"
+  #       widget: "list"
+  #       i18n: true
+  #       fields:
+  #         - { label: "Name", name: "name", widget: "string", i18n: true }
+  #         - { label: "Weight", name: "weight", widget: "number", value_type: "int", i18n: duplicate }
+  #         - { label: "URL", name: "url", widget: "string", i18n: true }
+  #         - label: "Params"
+  #           name: "params"
+  #           widget: "object"
+  #           required: false
+  #           fields:
+  #             - { label: "External Link?", name: "external", widget: "boolean", default: false, required: false, i18n: duplicate }
+  #     - label: "Bottom Links (روابط سفلية)"
+  #       name: "footer_bottom"
+  #       widget: "list"
+  #       i18n: true
+  #       fields:
+  #         - { label: "Name", name: "name", widget: "string", i18n: true }
+  #         - { label: "Weight", name: "weight", widget: "number", value_type: "int", i18n: duplicate }
+  #         - { label: "URL", name: "url", widget: "string", i18n: true }
+
+  # # ==========================================
+  # # 2. HOMEPAGE DATA
+  # # ==========================================
+  # - name: "homepage"
+  #   label: "الصفحة الرئيسية (Homepage)"
+  #   folder: "data/homepage"
+  #   extension: "yml"
+  #   format: "yaml"
+  #   create: false
+  #   i18n: true
+  #   fields:
+  #     - label: "Hero Section"
+  #       name: "hero"
+  #       widget: "object"
+  #       i18n: true
+  #       fields:
+  #         - { label: "Badge", name: "badge", widget: "string", i18n: true }
+  #         - { label: "Title", name: "title", widget: "string", i18n: true }
+  #         - { label: "Description", name: "description", widget: "text", i18n: true }
+  #         - label: "Buttons"
+  #           name: "buttons"
+  #           widget: "object"
+  #           fields:
+  #             - { label: "Primary Name", name: "primary_name", widget: "string", required: false, i18n: true }
+  #             - { label: "Primary URL", name: "primary_url", widget: "string", required: false, i18n: true }
+  #             - { label: "Secondary Name", name: "secondary_name", widget: "string", required: false, i18n: true }
+  #             - { label: "Secondary URL", name: "secondary_url", widget: "string", required: false, i18n: true }
+  #     - label: "Services Section"
+  #       name: "services"
+  #       widget: "object"
+  #       i18n: true
+  #       fields:
+  #         - { label: "Title", name: "title", widget: "string", required: false, i18n: true }
+  #         - { label: "Sub Title", name: "sub_title", widget: "string", required: false, i18n: true }
+  #         - label: "Items"
+  #           name: "items"
+  #           widget: "list"
+  #           i18n: true
+  #           fields:
+  #             - { label: "Name", name: "name", widget: "string", i18n: true }
+  #             - { label: "Weight", name: "weight", widget: "number", value_type: "int", i18n: duplicate }
+  #             - { label: "URL", name: "url", widget: "string", required: false, i18n: true }
+  #             - label: "Params"
+  #               name: "params"
+  #               widget: "object"
+  #               required: false
+  #               fields:
+  #                 - { label: "Image", name: "image", widget: "image", required: false, i18n: duplicate }
+  #                 - { label: "Description", name: "description", widget: "text", required: false, i18n: true }
+
+  # # ==========================================
+  # # 3. MENUS DATA
+  # # ==========================================
+  # - name: "menus"
+  #   label: "القوائم (Menus)"
+  #   folder: "data/menus"
+  #   extension: "yml"
+  #   format: "yaml"
+  #   create: false
+  #   i18n: true
+  #   fields:
+  #     - label: "Main Menu"
+  #       name: "main"
+  #       widget: "list"
+  #       i18n: true
+  #       fields:
+  #         - { label: "Name", name: "name", widget: "string", i18n: true }
+  #         - { label: "Weight", name: "weight", widget: "number", value_type: "int", i18n: duplicate }
+  #         - { label: "URL", name: "url", widget: "string", required: false, i18n: true }
+  #         - { label: "Identifier", name: "identifier", widget: "string", required: false, i18n: duplicate }
+  #         - { label: "Parent", name: "parent", widget: "string", required: false, i18n: duplicate }
+  #     - label: "Top Bar Menu"
+  #       name: "top_bar"
+  #       widget: "list"
+  #       i18n: true
+  #       fields:
+  #         - { label: "Name", name: "name", widget: "string", i18n: true }
+  #         - { label: "Weight", name: "weight", widget: "number", value_type: "int", i18n: duplicate }
+  #         - { label: "URL", name: "url", widget: "string", i18n: true }
+  #         - label: "Params"
+  #           name: "params"
+  #           widget: "object"
+  #           required: false
+  #           fields:
+  #             - { label: "External Link?", name: "external", widget: "boolean", default: false, required: false, i18n: duplicate }
+
+  # # ==========================================
+  # # 4. SITE DATA (AR / EN)
+  # # ==========================================
+  # - name: "site"
+  #   label: "معلومات الموقع (Site Info)"
+  #   folder: "data/site"
+  #   extension: "yml"
+  #   format: "yaml"
+  #   create: false
+  #   i18n: true
+  #   # Exclude global.yml so Sveltia only treats locale files (ar.yml, en.yml) as translations
+  #   filter:
+  #     field: "title"
+  #     value: ".*"
+  #   fields:
+  #     - { label: "Title", name: "title", widget: "string", i18n: true }
+  #     - { label: "Description", name: "description", widget: "text", i18n: true }
+  #     - { label: "Short Title", name: "short_title", widget: "string", i18n: true }
+  #     - { label: "Parent Name", name: "parent_name", widget: "string", i18n: true }
+  #     - { label: "Address", name: "address", widget: "string", i18n: true }
+  #     - label: "Schema Details"
+  #       name: "schema"
+  #       widget: "object"
+  #       i18n: duplicate
+  #       fields:
+  #         - { label: "Type", name: "type", widget: "string", default: "EducationalOrganization" }
+  #         - { label: "Alternate Name", name: "alternate_name", widget: "string", required: false }
+  #         - label: "Address"
+  #           name: "address"
+  #           widget: "object"
+  #           fields:
+  #             - { label: "Locality", name: "locality", widget: "string" }
+  #             - { label: "Region", name: "region", widget: "string" }
+  #             - { label: "Country", name: "country", widget: "string" }
+
+  # # ==========================================
+  # # 5. GLOBAL CONFIGURATION (File Collection)
+  # # ==========================================
+  # - name: "global_settings"
+  #   label: "الإعدادات العامة (Global Settings)"
+  #   files:
+  #     - name: "site_global"
+  #       label: "إعدادات الموقع العامة (Global Settings)"
+  #       file: "data/site/global.yml"
+  #       i18n: false
+  #       fields:
+  #         - { label: "Parent URL", name: "parent_url", widget: "string" }
+  #         - { label: "Campus Map Embed URL", name: "campus_map_embed", widget: "string" }
+  #         - { label: "Official Domain", name: "official_domain", widget: "string" }
+  #         - { label: "Show Official Domain Notice", name: "show_official_domain_notice", widget: "boolean", default: true }
+  #         - { label: "Visitor Counter Endpoint", name: "visitor_counter_endpoint", widget: "string", required: false }
+  #         - { label: "Email", name: "email", widget: "string" }
+  #         - { label: "Phone", name: "phone", widget: "string", required: false }
+  #         - label: "Social Media Links"
+  #           name: "social"
+  #           widget: "object"
+  #           required: false
+  #           fields:
+  #             - { label: "Facebook", name: "facebook", widget: "string", required: false }
+  #             - { label: "Twitter", name: "twitter", widget: "string", required: false }
+  #             - { label: "YouTube", name: "youtube", widget: "string", required: false }
+  #             - { label: "Instagram", name: "instagram", widget: "string", required: false }
+  #             - { label: "LinkedIn", name: "linkedin", widget: "string", required: false }
+  #             - { label: "Telegram", name: "telegram", widget: "string", required: false }
+  #             - { label: "WhatsApp", name: "whatsapp", widget: "string", required: false }
+  #             - { label: "TikTok", name: "tiktok", widget: "string", required: false }

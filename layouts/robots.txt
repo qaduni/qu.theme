@@ -1,4 +1,14 @@
+# {{ .Site.BaseURL }}
+
 User-agent: *
 Allow: /
 
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /private/
+
+# Sitemap
 Sitemap: {{ "sitemap.xml" | absURL }}
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
