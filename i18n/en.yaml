@@ -25,6 +25,8 @@ announcement_label: "Announcement"
 type_label: "Type"
 category_label: "Category"
 search_placeholder: "Search news and announcements..."
+search_news_placeholder: "Search news..."
+search_announcements_placeholder: "Search announcements..."
 
 have_question: "Have a question?"
 contact_subtitle: "Our team is ready to answer your questions and provide support"

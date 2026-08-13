@@ -1,36 +1,40 @@
 {{ define "main" }}
 {{ $annSection := "/media/announcements" }}
 {{ $isAnn := or
-    (hasPrefix .RelPermalink $annSection)
-    (hasPrefix .RelPermalink (printf "/%s%s" .Language.Lang $annSection))
+(hasPrefix .RelPermalink $annSection)
+(hasPrefix .RelPermalink (printf "/%s%s" .Language.Lang $annSection))
 }}
-{{ $bundle := cond $isAnn "/pagefind-announcements/" "/pagefind-news/" }}
 
-<div data-pagefind-ignore="all">
+<link href="/pagefind/pagefind-component-ui.css" rel="stylesheet">
+<script src="/pagefind/pagefind-component-ui.js" type="module"></script>
+
 <section class="page-header">
     <div class="container">
-        <h1>{{ .Title }}</h1>
+        <!-- Main page metadata for Pagefind indexing -->
+        <h1 data-pagefind-body data-pagefind-weight="10" data-pagefind-meta="title">{{ .Title }}</h1>
         <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
                 <li><a href="{{ .Site.Home.RelPermalink }}">{{ i18n "home" }}</a></li>
-                {{ if and .Parent (not .Parent.IsHome) }}
-                <li><a href="{{ .Parent.RelPermalink }}">{{ .Parent.Title }}</a></li>
+
+                {{ range .Ancestors.Reverse }}
+                {{ if and .Title (ne . $.Site.Home) }}
+                <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
                 {{ end }}
+                {{ end }}
+
                 <li>{{ .Title }}</li>
             </ol>
         </nav>
     </div>
 </section>
 
-<section class="list-page list-page--with-search">
-    {{ if .Pages }}
+<!-- Ignore search UI controls and repeated paginated lists from site index -->
+<section class="list-page" data-pagefind-ignore="all">
     {{ $pfPlaceholder := cond $isAnn (i18n "search_announcements_placeholder") (i18n "search_news_placeholder") }}
-    <pagefind-config bundle-path="{{ $bundle }}"></pagefind-config>
-    <div class="container" style="padding-top: 2.5rem; padding-bottom: 1.5rem; display: flex; justify-content: center;">
-        <pagefind-modal-trigger placeholder="{{ $pfPlaceholder }}"></pagefind-modal-trigger>
+
+    <div style="margin: 2rem auto; justify-items: center; width: 100%; max-width: 500px;">
+        <pagefind-searchbox style="width: 100%;" placeholder="{{ $pfPlaceholder }}" max-results="10"></pagefind-searchbox>
     </div>
-    <pagefind-modal placeholder="{{ $pfPlaceholder }}"></pagefind-modal>
-    {{ end }}
 
     <div class="container">
         {{ with .Content }}
@@ -41,15 +45,44 @@
 
         <div class="list-items">
             {{ range $paginator.Pages }}
+
+            {{/* Detect if the page is in the announcements section */}}
+            {{ $annSection := "/media/announcements" }}
+            {{ $isAnn := or (hasPrefix .RelPermalink $annSection) (hasPrefix .RelPermalink (printf "/%s%s"
+            .Language.Lang $annSection)) }}
+
             <article class="list-item {{ if .Params.important }}priority-high{{ end }}"
-                     data-title="{{ .Title | lower }}"
-                     data-description="{{ .Description | lower }}">
-                {{ with .Date }}
+                data-title="{{ .Title | lower }}" data-description="{{ .Description | lower }}">
+
+                {{/* If it's an announcement, display the date badge; otherwise, render the responsive post image */}}
+                {{ if $isAnn }}
+                {{ if .Date }}
                 <div class="list-item-date">
-                    <span class="day">{{ .Format "02" }}</span>
-                    <span class="month">{{ . | time.Format ":date_medium" }}</span>
+                    <span class="day">{{ .Date.Format "02" }}</span>
+                    <span class="month">{{ .Date | time.Format ":date_medium" }}</span>
                 </div>
                 {{ end }}
+                {{ else }}
+                <div class="list-item-image">
+                    {{ if .Params.image }}
+                    {{ $altText := .Params.imageAlt | default .Title }}
+                    {{ $imgPath := strings.TrimPrefix "/" .Params.image }}
+
+                    {{ partial "responsive-img.html" (dict
+                    "src" $imgPath
+                    "alt" $altText
+                    "sizes" "(max-width: 768px) 100vw, 33vw"
+                    ) }}
+                    {{ else }}
+                    {{ partial "responsive-img.html" (dict
+                    "src" "images/logo.webp"
+                    "alt" "Placeholder"
+                    "sizes" "(max-width: 768px) 100vw, 33vw"
+                    ) }}
+                    {{ end }}
+                </div>
+                {{ end }}
+
                 <div class="list-item-content">
                     {{ if .Params.important }}
                     <span class="priority-badge">{{ i18n "important" }}</span>
@@ -62,18 +95,22 @@
         </div>
 
         {{ if gt $paginator.TotalPages 1 }}
-        <nav class="pagination" aria-label="{{ i18n "page_navigation" }}">
+        <nav class="pagination" aria-label="{{ i18n " page_navigation" }}">
             <ul class="pagination-list">
                 {{ if ne $paginator.PageNumber 1 }}
                 <li>
                     <a href="{{ $paginator.First.URL }}" class="pagination-link pagination-first">
-                        <svg width="16" height="16"><use href="#icon-chevrons-right"></use></svg>
+                        <svg width="16" height="16">
+                            <use href="#icon-chevrons-right"></use>
+                        </svg>
                     </a>
                 </li>
                 {{ else }}
                 <li>
                     <span class="pagination-link pagination-first disabled">
-                        <svg width="16" height="16"><use href="#icon-chevrons-right"></use></svg>
+                        <svg width="16" height="16">
+                            <use href="#icon-chevrons-right"></use>
+                        </svg>
                     </span>
                 </li>
                 {{ end }}
@@ -81,13 +118,17 @@
                 {{ if $paginator.HasPrev }}
                 <li>
                     <a href="{{ $paginator.Prev.URL }}" class="pagination-link pagination-prev">
-                        <svg width="16" height="16"><use href="#icon-arrow-right"></use></svg>
+                        <svg width="16" height="16">
+                            <use href="#icon-arrow-right"></use>
+                        </svg>
                     </a>
                 </li>
                 {{ else }}
                 <li>
                     <span class="pagination-link pagination-prev disabled">
-                        <svg width="16" height="16"><use href="#icon-arrow-right"></use></svg>
+                        <svg width="16" height="16">
+                            <use href="#icon-arrow-right"></use>
+                        </svg>
                     </span>
                 </li>
                 {{ end }}
@@ -99,40 +140,45 @@
                 {{ $upper_limit := (sub $paginator.TotalPages $adjacent_links) }}
 
                 {{ range $paginator.Pagers }}
-                    {{ $show := false }}
-                    {{ if le $paginator.TotalPages $max_links }}
-                        {{ $show = true }}
-                    {{ else if le $currentPage $lower_limit }}
-                        {{ $show = (le .PageNumber $max_links) }}
-                    {{ else if ge $currentPage $upper_limit }}
-                        {{ $show = (gt .PageNumber (sub $paginator.TotalPages $max_links)) }}
-                    {{ else }}
-                        {{ $show = (and (ge .PageNumber (sub $currentPage $adjacent_links)) (le .PageNumber (add $currentPage $adjacent_links))) }}
-                    {{ end }}
+                {{ $show := false }}
+                {{ if le $paginator.TotalPages $max_links }}
+                {{ $show = true }}
+                {{ else if le $currentPage $lower_limit }}
+                {{ $show = (le .PageNumber $max_links) }}
+                {{ else if ge $currentPage $upper_limit }}
+                {{ $show = (gt .PageNumber (sub $paginator.TotalPages $max_links)) }}
+                {{ else }}
+                {{ $show = (and (ge .PageNumber (sub $currentPage $adjacent_links)) (le .PageNumber (add $currentPage
+                $adjacent_links))) }}
+                {{ end }}
 
-                    {{ if $show }}
-                        {{ if eq .PageNumber $currentPage }}
-                        <li>
-                            <span class="pagination-link current" aria-current="page">{{ .PageNumber }}</span>
-                        </li>
-                        {{ else }}
-                        <li>
-                            <a href="{{ .URL }}" class="pagination-link">{{ .PageNumber }}</a>
-                        </li>
-                        {{ end }}
-                    {{ end }}
+                {{ if $show }}
+                {{ if eq .PageNumber $currentPage }}
+                <li>
+                    <span class="pagination-link current" aria-current="page">{{ .PageNumber }}</span>
+                </li>
+                {{ else }}
+                <li>
+                    <a href="{{ .URL }}" class="pagination-link">{{ .PageNumber }}</a>
+                </li>
+                {{ end }}
+                {{ end }}
                 {{ end }}
 
                 {{ if $paginator.HasNext }}
                 <li>
                     <a href="{{ $paginator.Next.URL }}" class="pagination-link pagination-next">
-                        <svg width="16" height="16"><use href="#icon-arrow-right"></use></svg>
+                        <svg width="16" height="16">
+                            <use href="#icon-arrow-right"></use>
+                        </svg>
                     </a>
                 </li>
                 {{ else }}
                 <li>
                     <span class="pagination-link pagination-next disabled">
-                        <svg width="16" height="16"><use href="#icon-arrow-right"></use></svg>
+                        <svg width="16" height="16">
+                            <use href="#icon-arrow-right"></use>
+                        </svg>
                     </span>
                 </li>
                 {{ end }}
@@ -140,13 +186,17 @@
                 {{ if ne $paginator.PageNumber $paginator.TotalPages }}
                 <li>
                     <a href="{{ $paginator.Last.URL }}" class="pagination-link pagination-last">
-                        <svg width="16" height="16"><use href="#icon-chevrons-right"></use></svg>
+                        <svg width="16" height="16">
+                            <use href="#icon-chevrons-right"></use>
+                        </svg>
                     </a>
                 </li>
                 {{ else }}
                 <li>
                     <span class="pagination-link pagination-last disabled">
-                        <svg width="16" height="16"><use href="#icon-chevrons-right"></use></svg>
+                        <svg width="16" height="16">
+                            <use href="#icon-chevrons-right"></use>
+                        </svg>
                     </span>
                 </li>
                 {{ end }}
@@ -159,10 +209,4 @@
         {{ end }}
     </div>
 </section>
-</div>
-
-{{ if .Pages }}
-<link href="{{ $bundle }}pagefind-component-ui.css" rel="stylesheet">
-<script src="{{ $bundle }}pagefind-component-ui.js" type="module"></script>
-{{ end }}
 {{ end }}

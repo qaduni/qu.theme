@@ -33,6 +33,19 @@
     border-right: 4px solid var(--color-accent);
 }
 
+.list-item-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    min-width: 70px;
+    flex-shrink: 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--color-surface, #f4f4f5);
+}
+
 .list-item-date {
     display: flex;
     flex-direction: column;
