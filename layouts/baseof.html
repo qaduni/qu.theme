@@ -1,62 +1,77 @@
 <!DOCTYPE html>
 <html lang="{{ .Language.Lang }}" dir="{{ .Language.Direction }}">
+
 <head>
-    <!-- <script>
+    <script>
+        //     (function () {
+        //     var savedLang = localStorage.getItem('theme_lang_preference');
+        //     var currentPath = window.location.pathname; // e.g. "/", "/about", "/en", "/en/about"
+        //     var browserLang = (navigator.language || navigator.userLanguage || 'ar').toLowerCase();
+
+        //     var targetLang = savedLang;
+        //     if (!targetLang) {
+        //         targetLang = browserLang.startsWith('en') ? 'en' : 'ar';
+        //         console.log("Target language determined:", targetLang);
+        //     }
+
+        //     // Check if current URL is under the English route (/en or /en/...)
+        //     var isCurrentlyEn = currentPath === '/en' || currentPath.startsWith('/en/');
+
+        //     if (targetLang === 'en' && !isCurrentlyEn) {
+        //         // Normalize leading slash to prevent double slashes like "/en//about"
+        //         var formattedPath = currentPath.startsWith('/') ? currentPath : '/' + currentPath;
+        //         var targetUrl = '/en' + (formattedPath === '/' ? '' : formattedPath);
+
+        //         console.log("Redirecting to English:", targetUrl);
+        //         window.location.href = targetUrl;
+
+        //     } else if (targetLang === 'ar' && isCurrentlyEn) {
+        //         // Strip out leading /en or /en/
+        //         var newPath = currentPath.replace(/^\/en(\/|$)/, '/') || '/';
+
+        //         console.log("Redirecting to Arabic:", newPath);
+        //         window.location.href = newPath;
+        //     }
+        // })();
         (function () {
-        var savedLang = localStorage.getItem('theme_lang_preference');
-        var currentPath = window.location.pathname; // e.g. "/", "/about", "/en", "/en/about"
-        var browserLang = (navigator.language || navigator.userLanguage || 'ar').toLowerCase();
-        
-        var targetLang = savedLang;
-        if (!targetLang) {
-            targetLang = browserLang.startsWith('en') ? 'en' : 'ar';
-            console.log("Target language determined:", targetLang);
-        }
-
-        // Check if current URL is under the English route (/en or /en/...)
-        var isCurrentlyEn = currentPath === '/en' || currentPath.startsWith('/en/');
-
-        if (targetLang === 'en' && !isCurrentlyEn) {
-            // Normalize leading slash to prevent double slashes like "/en//about"
-            var formattedPath = currentPath.startsWith('/') ? currentPath : '/' + currentPath;
-            var targetUrl = '/en' + (formattedPath === '/' ? '' : formattedPath);
-            
-            console.log("Redirecting to English:", targetUrl);
-            window.location.href = targetUrl;
-
-        } else if (targetLang === 'ar' && isCurrentlyEn) {
-            // Strip out leading /en or /en/
-            var newPath = currentPath.replace(/^\/en(\/|$)/, '/') || '/';
-            
-            console.log("Redirecting to Arabic:", newPath);
-            window.location.href = newPath;
-        }
-    })();
-    </script> -->
+            try {
+                var saved = JSON.parse(localStorage.getItem('hugo_a11y_settings') || '{ }');
+                if (saved.fontSize) {
+                    document.documentElement.style.fontSize = saved.fontSize + '%';
+                }
+                if (saved.highContrast) {
+                    document.documentElement.classList.add('a11y-high-contrast-preload');
+                }
+            } catch (e) { }
+        })();
+    </script>
     {{ $siteData := index hugo.Data.site .Language.Lang }}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ $siteData.description }}{{ end }}">
-    <title>{{ block "title" (dict "Page" . "SiteData" $siteData) }}{{ .Page.Title }} | {{ .SiteData.title }}{{ end }}</title>
+    <title>{{ block "title" (dict "Page" . "SiteData" $siteData) }}{{ .Page.Title }} | {{ .SiteData.title }}{{ end }}
+    </title>
 
     {{ $logoWebP := resources.Get "images/logo.webp" }}
     {{ $logoPNG := resources.Get "images/logo.png" }}
-    {{ with $logoWebP }}<link rel="icon" type="image/webp" href="{{ .RelPermalink }}">{{ end }}
-    {{ with $logoPNG }}<link rel="apple-touch-icon" href="{{ .RelPermalink }}">{{ end }}
+    {{ with $logoWebP }}
+    <link rel="icon" type="image/webp" href="{{ .RelPermalink }}">{{ end }}
+    {{ with $logoPNG }}
+    <link rel="apple-touch-icon" href="{{ .RelPermalink }}">{{ end }}
 
-    <link rel="manifest" href="{{ "manifest.webmanifest" | relLangURL }}">
+    <link rel="manifest" href="{{ " manifest.webmanifest" | relLangURL }}">
     <meta name="theme-color" content="#0f4c81">
 
-    {{ $fonts := dict 
-        "ar" (slice "cairo-regular.woff2" "cairo-semibold.woff2" "cairo-bold.woff2")
-        "en" (slice "inter-regular.woff2" "inter-semibold.woff2" "inter-medium.woff2" "inter-bold.woff2")
+    {{ $fonts := dict
+    "ar" (slice "cairo-regular.woff2" "cairo-semibold.woff2" "cairo-bold.woff2")
+    "en" (slice "inter-regular.woff2" "inter-semibold.woff2" "inter-medium.woff2" "inter-bold.woff2")
     }}
     {{ with index $fonts .Language.Lang }}
-        {{ range . }}
-            {{ with resources.Get (printf "fonts/%s" .) }}
-                <link rel="prefetch" href="{{ .RelPermalink }}" as="font" type="font/woff2" crossorigin>
-            {{ end }}
-        {{ end }}
+    {{ range . }}
+    {{ with resources.Get (printf "fonts/%s" .) }}
+    <link rel="prefetch" href="{{ .RelPermalink }}" as="font" type="font/woff2" crossorigin>
+    {{ end }}
+    {{ end }}
     {{ end }}
 
     {{ with resources.Get "css/main.css" | css.Build (dict "minify" true) | fingerprint }}
@@ -64,17 +79,21 @@
     {{ end }}
 
     <meta property="og:title" content="{{ .Title }}">
-    <meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{ $siteData.description }}{{ end }}">
+    <meta property="og:description"
+        content="{{ with .Description }}{{ . }}{{ else }}{{ $siteData.description }}{{ end }}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ .Permalink }}">
     <meta property="og:site_name" content="{{ $siteData.title }}">
     <meta property="og:locale" content="{{ if eq .Language.Lang `ar` }}ar_IQ{{ else }}en_US{{ end }}">
-    {{ with .Params.image }}<meta property="og:image" content="{{ . | absURL }}">{{ end }}
+    {{ with .Params.image }}
+    <meta property="og:image" content="{{ . | absURL }}">{{ end }}
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ .Title }}">
-    <meta name="twitter:description" content="{{ with .Description }}{{ . }}{{ else }}{{ $siteData.description }}{{ end }}">
-    {{ with .Params.image }}<meta name="twitter:image" content="{{ . | absURL }}">{{ end }}
+    <meta name="twitter:description"
+        content="{{ with .Description }}{{ . }}{{ else }}{{ $siteData.description }}{{ end }}">
+    {{ with .Params.image }}
+    <meta name="twitter:image" content="{{ . | absURL }}">{{ end }}
 
     <link rel="canonical" href="{{ .Permalink }}">
 
@@ -88,6 +107,7 @@
     {{ partial "schema.html" . }}
     {{ block "head" . }}{{ end }}
 </head>
+
 <body data-lang="{{ .Language.Lang }}" data-pwa-enabled="true">
     {{ partial "icons.html" . }}
     {{ partial "header.html" . }}
@@ -101,5 +121,7 @@
     {{ $jsMain := resources.Get "js/main.js" | minify | fingerprint }}
     <script src="{{ $jsMain.RelPermalink }}" defer></script>
     {{ block "scripts" . }}{{ end }}
+    {{ partial "accessibility-widget.html" . }}
 </body>
+
 </html>

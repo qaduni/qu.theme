@@ -59,3 +59,12 @@ map_title: "Location map"
 
 404_title: "Page not found"
 404_sub_title: "The page you were looking for does not exist or has been moved."
+
+a11y_title: "Accessibility Settings"
+a11y_font_size: "Font Size:"
+a11y_decrease: "A-"
+a11y_reset: "Reset"
+a11y_increase: "A+"
+a11y_contrast: "Toggle High Contrast"
+a11y_links: "Highlight Links"
+a11y_btn_label: "Accessibility Options"
