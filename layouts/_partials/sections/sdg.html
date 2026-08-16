@@ -6,6 +6,11 @@
     </symbol>
 </svg>
 
+{{ $logo := resources.Get "images/uni_logo.webp" }}
+{{ if not $logo }}
+    {{ $logo = resources.Get "images/uni_logo.png" }}
+{{ end }}
+
 <section class="section sdg-section">
     <div class="container">
         <div class="sdg-card reveal">
@@ -23,7 +28,7 @@
                 </span>
                 <h3>{{ i18n "sdg_title" }}</h3>
                 <p>{{ i18n "sdg_subtitle" }}</p>
-                <a href="{{ .Site.Params.sustainability.url | safeURL}}" class="btn sdg-btn btn-lg" target="_blank" rel="noopener">
+                <a href="https://sust.qu.edu.iq/" class="btn sdg-btn btn-lg" target="_blank" rel="noopener">
                     <svg width="20" height="20" aria-hidden="true"><use href="#icon-globe"></use></svg>
                     {{ i18n "sdg_cta" }}
                 </a>
@@ -41,10 +46,23 @@
                             <stop offset="0%" stop-color="#a7e3b8"/>
                             <stop offset="100%" stop-color="#2e8b57"/>
                         </linearGradient>
+                        <!-- Soft glow backdrop for logo readability -->
+                        <radialGradient id="sdg-logo-glow" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
+                            <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+                        </radialGradient>
                     </defs>
+
+                    <!-- Green Earth Sphere -->
                     <circle cx="120" cy="120" r="92" fill="url(#sdg-earth)"/>
-                    <path d="M58 110 q22 -18 50 -4 q22 11 44 -6" fill="none" stroke="#e7f6ec" stroke-width="3" stroke-linecap="round" opacity=".55"/>
-                    <path d="M50 138 q26 -10 56 4 q24 12 50 -2" fill="none" stroke="#e7f6ec" stroke-width="3" stroke-linecap="round" opacity=".45"/>
+
+                    <!-- Logo Glow & Image -->
+                    {{ with $logo }}
+                        <circle cx="120" cy="120" r="55" fill="url(#sdg-logo-glow)"/>
+                        <image href="{{ .RelPermalink }}" x="38" y="38" width="165" height="165" preserveAspectRatio="xMidYMid meet" opacity="0.95"/>
+                    {{ end }}
+
+                    <!-- Overlapping Decorative Leaves -->
                     <g transform="translate(120 32) rotate(-18)">
                         <path d="M0 0 C 28 -8 56 14 64 56 C 32 60 4 38 0 0 Z" fill="url(#sdg-leaf-grad)"/>
                         <path d="M2 6 C 22 18 42 36 58 52" fill="none" stroke="#0f5132" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>
