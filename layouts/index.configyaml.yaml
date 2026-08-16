@@ -55,7 +55,7 @@ collections:
         widget: "string"
         required: true
         i18n: true
-        pattern: &title_pattern
+        pattern: &titlePattern
           - '^[a-zA-Z0-9\u0600-\u06FF\s.,،؟!:؛"''()«»\-]{10,75}$'
           - "يجب أن يكون العنوان بين 10 و 75 حرفًا."
       - label: "الوصف"
@@ -63,7 +63,7 @@ collections:
         widget: "text"
         required: true
         i18n: true
-        pattern: &description_pattern
+        pattern: &descriptionPattern
           - '^[a-zA-Z0-9\u0600-\u06FF\s.,،؟!:؛"''()«»\-]{30,120}$'
           - "يجب أن يكون الوصف بين 30 و 120 حرفًا."
       - label: "الصورة"
@@ -106,7 +106,7 @@ collections:
         widget: "string"
         required: true
         i18n: true
-        pattern: *title_pattern
+        pattern: *titlePattern
       - label: "هل الاعلان مهم؟"
         name: "important"
         widget: "boolean"
@@ -117,7 +117,7 @@ collections:
         widget: "text"
         required: true
         i18n: true
-        pattern: *description_pattern
+        pattern: *descriptionPattern
       - label: "المحتوى"
         name: "body"
         widget: "markdown"
