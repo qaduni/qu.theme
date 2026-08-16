@@ -20,7 +20,22 @@
 
 <div class="content-wrapper">
     <div class="container">
-        <article class="article-content" data-pagefind-body>
+        {{/* 1. Get the directory path (e.g., "media/news/" or "media/announcements/") */}}
+        {{ $filePath := .File.Dir | default "" }}
+
+        {{/* 2. Determine category based on Front Matter, Path keywords, or Section */}}
+        {{ $category := "page" }} {{/* Default fallback */}}
+
+        {{ if or (.Params.type) (eq .Params.type "news") (in $filePath "news") }}
+            {{ $category = "news" }}
+        {{ else if or (eq .Params.type "announcements") (in $filePath "announcements") }}
+            {{ $category = "announcements" }}
+        {{ end }}
+
+        {{/* 3. Get localized label from i18n */}}
+        {{ $filterLabel := i18n (printf "section_%s" $category) | default $category }}
+
+        <article class="article-content" data-pagefind-body data-pagefind-filter="category:{{ $filterLabel }}">
             {{ .Content }}
         </article>
     </div>

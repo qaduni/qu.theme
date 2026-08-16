@@ -16,5 +16,6 @@
 @import "components/_content.css";
 @import "components/_forms.css";
 @import "components/_motion.css";
+@import "components/_searchbox.css";
 @import "_footer.css";
 @import "_responsive.css";

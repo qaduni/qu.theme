@@ -17,10 +17,12 @@ no_announcements: "لا توجد إعلانات بعد"
 stay_tuned_announcements: "ترقبوا الإعلانات القادمة"
 all_announcements: "جميع الإعلانات"
 
-news_label: "خبر"
-announcement_label: "إعلان"
-type_label: "النوع"
-category_label: "التصنيف"
+
+section_news: "أخبار"
+section_announcements: "إعلانات"
+section_page: "صفحة"
+
+filter_label: "فلتر"
 search_placeholder: "البحث في الأخبار والإعلانات..."
 search_news_placeholder: "إبحث في الاخبار..."
 search_announcements_placeholder: "إبحث في الإعلانات..."
