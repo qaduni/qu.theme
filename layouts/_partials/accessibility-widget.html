@@ -63,10 +63,9 @@
         position: fixed !important;
         bottom: max(24px, env(safe-area-inset-bottom)) !important;
         right: 24px !important;
-        z-index: 2147483647 !important;
-        /* Max allowed z-index */
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-        direction: ltr;
+        z-index: 2147483647 !important; /* Max allowed z-index */
+        font-family: inherit !important;
+        direction: inherit;
     }
 
     /* Support Arabic (RTL) Automatically */
@@ -74,7 +73,7 @@
     [dir="rtl"] .site-tools-box {
         right: auto !important;
         left: 24px !important;
-        direction: rtl;
+        direction: inherit;
     }
 
     /* Floating Trigger Button */
@@ -210,6 +209,7 @@
 
     /* Toggle Button Layouts & Active States */
     .site-tools-box .a11y-toggle-btn {
+        display: flex;
         width: 100% !important;
         justify-content: space-between !important;
     }
