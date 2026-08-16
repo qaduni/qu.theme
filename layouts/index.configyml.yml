@@ -2,8 +2,8 @@
 
 backend:
   name: github
-  repo: "{{ site.Params.cms.repo | default `qaduni/scr.qu.edu.iq` }}"
-  branch: "{{ site.Params.cms.branch | default `main` }}"
+  repo: "{{ site.Params.cms_repo | default `qaduni/qu.edu.iq` }}"
+  branch: "{{ site.Params.cms_branch | default `main` }}"
   auth_methods:
     - token
 
