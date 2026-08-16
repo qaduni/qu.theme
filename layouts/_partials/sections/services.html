@@ -33,7 +33,7 @@
                     <h3>{{ .name }}</h3>
                     {{ with .params.description }}<p>{{ . }}</p>{{ end }}
                     {{ with .url}}
-                    <a href="{{ . }}"{{ if .params.external }} target="_blank" rel="noopener"{{ end }} class="card-link">
+                    <a href="{{ . }}"{{ if $e.params.external }} target="_blank" rel="noopener"{{ end }} class="card-link">
                         {{ i18n "view_details" }}
                         <svg width="16" height="16"><use href="#icon-arrow-right"></use></svg>
                     </a>
