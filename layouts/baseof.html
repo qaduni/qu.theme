@@ -85,15 +85,18 @@
     <meta property="og:url" content="{{ .Permalink }}">
     <meta property="og:site_name" content="{{ $siteData.title }}">
     <meta property="og:locale" content="{{ if eq .Language.Lang `ar` }}ar_IQ{{ else }}en_US{{ end }}">
-    {{ with .Params.image }}
-    <meta property="og:image" content="{{ . | absURL }}">{{ end }}
+    {{ $imagePath := .Params.image | default "images/logo.webp" }}
+    {{ with resources.Get $imagePath }}
+    <meta property="og:image" content="{{ .Permalink }}">
+    {{ end }}
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ .Title }}">
     <meta name="twitter:description"
         content="{{ with .Description }}{{ . }}{{ else }}{{ $siteData.description }}{{ end }}">
-    {{ with .Params.image }}
-    <meta name="twitter:image" content="{{ . | absURL }}">{{ end }}
+    {{ with resources.Get $imagePath }}
+    <meta name="twitter:image" content="{{ . | absURL }}">
+    {{ end }}
 
     <link rel="canonical" href="{{ .Permalink }}">
 
