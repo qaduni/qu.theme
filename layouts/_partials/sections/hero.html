@@ -1,10 +1,9 @@
 {{/* Fetch global site configuration & localized home page data */}}
 {{ $lang := .Language.Lang }}
 {{ $homepageData := index hugo.Data.homepage $lang }}
-{{ $heroStatsData := index hugo.Data.heroStats $lang }}
 
 {{/* Slides: pulled from data/homepage/[ar,en].yml with fallback defaults */}}
-{{ $slides := $homepageData.slides | default (slice "images/hero.webp" "images/hero-2.webp" "images/hero-3.webp" "images/hero-4.webp") }}
+{{ $slides := $homepageData.slides | default (slice "images/hero.webp") }}
 {{ $slideCount := len $slides }}
 
 <section class="hero{{ if gt $slideCount 1 }} hero--gallery{{ end }}" data-slide-count="{{ $slideCount }}">
@@ -53,12 +52,12 @@
                 </a>
             </div>
 
-            {{ with $heroStatsData }}
+            {{ with $homepageData.hero_stats }}
             <div class="hero-stats">
                 {{ range . }}
                 <div class="stat-item">
                     <span class="stat-number">{{ .value }}</span>
-                    <span class="stat-label">{{ .label }}</span>
+                    <span class="stat-label">{{ .name }}</span>
                 </div>
                 {{ end }}
             </div>

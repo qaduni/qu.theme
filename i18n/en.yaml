@@ -1,11 +1,13 @@
-# qu.theme — English translations (theme defaults).
-# Sites override any key via <site>/i18n/en.yaml.
-
 welcome_message: "Welcome"
 site_description: "A general-purpose Hugo theme for academic and research organisations."
 internationally_accredited: "Accredited"
 
 view_details: "Details"
+
+sdg_badge: "University of Al-Qadisiyah | Sustainable Development"
+sdg_title: "Our Vision for a Green and Sustainable Campus&quot"
+sdg_subtitle: "Advancing scientific research, education, and environmental innovation to achieve the UN Sustainable Development Goals 2030"
+sdg_cta: "Explore Sustainability Initiatives"
 
 latest_news: "Latest News"
 news_subtitle: "Latest activity, events and achievements"
