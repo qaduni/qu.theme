@@ -2,15 +2,15 @@
 <html lang="{{ .Site.Language.Lang | default "ar" }}" dir="{{ if eq .Site.Language.Lang "ar" }}rtl{{ else }}ltr{{ end }}">
 
 <head>
+    {{/* 1. Charset MUST be the very first element inside <head> */}}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0f4c81">
-    {{ hugo.Generator }}
 
-    {{/* Crawler & Bot Directives: Prevent indexing the alias, but pass link equity */}}
-    <meta name="robots" content="noindex, follow">
+    {{/* Directs search engines to index and follow links */}}
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 
-    {{/* Extract site defaults for the root redirect page */}}
+    {{/* Site Data & Title Fallbacks */}}
     {{ $defaultLang := .Site.Language.Lang | default "ar" }}
     {{ $siteData := index hugo.Data.site $defaultLang }}
     {{ $siteTitle := or (index $siteData "title") .Site.Title "جامعة القادسية" }}
@@ -24,25 +24,37 @@
     <meta name="description" content="{{ $description }}">
     <link rel="canonical" href="{{ .Permalink }}">
 
-    {{/* --- Open Graph & Twitter Social Card Engine --- */}}
+    {{/* --- Complete Favicon & Web Manifest Suite --- */}}
+    {{ $svgIcon  := or (resources.Get "images/favicon.svg") (resources.Get "images/logo.svg") }}
+    {{ $png32    := or (resources.Get "images/favicon-32x32.png") (resources.Get "images/favicon.png") (resources.Get "images/logo.png") }}
+    {{ $appleIcon:= or (resources.Get "images/apple-touch-icon.png") $png32 }}
+
+    {{/* Standard .ico / fallback favicon */}}
+    <link rel="icon" href="{{ "favicon.ico" | relLangURL }}" sizes="any">
+
+    {{ with $svgIcon }}
+    <link rel="icon" type="image/svg+xml" href="{{ .RelPermalink }}">
+    {{ end }}
+
+    {{ with $png32 }}
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ .RelPermalink }}">
+    {{ end }}
+
+    {{ with $appleIcon }}
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ .RelPermalink }}">
+    {{ end }}
+
+    <link rel="manifest" href="{{ "manifest.webmanifest" | relLangURL }}">
+
+    {{/* --- Open Graph & Social Cards --- */}}
     {{ $ogCard := or 
         (resources.Get "images/OG_Card.png") 
         (resources.Get "images/og_card.png") 
         (resources.Get "images/og-card.png") 
         (resources.Get "images/og-cover.png")
-        (resources.Get "images/og-cover.jpg") 
         (resources.Get "images/logo.png")
-        (resources.Get "images/logo.webp")
-        (resources.Get "images/logo.svg")
     }}
 
-    {{ $specifiedImg := .Params.image }}
-    {{ $ogImageResource := or 
-        (and $specifiedImg (resources.Get $specifiedImg))
-        $ogCard
-    }}
-
-    {{/* Open Graph / Facebook / LinkedIn / WhatsApp */}}
     <meta property="og:title" content="{{ $defaultTitle }}">
     <meta property="og:description" content="{{ $description }}">
     <meta property="og:type" content="website">
@@ -50,7 +62,7 @@
     <meta property="og:site_name" content="{{ $siteTitle }}">
     <meta property="og:locale" content="{{ if eq $defaultLang "ar" }}ar_IQ{{ else }}en_US{{ end }}">
 
-    {{ with $ogImageResource }}
+    {{ with $ogCard }}
     <meta property="og:image" content="{{ .Permalink }}">
     {{ with .Width }}<meta property="og:image:width" content="{{ . }}">{{ end }}
     {{ with .Height }}<meta property="og:image:height" content="{{ . }}">{{ end }}
@@ -62,13 +74,14 @@
     <meta name="twitter:site" content="@QU_Iraq">
     <meta name="twitter:title" content="{{ $defaultTitle }}">
     <meta name="twitter:description" content="{{ $description }}">
-    {{ with $ogImageResource }}
+    {{ with $ogCard }}
     <meta name="twitter:image" content="{{ .Permalink }}">
     {{ end }}
 
-    {{/* Bulletproof Instant Redirect Engines */}}
-    <meta id="redirect-target" data-url="{{ $targetUrl }}" http-equiv="refresh" content="0; url={{ $targetUrl }}">
+    {{ partial "schema.html" }}
 
+    {{/* Instant Redirect Logic */}}
+    <meta id="redirect-target" data-url="{{ $targetUrl }}" http-equiv="refresh" content="0; url={{ $targetUrl }}">
     <script>
         (function() {
             var target = document.getElementById('redirect-target').getAttribute('data-url');
@@ -77,9 +90,16 @@
             }
         })();
     </script>
+
+    {{ hugo.Generator }}
 </head>
 
 <body>
+    {{/* Accessible and Crawler-Friendly H1 Heading */}}
+    <h1 style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;">
+        {{ $defaultTitle }}
+    </h1>
+
     <p>Redirecting to <a href="{{ $targetUrl }}">{{ $targetUrl }}</a>...</p>
 </body>
 
