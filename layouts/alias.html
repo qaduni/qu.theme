@@ -1,48 +1,72 @@
 <!DOCTYPE html>
 <html lang="{{ .Site.Language.Lang | default "ar" }}" dir="{{ if eq .Site.Language.Lang "ar" }}rtl{{ else }}ltr{{ end }}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f4c81">
+    {{ hugo.Generator }}
+
+    {{/* Crawler & Bot Directives: Prevent indexing the alias, but pass link equity */}}
+    <meta name="robots" content="noindex, follow">
 
     {{/* Extract site defaults for the root redirect page */}}
     {{ $defaultLang := .Site.Language.Lang | default "ar" }}
     {{ $siteData := index hugo.Data.site $defaultLang }}
-    {{ $title := or .Page.Title (index $siteData "title") .Site.Title "University of Qadisiyah" }}
-    {{ $description := or .Page.Description (index $siteData "description") .Site.Params.description "University of Qadisiyah" }}
+    {{ $siteTitle := or (index $siteData "title") .Site.Title "جامعة القادسية" }}
+    {{ $title := or .Page.Title $siteTitle }}
+    {{ $defaultTitle := printf "%s | %s" $title $siteTitle }}
+    {{ $description := or .Page.Description (index $siteData "description") .Site.Params.description "جامعة القادسية - إحدى الجامعات العراقية الرائدة في التعليم العالي والبحث العلمي" }}
     {{ $targetUrl := .RelPermalink }}
 
-    {{/* Standard SEO */}}
-    <title>{{ $title }}</title>
+    {{/* Standard SEO Tags */}}
+    <title>{{ $defaultTitle }}</title>
     <meta name="description" content="{{ $description }}">
-    <link rel="canonical" href="{{ $targetUrl }}">
+    <link rel="canonical" href="{{ .Permalink }}">
 
-    {{/* Open Graph / Facebook / WhatsApp */}}
-    <meta property="og:title" content="{{ $title }}">
+    {{/* --- Open Graph & Twitter Social Card Engine --- */}}
+    {{ $ogCard := or 
+        (resources.Get "images/OG_Card.png") 
+        (resources.Get "images/og_card.png") 
+        (resources.Get "images/og-card.png") 
+        (resources.Get "images/og-cover.png")
+        (resources.Get "images/og-cover.jpg") 
+        (resources.Get "images/logo.png")
+        (resources.Get "images/logo.webp")
+        (resources.Get "images/logo.svg")
+    }}
+
+    {{ $specifiedImg := .Params.image }}
+    {{ $ogImageResource := or 
+        (and $specifiedImg (resources.Get $specifiedImg))
+        $ogCard
+    }}
+
+    {{/* Open Graph / Facebook / LinkedIn / WhatsApp */}}
+    <meta property="og:title" content="{{ $defaultTitle }}">
     <meta property="og:description" content="{{ $description }}">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ $targetUrl }}">
-    <meta property="og:site_name" content="{{ $title }}">
+    <meta property="og:url" content="{{ .Permalink }}">
+    <meta property="og:site_name" content="{{ $siteTitle }}">
     <meta property="og:locale" content="{{ if eq $defaultLang "ar" }}ar_IQ{{ else }}en_US{{ end }}">
 
-    {{/* Image Engine (Updated to check OG_Card.png first) */}}
-    {{ $logoResource := or 
-        (resources.Get "images/OG_Card.png")
-        (resources.Get "images/og_card.png")
-        (resources.Get "images/logo.png") 
-        (resources.Get "images/logo.webp") 
-        (resources.Get "images/logo.svg") 
-    }}
-    {{ with $logoResource }}
-    <meta property="og:image" content="{{ $targetUrl }}">
-    <meta name="twitter:image" content="{{ $targetUrl }}">
+    {{ with $ogImageResource }}
+    <meta property="og:image" content="{{ .Permalink }}">
+    {{ with .Width }}<meta property="og:image:width" content="{{ . }}">{{ end }}
+    {{ with .Height }}<meta property="og:image:height" content="{{ . }}">{{ end }}
+    <meta property="og:image:alt" content="{{ $defaultTitle }}">
     {{ end }}
 
     {{/* Twitter Cards */}}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@QU_Iraq">
-    <meta name="twitter:title" content="{{ $title }}">
+    <meta name="twitter:title" content="{{ $defaultTitle }}">
     <meta name="twitter:description" content="{{ $description }}">
+    {{ with $ogImageResource }}
+    <meta name="twitter:image" content="{{ .Permalink }}">
+    {{ end }}
 
+    {{/* Bulletproof Instant Redirect Engines */}}
     <meta id="redirect-target" data-url="{{ $targetUrl }}" http-equiv="refresh" content="0; url={{ $targetUrl }}">
 
     <script>
@@ -54,7 +78,9 @@
         })();
     </script>
 </head>
+
 <body>
     <p>Redirecting to <a href="{{ $targetUrl }}">{{ $targetUrl }}</a>...</p>
 </body>
+
 </html>
