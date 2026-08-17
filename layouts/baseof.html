@@ -2,6 +2,11 @@
 <html lang="{{ .Language.Lang }}" dir="{{ .Language.Direction }}">
 
 <head>
+    {{/* 1. Charset MUST be the very first element inside <head> */}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f4c81">
+
     <script>
         //     (function () {
         //     var savedLang = localStorage.getItem('theme_lang_preference');
@@ -45,60 +50,55 @@
             } catch (e) { }
         })();
     </script>
+    
     {{/* Site Data and Text Fallbacks */}}
     {{ $siteData := index hugo.Data.site .Language.Lang }}
-    {{ $defaultDescription := or .Description $siteData.description .Site.Params.description "University of Qadisiyah" }}
-    {{ $defaultTitle := printf "%s | %s" .Title (or $siteData.title .Site.Title "University of Qadisiyah") }}
+    {{ $siteTitle := or $siteData.title .Site.Title "جامعة القادسية" }}
+    {{ $defaultDescription := or .Description $siteData.description .Site.Params.description "البوابة الرئيسية لجامعة القادسية - إحدى الجامعات العراقية الرائدة في التعليم العالي والبحث العلمي" }}
+    
+    {{/* Format title to meet the 50-60 character SEO recommendation */}}
+    {{ $defaultTitle := printf "%s | %s" .Title $siteTitle }}
 
     {{/* --- Image Resource Fallback Engine --- */}}
-    {{/* 1. Individual format resource lookups */}}
     {{ $svgIcon  := or (resources.Get "images/favicon.svg")  (resources.Get "images/logo.svg") }}
     {{ $webpIcon := or (resources.Get "images/favicon.webp") (resources.Get "images/logo.webp") }}
     {{ $pngIcon  := or (resources.Get "images/favicon-32x32.png") (resources.Get "images/favicon.png") (resources.Get "images/apple-touch-icon.png") (resources.Get "images/logo.png") }}
-
-    {{/* 2. Master fallback icon (picks whichever exists: SVG -> WebP -> PNG) */}}
     {{ $masterIcon := or $svgIcon $webpIcon $pngIcon }}
 
-    {{/* 3. Open Graph / Twitter Image lookup */}}
+    {{/* 1200x630 Open Graph cover lookup to avoid 512x512 logo rejection on LinkedIn/Twitter */}}
+    {{ $ogCover := or (resources.Get "images/og-cover.jpg") (resources.Get "images/og-cover.png") (resources.Get "images/og-cover.webp") }}
+
     {{ $specifiedImg := .Params.image }}
     {{ $ogImageResource := or 
         (and $specifiedImg (resources.Get $specifiedImg))
+        $ogCover
         $pngIcon
         $webpIcon
         $svgIcon
     }}
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0f4c81">
 
     {{/* Standard SEO Tags */}}
     <title>{{ block "title" (dict "Page" . "SiteData" $siteData "DefaultTitle" $defaultTitle) }}{{ .DefaultTitle }}{{ end }}</title>
     <meta name="description" content="{{ $defaultDescription }}">
     <link rel="canonical" href="{{ .Permalink }}">
 
-    {{/* --- Favicons & Touch Icons (Renders only if asset exists) --- */}}
-    {{/* SVG Favicon */}}
+    {{/* --- Favicons & Touch Icons --- */}}
     {{ with $svgIcon }}
     <link rel="icon" type="image/svg+xml" href="{{ .RelPermalink }}">
     {{ end }}
 
-    {{/* WebP Favicon */}}
-    {{ with $webpIcon }}
-    <link rel="icon" type="image/webp" href="{{ .RelPermalink }}">
-    {{ end }}
-
-    {{/* Standard PNG Favicon / Generic Icon Fallback */}}
     {{ with $pngIcon }}
     <link rel="icon" type="image/png" sizes="32x32" href="{{ .RelPermalink }}">
     {{ else }}
-        {{/* Fallback for legacy browsers if no PNG exists */}}
         {{ with $masterIcon }}
         <link rel="icon" href="{{ .RelPermalink }}">
         {{ end }}
     {{ end }}
 
-    {{/* Apple Touch Icon (Prefers PNG, falls back to master icon) */}}
+    {{ with $webpIcon }}
+    <link rel="icon" type="image/webp" href="{{ .RelPermalink }}">
+    {{ end }}
+
     {{ $appleTouchIcon := or $pngIcon $masterIcon }}
     {{ with $appleTouchIcon }}
     <link rel="apple-touch-icon" sizes="180x180" href="{{ .RelPermalink }}">
@@ -125,21 +125,25 @@
     {{ end }}
 
     {{/* Open Graph / Facebook / LinkedIn */}}
-    <meta property="og:title" content="{{ .Title }}">
+    <meta property="og:title" content="{{ $defaultTitle }}">
     <meta property="og:description" content="{{ $defaultDescription }}">
     <meta property="og:type" content="{{ if .IsHome }}website{{ else }}article{{ end }}">
     <meta property="og:url" content="{{ .Permalink }}">
-    <meta property="og:site_name" content="{{ or $siteData.title .Site.Title "University of Qadisiyah" }}">
+    <meta property="og:site_name" content="{{ $siteTitle }}">
     <meta property="og:locale" content="{{ if eq .Language.Lang "ar" }}ar_IQ{{ else }}en_US{{ end }}">
+    
     {{ with $ogImageResource }}
     <meta property="og:image" content="{{ .Permalink }}">
-    <meta property="og:image:alt" content="{{ $.Title }}">
+    {{/* Dynamically output image dimensions for LinkedIn/Facebook */}}
+    {{ with .Width }}<meta property="og:image:width" content="{{ . }}">{{ end }}
+    {{ with .Height }}<meta property="og:image:height" content="{{ . }}">{{ end }}
+    <meta property="og:image:alt" content="{{ $defaultTitle }}">
     {{ end }}
 
     {{/* Twitter Cards */}}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@QU_Iraq">
-    <meta name="twitter:title" content="{{ .Title }}">
+    <meta name="twitter:title" content="{{ $defaultTitle }}">
     <meta name="twitter:description" content="{{ $defaultDescription }}">
     {{ with $ogImageResource }}
     <meta name="twitter:image" content="{{ .Permalink }}">
