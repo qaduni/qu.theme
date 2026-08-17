@@ -2,10 +2,10 @@
 <html lang="{{ .Language.Lang }}" dir="{{ .Language.Direction }}">
 
 <head>
-    {{/* 1. Charset MUST be the very first element inside <head> */}}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0f4c81">
+    {{ hugo.Generator }}
 
     <script>
         //     (function () {
@@ -50,31 +50,37 @@
             } catch (e) { }
         })();
     </script>
-    
+
     {{/* Site Data and Text Fallbacks */}}
     {{ $siteData := index hugo.Data.site .Language.Lang }}
     {{ $siteTitle := or $siteData.title .Site.Title "جامعة القادسية" }}
-    {{ $defaultDescription := or .Description $siteData.description .Site.Params.description "البوابة الرئيسية لجامعة القادسية - إحدى الجامعات العراقية الرائدة في التعليم العالي والبحث العلمي" }}
+    {{ $defaultDescription := or .Description $siteData.description .Site.Params.description "جامعة القادسية - إحدى الجامعات العراقية الرائدة في التعليم العالي والبحث العلمي" }}
     
-    {{/* Format title to meet the 50-60 character SEO recommendation */}}
+    {{/* Title formatting */}}
     {{ $defaultTitle := printf "%s | %s" .Title $siteTitle }}
 
-    {{/* --- Image Resource Fallback Engine --- */}}
+    {{/* --- Favicon Resource Engine --- */}}
     {{ $svgIcon  := or (resources.Get "images/favicon.svg")  (resources.Get "images/logo.svg") }}
     {{ $webpIcon := or (resources.Get "images/favicon.webp") (resources.Get "images/logo.webp") }}
-    {{ $pngIcon  := or (resources.Get "images/favicon-32x32.png") (resources.Get "images/favicon.png") (resources.Get "images/apple-touch-icon.png") (resources.Get "images/logo.png") }}
+    {{ $pngIcon  := or (resources.Get "images/favicon-32x32.png") (resources.Get "images/favicon.png") (resources.Get "images/apple-touch-icon.png") }}
     {{ $masterIcon := or $svgIcon $webpIcon $pngIcon }}
 
-    {{/* 1200x630 Open Graph cover lookup to avoid 512x512 logo rejection on LinkedIn/Twitter */}}
-    {{ $ogCover := or (resources.Get "images/og-cover.jpg") (resources.Get "images/og-cover.png") (resources.Get "images/og-cover.webp") }}
+    {{/* --- Open Graph & Twitter Social Card Engine (Strictly Excludes 32x32 Favicons) --- */}}
+    {{ $ogCard := or 
+        (resources.Get "images/OG_Card.png") 
+        (resources.Get "images/og_card.png") 
+        (resources.Get "images/og-card.png") 
+        (resources.Get "images/og-cover.png")
+        (resources.Get "images/og-cover.jpg") 
+        (resources.Get "images/logo.png")
+        (resources.Get "images/logo.webp")
+        (resources.Get "images/logo.svg")
+    }}
 
     {{ $specifiedImg := .Params.image }}
     {{ $ogImageResource := or 
         (and $specifiedImg (resources.Get $specifiedImg))
-        $ogCover
-        $pngIcon
-        $webpIcon
-        $svgIcon
+        $ogCard
     }}
 
     {{/* Standard SEO Tags */}}
@@ -99,7 +105,7 @@
     <link rel="icon" type="image/webp" href="{{ .RelPermalink }}">
     {{ end }}
 
-    {{ $appleTouchIcon := or $pngIcon $masterIcon }}
+    {{ $appleTouchIcon := or (resources.Get "images/apple-touch-icon.png") $pngIcon $masterIcon }}
     {{ with $appleTouchIcon }}
     <link rel="apple-touch-icon" sizes="180x180" href="{{ .RelPermalink }}">
     {{ end }}
@@ -134,7 +140,6 @@
     
     {{ with $ogImageResource }}
     <meta property="og:image" content="{{ .Permalink }}">
-    {{/* Dynamically output image dimensions for LinkedIn/Facebook */}}
     {{ with .Width }}<meta property="og:image:width" content="{{ . }}">{{ end }}
     {{ with .Height }}<meta property="og:image:height" content="{{ . }}">{{ end }}
     <meta property="og:image:alt" content="{{ $defaultTitle }}">
@@ -160,6 +165,9 @@
 
     {{/* Structured Data (JSON-LD) */}}
     {{ partial "schema.html" . }}
+
+    {{/* Generator tag moved to bottom of head */}}
+    {{ hugo.Generator }}
 
     {{ block "head" . }}{{ end }}
 </head>

@@ -8,30 +8,33 @@
     {{ $defaultLang := .Site.Language.Lang | default "ar" }}
     {{ $siteData := index hugo.Data.site $defaultLang }}
     {{ $title := or .Page.Title (index $siteData "title") .Site.Title "University of Qadisiyah" }}
-    {{ $description := or .Page.Description (index $siteData "description") .Site.Params.description "Quality Assurance and University Performance Department - University of Qadisiyah" }}
+    {{ $description := or .Page.Description (index $siteData "description") .Site.Params.description "University of Qadisiyah" }}
+    {{ $targetUrl := .RelPermalink }}
 
     {{/* Standard SEO */}}
     <title>{{ $title }}</title>
     <meta name="description" content="{{ $description }}">
-    <link rel="canonical" href="{{ .Permalink }}">
+    <link rel="canonical" href="{{ $targetUrl }}">
 
     {{/* Open Graph / Facebook / WhatsApp */}}
     <meta property="og:title" content="{{ $title }}">
     <meta property="og:description" content="{{ $description }}">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ .Permalink }}">
+    <meta property="og:url" content="{{ $targetUrl }}">
     <meta property="og:site_name" content="{{ $title }}">
     <meta property="og:locale" content="{{ if eq $defaultLang "ar" }}ar_IQ{{ else }}en_US{{ end }}">
 
-    {{/* Image Fallback engine */}}
+    {{/* Image Engine (Updated to check OG_Card.png first) */}}
     {{ $logoResource := or 
+        (resources.Get "images/OG_Card.png")
+        (resources.Get "images/og_card.png")
         (resources.Get "images/logo.png") 
         (resources.Get "images/logo.webp") 
         (resources.Get "images/logo.svg") 
     }}
     {{ with $logoResource }}
-    <meta property="og:image" content="{{ .Permalink }}">
-    <meta name="twitter:image" content="{{ .Permalink }}">
+    <meta property="og:image" content="{{ $targetUrl }}">
+    <meta name="twitter:image" content="{{ $targetUrl }}">
     {{ end }}
 
     {{/* Twitter Cards */}}
@@ -40,13 +43,18 @@
     <meta name="twitter:title" content="{{ $title }}">
     <meta name="twitter:description" content="{{ $description }}">
 
-    {{/* Redirect logic for browsers and crawlers */}}
-    <meta http-equiv="refresh" content="0; url={{ .Permalink }}">
+    <meta id="redirect-target" data-url="{{ $targetUrl }}" http-equiv="refresh" content="0; url={{ $targetUrl }}">
+
     <script>
-        window.location.href = {{ .Permalink | jsonify }};
+        (function() {
+            var target = document.getElementById('redirect-target').getAttribute('data-url');
+            if (target) {
+                window.location.replace(target);
+            }
+        })();
     </script>
 </head>
 <body>
-    <p>Redirecting to <a href="{{ .Permalink }}">{{ .Permalink }}</a>...</p>
+    <p>Redirecting to <a href="{{ $targetUrl }}">{{ $targetUrl }}</a>...</p>
 </body>
 </html>
