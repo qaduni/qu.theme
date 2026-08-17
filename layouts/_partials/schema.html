@@ -2,10 +2,14 @@
 {{ $dot := . }}
 {{ $site := .Site }}
 
-{{/* 2. Logo Setup */}}
-{{ $logoPNG := resources.Get "images/logo.png" }}
+{{/* 2. Logo Setup with Fallbacks */}}
+{{ $logoResource := or 
+    (resources.Get "images/logo.png") 
+    (resources.Get "images/logo.webp") 
+    (resources.Get "images/logo.svg") 
+}}
 {{ $logoUrl := "" }}
-{{ with $logoPNG }}
+{{ with $logoResource }}
   {{ $logoUrl = .Permalink }}
 {{ end }}
 

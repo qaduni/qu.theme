@@ -45,69 +45,118 @@
             } catch (e) { }
         })();
     </script>
+    {{/* Site Data and Text Fallbacks */}}
     {{ $siteData := index hugo.Data.site .Language.Lang }}
+    {{ $defaultDescription := or .Description $siteData.description .Site.Params.description "University of Qadisiyah" }}
+    {{ $defaultTitle := printf "%s | %s" .Title (or $siteData.title .Site.Title "University of Qadisiyah") }}
+
+    {{/* --- Image Resource Fallback Engine --- */}}
+    {{/* 1. Individual format resource lookups */}}
+    {{ $svgIcon  := or (resources.Get "images/favicon.svg")  (resources.Get "images/logo.svg") }}
+    {{ $webpIcon := or (resources.Get "images/favicon.webp") (resources.Get "images/logo.webp") }}
+    {{ $pngIcon  := or (resources.Get "images/favicon-32x32.png") (resources.Get "images/favicon.png") (resources.Get "images/apple-touch-icon.png") (resources.Get "images/logo.png") }}
+
+    {{/* 2. Master fallback icon (picks whichever exists: SVG -> WebP -> PNG) */}}
+    {{ $masterIcon := or $svgIcon $webpIcon $pngIcon }}
+
+    {{/* 3. Open Graph / Twitter Image lookup */}}
+    {{ $specifiedImg := .Params.image }}
+    {{ $ogImageResource := or 
+        (and $specifiedImg (resources.Get $specifiedImg))
+        $pngIcon
+        $webpIcon
+        $svgIcon
+    }}
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ $siteData.description }}{{ end }}">
-    <title>{{ block "title" (dict "Page" . "SiteData" $siteData) }}{{ .Page.Title }} | {{ .SiteData.title }}{{ end }}
-    </title>
-
-    {{ $logoWebP := resources.Get "images/logo.webp" }}
-    {{ $logoPNG := resources.Get "images/logo.png" }}
-    {{ with $logoWebP }}
-    <link rel="icon" type="image/webp" href="{{ .RelPermalink }}">{{ end }}
-    {{ with $logoPNG }}
-    <link rel="apple-touch-icon" href="{{ .RelPermalink }}">{{ end }}
-
-    <link rel="manifest" href="{{ " manifest.webmanifest" | relLangURL }}">
     <meta name="theme-color" content="#0f4c81">
 
+    {{/* Standard SEO Tags */}}
+    <title>{{ block "title" (dict "Page" . "SiteData" $siteData "DefaultTitle" $defaultTitle) }}{{ .DefaultTitle }}{{ end }}</title>
+    <meta name="description" content="{{ $defaultDescription }}">
+    <link rel="canonical" href="{{ .Permalink }}">
+
+    {{/* --- Favicons & Touch Icons (Renders only if asset exists) --- */}}
+    {{/* SVG Favicon */}}
+    {{ with $svgIcon }}
+    <link rel="icon" type="image/svg+xml" href="{{ .RelPermalink }}">
+    {{ end }}
+
+    {{/* WebP Favicon */}}
+    {{ with $webpIcon }}
+    <link rel="icon" type="image/webp" href="{{ .RelPermalink }}">
+    {{ end }}
+
+    {{/* Standard PNG Favicon / Generic Icon Fallback */}}
+    {{ with $pngIcon }}
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ .RelPermalink }}">
+    {{ else }}
+        {{/* Fallback for legacy browsers if no PNG exists */}}
+        {{ with $masterIcon }}
+        <link rel="icon" href="{{ .RelPermalink }}">
+        {{ end }}
+    {{ end }}
+
+    {{/* Apple Touch Icon (Prefers PNG, falls back to master icon) */}}
+    {{ $appleTouchIcon := or $pngIcon $masterIcon }}
+    {{ with $appleTouchIcon }}
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ .RelPermalink }}">
+    {{ end }}
+
+    <link rel="manifest" href="{{ "manifest.webmanifest" | relLangURL }}">
+
+    {{/* Font Preloading */}}
     {{ $fonts := dict
     "ar" (slice "cairo-regular.woff2" "cairo-semibold.woff2" "cairo-bold.woff2")
     "en" (slice "inter-regular.woff2" "inter-semibold.woff2" "inter-medium.woff2" "inter-bold.woff2")
     }}
     {{ with index $fonts .Language.Lang }}
-    {{ range . }}
-    {{ with resources.Get (printf "fonts/%s" .) }}
-    <link rel="prefetch" href="{{ .RelPermalink }}" as="font" type="font/woff2" crossorigin>
-    {{ end }}
-    {{ end }}
+        {{ range . }}
+            {{ with resources.Get (printf "fonts/%s" .) }}
+            <link rel="preload" href="{{ .RelPermalink }}" as="font" type="font/woff2" crossorigin>
+            {{ end }}
+        {{ end }}
     {{ end }}
 
+    {{/* Main Stylesheet */}}
     {{ with resources.Get "css/main.css" | css.Build (dict "minify" true) | fingerprint }}
     <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
     {{ end }}
 
+    {{/* Open Graph / Facebook / LinkedIn */}}
     <meta property="og:title" content="{{ .Title }}">
-    <meta property="og:description"
-        content="{{ with .Description }}{{ . }}{{ else }}{{ $siteData.description }}{{ end }}">
-    <meta property="og:type" content="website">
+    <meta property="og:description" content="{{ $defaultDescription }}">
+    <meta property="og:type" content="{{ if .IsHome }}website{{ else }}article{{ end }}">
     <meta property="og:url" content="{{ .Permalink }}">
-    <meta property="og:site_name" content="{{ $siteData.title }}">
-    <meta property="og:locale" content="{{ if eq .Language.Lang `ar` }}ar_IQ{{ else }}en_US{{ end }}">
-    {{ $imagePath := .Params.image | default "images/logo.webp" }}
-    {{ with resources.Get $imagePath }}
+    <meta property="og:site_name" content="{{ or $siteData.title .Site.Title "University of Qadisiyah" }}">
+    <meta property="og:locale" content="{{ if eq .Language.Lang "ar" }}ar_IQ{{ else }}en_US{{ end }}">
+    {{ with $ogImageResource }}
     <meta property="og:image" content="{{ .Permalink }}">
+    <meta property="og:image:alt" content="{{ $.Title }}">
     {{ end }}
 
+    {{/* Twitter Cards */}}
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@QU_Iraq">
     <meta name="twitter:title" content="{{ .Title }}">
-    <meta name="twitter:description"
-        content="{{ with .Description }}{{ . }}{{ else }}{{ $siteData.description }}{{ end }}">
-    {{ with resources.Get $imagePath }}
-    <meta name="twitter:image" content="{{ . | absURL }}">
+    <meta name="twitter:description" content="{{ $defaultDescription }}">
+    {{ with $ogImageResource }}
+    <meta name="twitter:image" content="{{ .Permalink }}">
     {{ end }}
 
-    <link rel="canonical" href="{{ .Permalink }}">
-
+    {{/* Language Alternates (Hreflang) */}}
     {{ if .IsTranslated }}
-    <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}">
-    {{ range .Translations }}
-    <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}">
+        <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}">
+        {{ range .Translations }}
+        <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}">
+        {{ end }}
+        <link rel="alternate" hreflang="x-default" href="{{ .Site.BaseURL }}">
     {{ end }}
-    {{ end }}
-    <link rel="alternate" hreflang="x-default" href="{{ .Site.BaseURL }}">
+
+    {{/* Structured Data (JSON-LD) */}}
     {{ partial "schema.html" . }}
+
     {{ block "head" . }}{{ end }}
 </head>
 
