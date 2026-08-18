@@ -87,3 +87,52 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const navToggles = document.querySelectorAll('.nav-dropdown-toggle');
+
+    navToggles.forEach(toggle => {
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+            
+            // Close sibling menus on the same level
+            const parentLi = toggle.closest('li');
+            const siblingToggles = parentLi.parentElement.querySelectorAll(':scope > li > .nav-dropdown-toggle');
+            siblingToggles.forEach(sib => {
+                if (sib !== toggle) {
+                    sib.setAttribute('aria-expanded', 'false');
+                    sib.closest('li').classList.remove('is-open');
+                }
+            });
+
+            // Toggle active state
+            toggle.setAttribute('aria-expanded', !isExpanded);
+            parentLi.classList.toggle('is-open', !isExpanded);
+        });
+    });
+
+    // Handle ESC Key to close open menus sequentially
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const openToggles = Array.from(document.querySelectorAll('.nav-dropdown-toggle[aria-expanded="true"]'));
+            if (openToggles.length > 0) {
+                // Target the deepest open submenu first
+                const deepestToggle = openToggles.pop();
+                deepestToggle.setAttribute('aria-expanded', 'false');
+                deepestToggle.closest('li').classList.remove('is-open');
+                deepestToggle.focus();
+            }
+        }
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.main-nav')) {
+            document.querySelectorAll('.nav-dropdown-toggle[aria-expanded="true"]').forEach(toggle => {
+                toggle.setAttribute('aria-expanded', 'false');
+                toggle.closest('li').classList.remove('is-open');
+            });
+        }
+    });
+});
