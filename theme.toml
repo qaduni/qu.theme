@@ -12,9 +12,6 @@ min_version = "0.124.0"
   name = "Al-Qadisiyah University"
   homepage = "https://qu.edu.iq"
 
-# All `[params]` defaults are documented in exampleSite/hugo.toml.
-# The theme works with no params at all (sensible defaults shipped) but
-# every part of the visual and structural identity is overrideable.
 [params]
   rtl_support = true
   multilingual = true
