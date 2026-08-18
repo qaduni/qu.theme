@@ -1,0 +1,21 @@
+# {{ .Site.Title }}
+
+## Overview & Core Pages
+{{ range where .Site.RegularPages "Section" "in" (slice "about" "academics" "admissions" "campus" "policies" "research_and_innovation" "services" "students") }}
+- [{{ .Title }}]({{ .Permalink }}): {{ .Description | default .Summary }}
+{{- end }}
+
+## News
+{{ range where .Site.RegularPages "Section" "news" }}
+- [{{ .Title }}]({{ .Permalink }}) ({{ .Date.Format "2006-01-02" }}): {{ .Description | default .Summary }}
+{{- end }}
+
+## Important Announcements
+{{ range where (where .Site.RegularPages "Section" "announcements") "Params.important" true }}
+- [IMPORTANT] [{{ .Title }}]({{ .Permalink }}) (Type: {{ .Params.type | default "general" }}): {{ .Description | default .Summary }}
+{{- end }}
+
+## General Announcements
+{{ range where (where .Site.RegularPages "Section" "announcements") "Params.important" false }}
+- [{{ .Title }}]({{ .Permalink }}) (Type: {{ .Params.type | default "general" }}): {{ .Description | default .Summary }}
+{{- end }}
