@@ -27,7 +27,8 @@ section_announcements: "Announcements"
 section_page: "Page"
 
 filter_label: "Filter"
-search_placeholder: "Search news and announcements..."
+
+search_global: "Search pages, courses, programs, news and announcements..."
 search_news_placeholder: "Search news..."
 search_announcements_placeholder: "Search announcements..."
 

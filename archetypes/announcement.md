@@ -8,4 +8,3 @@ type: "general"
 # Set to true to highlight the announcement card and add an "Important" badge.
 important: false
 ---
-
