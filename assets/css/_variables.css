@@ -54,4 +54,9 @@
     --transition-fast: 150ms ease;
     --transition-base: 300ms ease;
     --transition-slow: 500ms ease;
+
+    /* Pagefind variables */
+    --pf-font: inherit;
+    --pf-searchbox-max-width: 500px;
+    --pf-searchbox-dropdown-max-height: 400px;
 }
