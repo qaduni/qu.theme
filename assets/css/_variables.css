@@ -24,8 +24,7 @@
     --color-border: #e2e8f0;
     --color-border-light: #f1f5f9;
 
-    --font-arabic: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
-    --font-english: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font: 'Cairo', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-size-base: 16px;
     --line-height-base: 1.7;
 
@@ -54,9 +53,4 @@
     --transition-fast: 150ms ease;
     --transition-base: 300ms ease;
     --transition-slow: 500ms ease;
-
-    /* Pagefind variables */
-    --pf-font: inherit;
-    --pf-searchbox-max-width: 500px;
-    --pf-searchbox-dropdown-max-height: 400px;
 }

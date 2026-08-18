@@ -10,15 +10,11 @@ html {
 }
 
 body {
-    font-family: var(--font-english);
+    font-family: var(--font);
     line-height: var(--line-height-base);
     color: var(--color-text);
     background-color: var(--color-background);
     overflow-x: hidden;
-}
-
-html[dir="rtl"] body {
-    font-family: var(--font-arabic);
 }
 
 [dir="rtl"] {

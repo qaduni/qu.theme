@@ -113,16 +113,8 @@
     <link rel="manifest" href="{{ "manifest.webmanifest" | relLangURL }}">
 
     {{/* Font Preloading */}}
-    {{ $fonts := dict
-    "ar" (slice "cairo-regular.woff2" "cairo-semibold.woff2" "cairo-bold.woff2")
-    "en" (slice "inter-regular.woff2" "inter-semibold.woff2" "inter-medium.woff2" "inter-bold.woff2")
-    }}
-    {{ with index $fonts .Language.Lang }}
-        {{ range . }}
-            {{ with resources.Get (printf "fonts/%s" .) }}
-            <link rel="preload" href="{{ .RelPermalink }}" as="font" type="font/woff2" crossorigin>
-            {{ end }}
-        {{ end }}
+    {{ with resources.Get "Cairo-Variable.woff2" }}
+        <link rel="preload" href="{{ .RelPermalink }}" as="font" type="font/woff2" crossorigin>
     {{ end }}
 
     {{/* Main Stylesheet */}}

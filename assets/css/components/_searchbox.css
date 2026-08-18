@@ -1,3 +1,30 @@
+/* 1. Global Pagefind Font Variables */
+:root {
+    --pf-font: "Cairo", sans-serif !important;
+    --pagefind-ui-font: "Cairo", sans-serif !important;
+}
+
+/* 2. Target ALL Pagefind Web Components & internal parts */
+pagefind-searchbox,
+pagefind-filter-dropdown,
+pagefind-modal,
+pagefind-results,
+pagefind-summary,
+pagefind-input,
+pagefind-filter-pane,
+[class^="pagefind-"] {
+    --pf-font: "Cairo", sans-serif !important;
+    font-family: "Cairo", sans-serif !important;
+}
+
+/* 3. Deep target native form controls inside components (input, select, button) */
+pagefind-searchbox *,
+pagefind-filter-dropdown *,
+pagefind-modal * {
+    font-family: "Cairo", sans-serif !important;
+}
+
+/* Searchbox Container & Layout */
 .searchbox {
     display: flex;
     align-items: center;
@@ -10,8 +37,15 @@
 
 /* Allow flex children to scale naturally in row layout */
 .searchbox > pagefind-searchbox {
+    --pf-input-height: 48px !important;
+    --pf-searchbox-max-width: 100% !important;
+    --pf-modal-max-width: 800px !important;
     flex: 1;
     min-width: 0;
+}
+
+.searchbox > pagefind-filter-dropdown button {
+    min-height: 48px !important;
 }
 
 /* Mobile adjustments */
@@ -23,11 +57,5 @@
     .searchbox > pagefind-searchbox,
     .searchbox > pagefind-filter-dropdown {
         width: 100%;
-    }
-}
-
-@media (max-width: 480px) {
-    .searchbox {
-        flex-direction: column;
     }
 }
