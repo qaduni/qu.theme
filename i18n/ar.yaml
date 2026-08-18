@@ -28,7 +28,9 @@ section_announcements: "إعلانات"
 section_page: "صفحة"
 
 filter_label: "فلتر"
-search_global: "البحث في الصفحات، الكورسات، البرامج، الأخبار والإعلانات..."
+search_global: "اكتب للبحث (مثال: علوم الحاسوب، الرسوم الدراسية)..."
+search_section_title: "البحث الشامل"
+search_section_subtitle: "ابحث في المقررات، البرامج الأكاديمية، أخبار الجامعة، والدليل الجامعي."
 search_news_placeholder: "إبحث في الاخبار..."
 search_announcements_placeholder: "إبحث في الإعلانات..."
 

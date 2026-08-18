@@ -1,7 +1,18 @@
 <link href="/pagefind/pagefind-component-ui.css" rel="stylesheet">
 <script src="/pagefind/pagefind-component-ui.js" type="module"></script>
 
-<div class="searchbox">
-    <pagefind-searchbox style="width: 100%;" placeholder="{{ i18n `search_global` }}" max-results="10"></pagefind-searchbox>
-    <pagefind-filter-dropdown filter="category" label="{{ i18n `filter_label` }}"></pagefind-filter-dropdown>
-</div>
+<section class="section section-alt">
+    <div class="container">
+        <div class="section-header reveal">
+            <h2>{{ i18n "search_section_title" }}</h2>
+            <p>{{ i18n "search_section_subtitle" }}</p>
+        </div>
+
+        <div class="searchbox">
+            <pagefind-searchbox style="width: 100%;" placeholder="{{ i18n `search_global` }}" max-results="10">
+            </pagefind-searchbox>
+            <pagefind-filter-dropdown filter="category" label="{{ i18n `filter_label` }}">
+            </pagefind-filter-dropdown>
+        </div>
+    </div>
+</section>
