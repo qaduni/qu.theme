@@ -68,6 +68,7 @@
 .sdg-btn {
     background: linear-gradient(135deg, #2e8b57 0%, #1f6b41 100%);
     color: #fff;
+    text-align: center;
     border: none;
     box-shadow: 0 8px 18px -8px rgba(15, 81, 50, .65);
     transition: transform var(--transition-base), box-shadow var(--transition-base), filter var(--transition-base);
