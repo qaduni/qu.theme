@@ -1,20 +1,33 @@
-{{ $image := resources.Get .src }}
+{{/* Normalize input path: strip leading slash for Hugo Pipes */}}
+{{ $src := .src }}
+{{ $assetPath := strings.TrimPrefix "/" $src }}
+{{ $image := resources.Get $assetPath }}
 
 {{ if $image }}
+  {{/* Hugo Asset Pipeline (assets/) */}}
   {{ $small := $image.Resize "400x webp q60" }}
-  {{ $mediumSmall := $image.Resize "600x webp q60" }}
   {{ $medium := $image.Resize "800x webp q60" }}
   {{ $large := $image.Resize "1200x webp q60" }}
 
   <img 
     src="{{ $medium.RelPermalink }}" 
     srcset="{{ $small.RelPermalink }} 400w, {{ $medium.RelPermalink }} 800w, {{ $large.RelPermalink }} 1200w"
-    sizes="{{ default "(max-width: 768px) 100vw, 100vw" .sizes }}"
+    sizes="{{ default `(max-width: 768px) 100vw, 100vw` .sizes }}"
     width="{{ $image.Width }}" 
     height="{{ $image.Height }}" 
     alt="{{ .alt }}"
     class="{{ .class }}"
-    loading="{{ default "lazy" .loading }}" 
+    loading="{{ default `lazy` .loading }}" 
     decoding="async"
-    fetchpriority="{{ default "auto" .fetchpriority }}">
+    fetchpriority="{{ default `auto` .fetchpriority }}">
+{{ else }}
+  {{/* Unprocessed Static Fallback (static/) */}}
+  {{ $staticPath := printf "/%s" $assetPath | relURL }}
+  <img 
+    src="{{ $staticPath }}" 
+    alt="{{ .alt }}"
+    class="{{ .class }}"
+    loading="{{ default `lazy` .loading }}" 
+    decoding="async"
+    fetchpriority="{{ default `auto` .fetchpriority }}">
 {{ end }}

@@ -12,22 +12,19 @@
             {{ range $i, $e := first 3 .Pages.ByDate.Reverse }}
             <article class="news-card reveal" style="--reveal-delay: {{ mul $i 90 }}ms;">
                 <div class="news-card-image">
-                    {{ if .Params.image }}
-                        {{ $altText := .Params.imageAlt | default .Title }}
-                        {{ $imgPath := strings.TrimPrefix "/" .Params.image }}
-                        
-                        {{ partial "responsive-img.html" (dict 
-                            "src" $imgPath 
-                            "alt" $altText 
-                            "sizes" "(max-width: 768px) 100vw, 33vw"
-                        ) }}
-                    {{ else }}
-                        {{ partial "responsive-img.html" (dict 
-                            "src" "images/logo.webp" 
-                            "alt" "Placeholder" 
-                            "sizes" "(max-width: 768px) 100vw, 33vw"
-                        ) }}
+                    {{ $imgPath := "images/logo.webp" }}
+                    {{ $altText := "Placeholder" }}
+
+                    {{ if and .Params.image (ne .Params.image "") }}
+                        {{ $imgPath = strings.TrimPrefix "/" .Params.image }}
+                        {{ $altText = .Params.imageAlt | default .Title }}
                     {{ end }}
+
+                    {{ partial "responsive-img.html" (dict 
+                    "src" $imgPath 
+                    "alt" $altText 
+                    "sizes" "(max-width: 768px) 100vw, 33vw"
+                    ) }}
                 </div>
                 <div class="news-card-content">
                     <div class="news-card-date">

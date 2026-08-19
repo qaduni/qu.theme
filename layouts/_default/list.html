@@ -65,22 +65,19 @@
                 {{ end }}
                 {{ else }}
                 <div class="list-item-image">
-                    {{ if .Params.image }}
-                    {{ $altText := .Params.imageAlt | default .Title }}
-                    {{ $imgPath := strings.TrimPrefix "/" .Params.image }}
+                    {{ $imgPath := "images/logo.webp" }}
+                    {{ $altText := "Placeholder" }}
 
-                    {{ partial "responsive-img.html" (dict
-                    "src" $imgPath
-                    "alt" $altText
-                    "sizes" "(max-width: 768px) 100vw, 33vw"
-                    ) }}
-                    {{ else }}
-                    {{ partial "responsive-img.html" (dict
-                    "src" "images/logo.webp"
-                    "alt" "Placeholder"
-                    "sizes" "(max-width: 768px) 100vw, 33vw"
-                    ) }}
+                    {{ if and .Params.image (ne .Params.image "") }}
+                        {{ $imgPath = strings.TrimPrefix "/" .Params.image }}
+                        {{ $altText = .Params.imageAlt | default .Title }}
                     {{ end }}
+
+                    {{ partial "responsive-img.html" (dict 
+                    "src" $imgPath 
+                    "alt" $altText 
+                    "sizes" "(max-width: 768px) 100vw, 33vw"
+                    ) }}
                 </div>
                 {{ end }}
 
