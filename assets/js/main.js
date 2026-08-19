@@ -27,12 +27,12 @@
     });
 })();
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const navToggle = document.querySelector('.nav-toggle');
     const navMenu = document.querySelector('.nav-menu');
 
     if (navToggle && navMenu) {
-        navToggle.addEventListener('click', function() {
+        navToggle.addEventListener('click', function () {
             const isExpanded = this.getAttribute('aria-expanded') === 'true';
             this.setAttribute('aria-expanded', !isExpanded);
             navMenu.classList.toggle('active');
@@ -44,11 +44,11 @@ document.addEventListener('DOMContentLoaded', function() {
         let lastScroll = 0;
         let ticking = false;
 
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             lastScroll = window.scrollY;
 
             if (!ticking) {
-                window.requestAnimationFrame(function() {
+                window.requestAnimationFrame(function () {
                     if (lastScroll > 50) {
                         header.classList.add('scrolled');
                     } else {
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (dropdown) {
             const trigger = item.querySelector('.nav-label') || item.querySelector('a');
             if (trigger) {
-                trigger.addEventListener('click', function(e) {
+                trigger.addEventListener('click', function (e) {
                     if (window.innerWidth <= 768 || trigger.tagName.toLowerCase() === 'span') {
                         e.preventDefault();
                         e.stopPropagation();
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (document.body.dataset.pwaEnabled === 'true' && 'serviceWorker' in navigator) {
         window.addEventListener('load', function () {
-            navigator.serviceWorker.register('/sw.js').catch(function () {});
+            navigator.serviceWorker.register('/sw.js').catch(function () { });
         });
     }
 });
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         toggle.addEventListener('click', (e) => {
             e.stopPropagation();
             const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
-            
+
             // Close sibling menus on the same level
             const parentLi = toggle.closest('li');
             const siblingToggles = parentLi.parentElement.querySelectorAll(':scope > li > .nav-dropdown-toggle');
@@ -135,4 +135,15 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const observer = new MutationObserver(() => {
+        const dropdownBtn = document.querySelector('.pf-dropdown-trigger');
+        if (dropdownBtn && !dropdownBtn.hasAttribute('aria-label')) {
+            dropdownBtn.setAttribute('aria-label', '{{ i18n "filter_label" }}');
+        }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
 });
