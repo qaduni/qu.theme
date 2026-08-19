@@ -153,8 +153,15 @@
     {{/* Structured Data (JSON-LD) */}}
     {{ partial "schema.html" . }}
 
-    {{/* Generator tag moved to bottom of head */}}
-    {{ hugo.Generator }}
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ hugo.Data.site.global.measurement_id }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', '{{ hugo.Data.site.global.measurement_id }}');
+    </script>
 
     {{ block "head" . }}{{ end }}
 </head>
