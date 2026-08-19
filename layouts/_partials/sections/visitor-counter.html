@@ -59,27 +59,57 @@
             updateCounter();
         }
 
-        var endpoint = counterSection.dataset.endpoint;
-        if (!endpoint) {
+        var baseUrl = counterSection.dataset.endpoint;
+        if (!baseUrl) {
             counterSection.hidden = true;
             return;
         }
+
+        // Strip trailing slash if present
+        baseUrl = baseUrl.replace(/\/$/, '');
 
         var observer = new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {
                 if (entry.isIntersecting) {
                     observer.unobserve(entry.target);
-                    fetch(endpoint, { credentials: 'omit' })
-                        .then(function (r) {
-                            if (!r.ok) throw new Error('HTTP ' + r.status);
-                            return r.json();
-                        })
-                        .then(function (data) {
-                            animateCounter('today-visitors', data.today || 0);
-                            animateCounter('total-visitors', data.total || 0);
-                            animateCounter('online-visitors', data.online || 0);
-                        })
-                        .catch(function () { counterSection.hidden = true; });
+
+                    var now = Date.now();
+                    var startOfDay = new Date().setHours(0, 0, 0, 0);
+                    var siteCreationDate = new Date('2020-01-01').getTime(); // Adjust site start date as needed
+
+                    // Umami API endpoints:
+                    // 1. Today's stats: /stats?startAt=...&endAt=...
+                    // 2. All-time stats: /stats?startAt=...&endAt=...
+                    // 3. Online visitors now: /active
+                    var todayUrl = baseUrl + '/stats?startAt=' + startOfDay + '&endAt=' + now;
+                    var totalUrl = baseUrl + '/stats?startAt=' + siteCreationDate + '&endAt=' + now;
+                    var activeUrl = baseUrl + '/active';
+
+                    Promise.all([
+                        fetch(todayUrl).then(function (r) { return r.json(); }),
+                        fetch(totalUrl).then(function (r) { return r.json(); }),
+                        fetch(activeUrl).then(function (r) { return r.json(); })
+                    ])
+                    .then(function (results) {
+                        var todayData = results[0];
+                        var totalData = results[1];
+                        var activeData = results[2];
+
+                        // Umami stats output: { visitors: { value: X }, pageviews: { value: Y } }
+                        // Umami active output: { visitors: Z } or array format depending on Umami version
+                        var todayVisitors = (todayData.visitors && todayData.visitors.value) || 0;
+                        var totalVisitors = (totalData.visitors && totalData.visitors.value) || 0;
+                        var onlineVisitors = (typeof activeData.visitors === 'number') 
+                            ? activeData.visitors 
+                            : (activeData[0] ? activeData[0].x || 0 : 0);
+
+                        animateCounter('today-visitors', todayVisitors);
+                        animateCounter('total-visitors', totalVisitors);
+                        animateCounter('online-visitors', onlineVisitors);
+                    })
+                    .catch(function () {
+                        counterSection.hidden = true;
+                    });
                 }
             });
         }, { threshold: 0.5 });

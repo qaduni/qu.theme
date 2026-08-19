@@ -152,7 +152,7 @@
 
     {{/* Structured Data (JSON-LD) */}}
     {{ partial "schema.html" . }}
-
+    <script defer src="https://umami.qu.edu.iq/script.js" data-website-id="{{ hugo.Data.site.global.tracking_code }}"></script>
     {{ block "head" . }}{{ end }}
 </head>
 
