@@ -4,7 +4,7 @@
 
 {{ $topBar := index $menusData "top_bar" }}
 {{ $mainMenu := index $menusData "main" }}
-{{ $contact := $siteData.contact }}
+{{ $contact := hugo.Data.site.global }}
 
 {{ $hasContact := and $contact (or $contact.email $contact.phone) }}
 

@@ -1,5 +1,7 @@
-<link href="/pagefind/pagefind-component-ui.css" rel="stylesheet">
-<script src="/pagefind/pagefind-component-ui.js" type="module"></script>
+<link rel="preload" href="/pagefind/pagefind-component-ui.css" as="style" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/pagefind/pagefind-component-ui.css"></noscript>
+
+<script src="/pagefind/pagefind-component-ui.js" type="module" async></script>
 
 <section class="section">
     <div class="container">
@@ -9,9 +11,16 @@
         </div>
 
         <div class="searchbox">
-            <pagefind-searchbox style="width: 100%;" placeholder="{{ i18n `search_global` }}" max-results="10">
+            <pagefind-searchbox 
+                style="width: 100%;" 
+                placeholder="{{ i18n `search_global` }}" 
+                aria-label="{{ i18n `search_global` }}"
+                max-results="10">
             </pagefind-searchbox>
-            <pagefind-filter-dropdown filter="category" label="{{ i18n `filter_label` }}">
+            <pagefind-filter-dropdown 
+                filter="category" 
+                label="{{ i18n `filter_label` }}"
+                aria-label="{{ i18n `filter_label` }}">
             </pagefind-filter-dropdown>
         </div>
     </div>

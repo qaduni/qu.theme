@@ -110,11 +110,10 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ .RelPermalink }}">
     {{ end }}
 
-    <link rel="manifest" href="{{ "manifest.webmanifest" | relLangURL }}">
+    <link rel="manifest" href="{{ `manifest.webmanifest` | relLangURL }}">
 
-    {{/* Font Preloading */}}
-    {{ with resources.Get "Cairo-Variable.woff2" }}
-        <link rel="preload" href="{{ .RelPermalink }}" as="font" type="font/woff2" crossorigin>
+    {{ with resources.Get "fonts/Cairo-Variable.woff2" }}
+    <link rel="preload" href="{{ .RelPermalink }}" as="font" type="font/woff2" crossorigin="anonymous">
     {{ end }}
 
     {{/* Main Stylesheet */}}
@@ -128,7 +127,7 @@
     <meta property="og:type" content="{{ if .IsHome }}website{{ else }}article{{ end }}">
     <meta property="og:url" content="{{ .Permalink }}">
     <meta property="og:site_name" content="{{ $siteTitle }}">
-    <meta property="og:locale" content="{{ if eq .Language.Lang "ar" }}ar_IQ{{ else }}en_US{{ end }}">
+    <meta property="og:locale" content="{{ if eq .Language.Lang `ar` }}ar_IQ{{ else }}en_US{{ end }}">
     
     {{ with $ogImageResource }}
     <meta property="og:image" content="{{ .Permalink }}">
