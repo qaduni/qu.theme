@@ -7,7 +7,7 @@
     {{ partial "sections/announcements.html" . }}
     {{ partial "sections/sdg.html" . }}
     {{ partial "sections/contact.html" . }}
-    {{ if hugo.Data.site.global.visitor_counter_endpoint }}
+    {{ if hugo.Data.site.global.tracking_code }}
         {{ partial "sections/visitor-counter.html" . }}
     {{ end }}
 {{ end }}
