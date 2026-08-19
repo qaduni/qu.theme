@@ -1,4 +1,6 @@
-<section class="visitor-counter-section" data-endpoint="https://umami.qu.edu.iq/api/websites/{{ hugo.Data.site.global.tracking_code }}">
+<section class="visitor-counter-section"
+         data-endpoint="https://umami.qu.edu.iq/api/websites/{{ hugo.Data.site.global.tracking_code }}"
+         data-share-token="{{ hugo.Data.site.global.share_id }}">
     <div class="container">
         <div class="visitor-counter">
             <div class="counter-item">
@@ -60,13 +62,21 @@
         }
 
         var baseUrl = counterSection.dataset.endpoint;
+        var shareToken = counterSection.dataset.shareToken;
+
         if (!baseUrl) {
             counterSection.hidden = true;
             return;
         }
 
-        // Strip trailing slash if present
         baseUrl = baseUrl.replace(/\/$/, '');
+
+        var fetchOptions = {};
+        if (shareToken) {
+            fetchOptions.headers = {
+                'x-umami-share-token': shareToken
+            };
+        }
 
         var observer = new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {
@@ -75,33 +85,44 @@
 
                     var now = Date.now();
                     var startOfDay = new Date().setHours(0, 0, 0, 0);
-                    var siteCreationDate = new Date('2020-01-01').getTime(); // Adjust site start date as needed
+                    var siteCreationDate = new Date('2020-01-01').getTime();
 
-                    // Umami API endpoints:
-                    // 1. Today's stats: /stats?startAt=...&endAt=...
-                    // 2. All-time stats: /stats?startAt=...&endAt=...
-                    // 3. Online visitors now: /active
                     var todayUrl = baseUrl + '/stats?startAt=' + startOfDay + '&endAt=' + now;
                     var totalUrl = baseUrl + '/stats?startAt=' + siteCreationDate + '&endAt=' + now;
                     var activeUrl = baseUrl + '/active';
 
                     Promise.all([
-                        fetch(todayUrl).then(function (r) { return r.json(); }),
-                        fetch(totalUrl).then(function (r) { return r.json(); }),
-                        fetch(activeUrl).then(function (r) { return r.json(); })
+                        fetch(todayUrl, fetchOptions).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }),
+                        fetch(totalUrl, fetchOptions).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }),
+                        fetch(activeUrl, fetchOptions).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
                     ])
                     .then(function (results) {
                         var todayData = results[0];
                         var totalData = results[1];
                         var activeData = results[2];
 
-                        // Umami stats output: { visitors: { value: X }, pageviews: { value: Y } }
-                        // Umami active output: { visitors: Z } or array format depending on Umami version
-                        var todayVisitors = (todayData.visitors && todayData.visitors.value) || 0;
-                        var totalVisitors = (totalData.visitors && totalData.visitors.value) || 0;
-                        var onlineVisitors = (typeof activeData.visitors === 'number') 
-                            ? activeData.visitors 
-                            : (activeData[0] ? activeData[0].x || 0 : 0);
+                        function parseStat(data, key) {
+                            if (!data) return 0;
+                            if (typeof data[key] === 'number') return data[key];
+                            if (data[key] && typeof data[key].value === 'number') return data[key].value;
+                            return 0;
+                        }
+
+                        function parseActive(data) {
+                            if (!data) return 0;
+                            if (typeof data === 'number') return data;
+                            if (typeof data.visitors === 'number') return data.visitors;
+                            if (typeof data.x === 'number') return data.x;
+                            if (Array.isArray(data) && data.length > 0) {
+                                var item = data[0];
+                                return item.y || item.x || item.visitors || 0;
+                            }
+                            return 0;
+                        }
+
+                        var todayVisitors = parseStat(todayData, 'visitors') || parseStat(todayData, 'pageviews');
+                        var totalVisitors = parseStat(totalData, 'visitors') || parseStat(totalData, 'pageviews');
+                        var onlineVisitors = parseActive(activeData);
 
                         animateCounter('today-visitors', todayVisitors);
                         animateCounter('total-visitors', totalVisitors);
