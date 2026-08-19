@@ -112,10 +112,6 @@
 
     <link rel="manifest" href="{{ `manifest.webmanifest` | relLangURL }}">
 
-    {{ with resources.Get "fonts/Cairo-Variable.woff2" }}
-    <link rel="preload" href="{{ .RelPermalink }}" as="font" type="font/woff2" crossorigin="anonymous">
-    {{ end }}
-
     {{/* Main Stylesheet */}}
     {{ with resources.Get "css/main.css" | css.Build (dict "minify" true) | fingerprint }}
     <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
