@@ -27,10 +27,6 @@ section_announcements: "Announcements"
 section_page: "Page"
 
 filter_label: "Filter"
-
-search_global: "Type to search (e.g., Computer Science, Tuition Fees)..."
-search_section_title: "Global Search"
-search_section_subtitle: "Search across courses, academic programs, campus news, and university directories."
 search_news_placeholder: "Search news..."
 search_announcements_placeholder: "Search announcements..."
 

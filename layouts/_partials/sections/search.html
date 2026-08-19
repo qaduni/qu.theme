@@ -1,3 +1,5 @@
+{{ $homepageData := index hugo.Data.homepage .Language.Lang}}
+
 <link rel="preload" href="/pagefind/pagefind-component-ui.css" as="style" onload="this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/pagefind/pagefind-component-ui.css"></noscript>
 
@@ -6,15 +8,15 @@
 <section class="section">
     <div class="container">
         <div class="section-header reveal">
-            <h2>{{ i18n "search_section_title" }}</h2>
-            <p>{{ i18n "search_section_subtitle" }}</p>
+            <h2>{{ $homepageData.search.title }}</h2>
+            <p>{{ $homepageData.search.sub_title }}</p>
         </div>
 
         <div class="searchbox">
             <pagefind-searchbox 
                 style="width: 100%;" 
-                placeholder="{{ i18n `search_global` }}" 
-                aria-label="{{ i18n `search_global` }}"
+                placeholder="{{ $homepageData.search.placeholder }}" 
+                aria-label="{{ $homepageData.search.title }}"
                 max-results="10">
             </pagefind-searchbox>
             <pagefind-filter-dropdown 
