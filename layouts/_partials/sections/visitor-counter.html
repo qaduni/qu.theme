@@ -1,6 +1,5 @@
 <section class="visitor-counter-section"
-         data-endpoint="https://umami.qu.edu.iq/api/websites/{{ hugo.Data.site.global.tracking_code }}"
-         data-share-token="{{ hugo.Data.site.global.share_id }}">
+         data-endpoint="https://umami.qu.edu.iq/api/share/{{ hugo.Data.site.global.share_id }}">
     <div class="container">
         <div class="visitor-counter">
             <div class="counter-item">
@@ -62,21 +61,12 @@
         }
 
         var baseUrl = counterSection.dataset.endpoint;
-        var shareToken = counterSection.dataset.shareToken;
-
         if (!baseUrl) {
             counterSection.hidden = true;
             return;
         }
 
         baseUrl = baseUrl.replace(/\/$/, '');
-
-        var fetchOptions = {};
-        if (shareToken) {
-            fetchOptions.headers = {
-                'x-umami-share-token': shareToken
-            };
-        }
 
         var observer = new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {
@@ -87,14 +77,17 @@
                     var startOfDay = new Date().setHours(0, 0, 0, 0);
                     var siteCreationDate = new Date('2020-01-01').getTime();
 
+                    // When hitting /api/share/{shareId}, the endpoints are:
+                    // /stats?startAt=...&endAt=...
+                    // /active
                     var todayUrl = baseUrl + '/stats?startAt=' + startOfDay + '&endAt=' + now;
                     var totalUrl = baseUrl + '/stats?startAt=' + siteCreationDate + '&endAt=' + now;
                     var activeUrl = baseUrl + '/active';
 
                     Promise.all([
-                        fetch(todayUrl, fetchOptions).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }),
-                        fetch(totalUrl, fetchOptions).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }),
-                        fetch(activeUrl, fetchOptions).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+                        fetch(todayUrl).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }),
+                        fetch(totalUrl).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }),
+                        fetch(activeUrl).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
                     ])
                     .then(function (results) {
                         var todayData = results[0];
