@@ -6,6 +6,8 @@
     {{ partial "sections/news-grid.html" . }}
     {{ partial "sections/announcements.html" . }}
     {{ partial "sections/sdg.html" . }}
-    {{ partial "sections/contact.html" . }}
+    {{ if ne hugo.Data.site.global.website_id "" }}
+        {{ partial "sections/contact.html" . }}
+    {{ end }}
     {{ partial "sections/visitor-counter.html" . }}
 {{ end }}

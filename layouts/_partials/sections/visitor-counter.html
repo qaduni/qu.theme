@@ -54,15 +54,14 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    var counterSection = document.querySelector(
-        '.visitor-counter-section'
-    );
+    var counterSection = document.querySelector('.visitor-counter-section');
 
     if (!counterSection) {
         return;
     }
 
-    var goatCounter = 'https://analytics.qu.edu.iq';
+    // Endpoint URL
+    var statsUrl = 'https://proxy.qu.edu.iq/stats?id={{ hugo.Data.site.global.website_id }}';
 
     function animateCounter(elementId, target, duration) {
 
@@ -89,10 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 startTime = timestamp;
             }
 
-            var progress = Math.min(
-                (timestamp - startTime) / duration,
-                1
-            );
+            var progress = Math.min((timestamp - startTime) / duration, 1);
 
             /*
              * Ease-out animation.
@@ -114,98 +110,23 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /*
-     * Fetch a public GoatCounter counter.
+     * Fetch all visitor statistics in a single call.
      */
-    function fetchCount(url) {
-
+    function fetchStats(url) {
         return fetch(url, {
             method: 'GET',
             cache: 'no-store'
         })
         .then(function (response) {
-
             if (!response.ok) {
-                throw new Error(
-                    'GoatCounter returned HTTP ' +
-                    response.status
-                );
+                throw new Error('API returned HTTP ' + response.status);
             }
-
             return response.json();
-        })
-        .then(function (data) {
-
-            if (!data ||
-                typeof data.count === 'undefined') {
-
-                throw new Error(
-                    'Invalid GoatCounter response'
-                );
-            }
-
-            /*
-             * GoatCounter returns count as a formatted string,
-             * for example:
-             *
-             * "1"
-             * "1,234"
-             */
-            return Number(
-                String(data.count).replace(/,/g, '')
-            ) || 0;
         });
     }
 
     /*
-     * Create today's date in YYYY-MM-DD format.
-     *
-     * This uses the visitor's local timezone, which is appropriate
-     * for the public website counter.
-     */
-    function getToday() {
-
-        var date = new Date();
-
-        var year = date.getFullYear();
-
-        var month = String(
-            date.getMonth() + 1
-        ).padStart(2, '0');
-
-        var day = String(
-            date.getDate()
-        ).padStart(2, '0');
-
-        return year + '-' + month + '-' + day;
-    }
-
-    /*
-     * Public GoatCounter counter URLs.
-     *
-     * Today  → start=today's date
-     * Week   → start=week
-     * Month  → start=month
-     * Total  → no date restriction
-     */
-    var todayUrl =
-        goatCounter +
-        '/counter/TOTAL.json?start=' +
-        encodeURIComponent(getToday());
-
-    var weekUrl =
-        goatCounter +
-        '/counter/TOTAL.json?start=week';
-
-    var monthUrl =
-        goatCounter +
-        '/counter/TOTAL.json?start=month';
-
-    var totalUrl =
-        goatCounter +
-        '/counter/TOTAL.json';
-
-    /*
-     * Only request the counters when the section is visible.
+     * Trigger fetching only when the counter section is visible.
      */
     var observer = new IntersectionObserver(
         function (entries) {
@@ -218,48 +139,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 observer.unobserve(entry.target);
 
-                Promise.all([
-                    fetchCount(todayUrl),
-                    fetchCount(weekUrl),
-                    fetchCount(monthUrl),
-                    fetchCount(totalUrl)
-                ])
-                .then(function (counts) {
+                fetchStats(statsUrl)
+                    .then(function (data) {
+                        
+                        // Extract visitor values safely with fallbacks
+                        var today   = (data.today   && data.today.visitors)   || 0;
+                        var week    = (data.week    && data.week.visitors)    || 0;
+                        var month   = (data.month   && data.month.visitors)   || 0;
+                        var total   = (data.total   && data.total.visitors)   || 0;
 
-                    animateCounter(
-                        'today-visitors',
-                        counts[0]
-                    );
-
-                    animateCounter(
-                        'week-visitors',
-                        counts[1]
-                    );
-
-                    animateCounter(
-                        'month-visitors',
-                        counts[2]
-                    );
-
-                    animateCounter(
-                        'total-visitors',
-                        counts[3]
-                    );
-                })
-                .catch(function (error) {
-
-                    console.error(
-                        'GoatCounter visitor counter:',
-                        error
-                    );
-
-                    /*
-                     * Hide the entire counter if GoatCounter
-                     * cannot be reached.
-                     */
-                    counterSection.hidden = true;
-                });
-
+                        animateCounter('today-visitors', today);
+                        animateCounter('week-visitors', week);
+                        animateCounter('month-visitors', month);
+                        animateCounter('total-visitors', total);
+                    })
+                    .catch(function (error) {
+                        console.error('Visitor counter error:', error);
+                        /*
+                         * Hide the section if fetching fails.
+                         */
+                        counterSection.hidden = true;
+                    });
             });
 
         },

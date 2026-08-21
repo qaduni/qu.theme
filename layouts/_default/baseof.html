@@ -152,7 +152,7 @@
 
     {{/* Structured Data (JSON-LD) */}}
     {{ partial "schema.html" . }}
-    <script data-goatcounter="https://analytics.qu.edu.iq/count" async src="//analytics.qu.edu.iq/count.js"></script>
+    <script defer src="https://analytics.qu.edu.iq/script.js" data-website-id="{{ hugo.Data.site.global.website_id }}"></script>
     {{ block "head" . }}{{ end }}
 </head>
 
