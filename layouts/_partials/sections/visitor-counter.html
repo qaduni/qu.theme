@@ -54,26 +54,18 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    /*
-     * Your GoatCounter installation.
-     *
-     * IMPORTANT:
-     * This must point to the GoatCounter site that you created
-     * for THIS domain/subdomain.
-     */
-    var goatCounter = 'https://analytics.qu.edu.iq';
-
-    var counterSection =
-        document.querySelector('.visitor-counter-section');
+    var counterSection = document.querySelector(
+        '.visitor-counter-section'
+    );
 
     if (!counterSection) {
         return;
     }
 
-    /*
-     * Animate a number from 0 to the target.
-     */
+    var goatCounter = 'https://analytics.qu.edu.iq';
+
     function animateCounter(elementId, target, duration) {
+
         duration = duration || 1200;
 
         var element = document.getElementById(elementId);
@@ -92,6 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var startTime = null;
 
         function update(timestamp) {
+
             if (!startTime) {
                 startTime = timestamp;
             }
@@ -121,92 +114,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /*
-     * Format a Date as YYYY-MM-DD.
-     *
-     * GoatCounter's visitor counter accepts dates in this format.
-     */
-    function formatDate(date) {
-        var year = date.getFullYear();
-        var month = String(date.getMonth() + 1).padStart(2, '0');
-        var day = String(date.getDate()).padStart(2, '0');
-
-        return year + '-' + month + '-' + day;
-    }
-
-    /*
-     * Get today's date.
-     */
-    var now = new Date();
-
-    /*
-     * Today
-     */
-    var todayStart = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate()
-    );
-
-    /*
-     * This week.
-     *
-     * Monday = first day of the week.
-     */
-    var weekStart = new Date(todayStart);
-
-    var day = weekStart.getDay();
-
-    /*
-     * JavaScript:
-     * Sunday = 0
-     * Monday = 1
-     * ...
-     * Saturday = 6
-     */
-    var daysFromMonday = (day + 6) % 7;
-
-    weekStart.setDate(
-        weekStart.getDate() - daysFromMonday
-    );
-
-    /*
-     * This month.
-     */
-    var monthStart = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        1
-    );
-
-    /*
-     * GoatCounter TOTAL counter.
-     *
-     * /counter/TOTAL.json is the public counter endpoint.
-     *
-     * start/end are supplied as YYYY-MM-DD.
-     */
-    function makeUrl(startDate) {
-        return goatCounter +
-            '/counter/TOTAL.json' +
-            '?start=' + encodeURIComponent(formatDate(startDate)) +
-            '&end=' + encodeURIComponent(formatDate(now));
-    }
-
-    /*
-     * All-time total.
-     */
-    var totalUrl =
-        goatCounter + '/counter/TOTAL.json';
-
-    /*
-     * Fetch a GoatCounter counter.
+     * Fetch a public GoatCounter counter.
      */
     function fetchCount(url) {
+
         return fetch(url, {
             method: 'GET',
             cache: 'no-store'
         })
         .then(function (response) {
+
             if (!response.ok) {
                 throw new Error(
                     'GoatCounter returned HTTP ' +
@@ -218,25 +135,20 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(function (data) {
 
-            /*
-             * GoatCounter returns:
-             *
-             * {
-             *     "count": "1,234",
-             *     "count_unique": "1,234"
-             * }
-             *
-             * count is a formatted string.
-             */
-            if (!data || typeof data.count === 'undefined') {
+            if (!data ||
+                typeof data.count === 'undefined') {
+
                 throw new Error(
                     'Invalid GoatCounter response'
                 );
             }
 
             /*
-             * Remove thousands separators and convert
-             * to a number.
+             * GoatCounter returns count as a formatted string,
+             * for example:
+             *
+             * "1"
+             * "1,234"
              */
             return Number(
                 String(data.count).replace(/,/g, '')
@@ -245,7 +157,55 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /*
-     * Only load the counters when they become visible.
+     * Create today's date in YYYY-MM-DD format.
+     *
+     * This uses the visitor's local timezone, which is appropriate
+     * for the public website counter.
+     */
+    function getToday() {
+
+        var date = new Date();
+
+        var year = date.getFullYear();
+
+        var month = String(
+            date.getMonth() + 1
+        ).padStart(2, '0');
+
+        var day = String(
+            date.getDate()
+        ).padStart(2, '0');
+
+        return year + '-' + month + '-' + day;
+    }
+
+    /*
+     * Public GoatCounter counter URLs.
+     *
+     * Today  → start=today's date
+     * Week   → start=week
+     * Month  → start=month
+     * Total  → no date restriction
+     */
+    var todayUrl =
+        goatCounter +
+        '/counter/TOTAL.json?start=' +
+        encodeURIComponent(getToday());
+
+    var weekUrl =
+        goatCounter +
+        '/counter/TOTAL.json?start=week';
+
+    var monthUrl =
+        goatCounter +
+        '/counter/TOTAL.json?start=month';
+
+    var totalUrl =
+        goatCounter +
+        '/counter/TOTAL.json';
+
+    /*
+     * Only request the counters when the section is visible.
      */
     var observer = new IntersectionObserver(
         function (entries) {
@@ -258,13 +218,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 observer.unobserve(entry.target);
 
-                /*
-                 * Request all four counters.
-                 */
                 Promise.all([
-                    fetchCount(makeUrl(todayStart)),
-                    fetchCount(makeUrl(weekStart)),
-                    fetchCount(makeUrl(monthStart)),
+                    fetchCount(todayUrl),
+                    fetchCount(weekUrl),
+                    fetchCount(monthUrl),
                     fetchCount(totalUrl)
                 ])
                 .then(function (counts) {
@@ -291,16 +248,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .catch(function (error) {
 
-                    /*
-                     * Don't show broken/incorrect counters.
-                     */
                     console.error(
                         'GoatCounter visitor counter:',
                         error
                     );
 
+                    /*
+                     * Hide the entire counter if GoatCounter
+                     * cannot be reached.
+                     */
                     counterSection.hidden = true;
                 });
+
             });
 
         },
@@ -310,5 +269,6 @@ document.addEventListener('DOMContentLoaded', function () {
     );
 
     observer.observe(counterSection);
+
 });
 </script>
