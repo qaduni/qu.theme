@@ -1,9 +1,8 @@
-<section class="visitor-counter-section"
-         data-endpoint="https://umami.qu.edu.iq/api/share/{{ hugo.Data.site.global.share_id }}">
+<section class="visitor-counter-section">
     <div class="container">
         <div class="visitor-counter">
             <div class="counter-item">
-                <svg width="28" height="28">
+                <svg width="28" height="28" aria-hidden="true">
                     <use href="#icon-users"></use>
                 </svg>
                 <div class="counter-content">
@@ -11,123 +10,305 @@
                     <span class="counter-label">{{ i18n "today_visitors" }}</span>
                 </div>
             </div>
+            
             <div class="counter-divider"></div>
+
             <div class="counter-item">
-                <svg width="28" height="28">
+                <svg width="28" height="28" aria-hidden="true">
                     <use href="#icon-chart"></use>
+                </svg>
+                <div class="counter-content">
+                    <span class="counter-number" id="week-visitors">0</span>
+                    <span class="counter-label">{{ i18n "this_week" }}</span>
+                </div>
+            </div>
+
+            <div class="counter-divider"></div>
+
+            <div class="counter-item">
+                <svg width="28" height="28" aria-hidden="true">
+                    <use href="#icon-chart"></use>
+                </svg>
+                <div class="counter-content">
+                    <span class="counter-number" id="month-visitors">0</span>
+                    <span class="counter-label">{{ i18n "this_month" }}</span>
+                </div>
+            </div>
+
+            <div class="counter-divider"></div>
+
+            <div class="counter-item">
+                <svg width="28" height="28" aria-hidden="true">
+                    <use href="#icon-globe"></use>
                 </svg>
                 <div class="counter-content">
                     <span class="counter-number" id="total-visitors">0</span>
                     <span class="counter-label">{{ i18n "total_visitors" }}</span>
                 </div>
             </div>
-            <div class="counter-divider"></div>
-            <div class="counter-item">
-                <svg width="28" height="28">
-                    <use href="#icon-globe"></use>
-                </svg>
-                <div class="counter-content">
-                    <span class="counter-number" id="online-visitors">0</span>
-                    <span class="counter-label">{{ i18n "online_now" }}</span>
-                </div>
-            </div>
+
         </div>
     </div>
 </section>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var counterSection = document.querySelector('.visitor-counter-section');
-        if (!counterSection) return;
+document.addEventListener('DOMContentLoaded', function () {
 
-        function animateCounter(elementId, target, duration) {
-            duration = duration || 2000;
-            var element = document.getElementById(elementId);
-            if (!element) return;
-            var start = 0;
-            var increment = target / (duration / 16);
-            var current = start;
+    /*
+     * Your GoatCounter installation.
+     *
+     * IMPORTANT:
+     * This must point to the GoatCounter site that you created
+     * for THIS domain/subdomain.
+     */
+    var goatCounter = 'https://analytics.qu.edu.iq';
 
-            function updateCounter() {
-                current += increment;
-                if (current < target) {
-                    element.textContent = Math.floor(current).toLocaleString();
-                    requestAnimationFrame(updateCounter);
-                } else {
-                    element.textContent = target.toLocaleString();
-                }
-            }
+    var counterSection =
+        document.querySelector('.visitor-counter-section');
 
-            updateCounter();
-        }
+    if (!counterSection) {
+        return;
+    }
 
-        var baseUrl = counterSection.dataset.endpoint;
-        if (!baseUrl) {
-            counterSection.hidden = true;
+    /*
+     * Animate a number from 0 to the target.
+     */
+    function animateCounter(elementId, target, duration) {
+        duration = duration || 1200;
+
+        var element = document.getElementById(elementId);
+
+        if (!element) {
             return;
         }
 
-        baseUrl = baseUrl.replace(/\/$/, '');
+        target = Number(target) || 0;
 
-        var observer = new IntersectionObserver(function (entries) {
+        if (target === 0) {
+            element.textContent = '0';
+            return;
+        }
+
+        var startTime = null;
+
+        function update(timestamp) {
+            if (!startTime) {
+                startTime = timestamp;
+            }
+
+            var progress = Math.min(
+                (timestamp - startTime) / duration,
+                1
+            );
+
+            /*
+             * Ease-out animation.
+             */
+            var eased = 1 - Math.pow(1 - progress, 3);
+
+            var value = Math.floor(target * eased);
+
+            element.textContent = value.toLocaleString();
+
+            if (progress < 1) {
+                requestAnimationFrame(update);
+            } else {
+                element.textContent = target.toLocaleString();
+            }
+        }
+
+        requestAnimationFrame(update);
+    }
+
+    /*
+     * Format a Date as YYYY-MM-DD.
+     *
+     * GoatCounter's visitor counter accepts dates in this format.
+     */
+    function formatDate(date) {
+        var year = date.getFullYear();
+        var month = String(date.getMonth() + 1).padStart(2, '0');
+        var day = String(date.getDate()).padStart(2, '0');
+
+        return year + '-' + month + '-' + day;
+    }
+
+    /*
+     * Get today's date.
+     */
+    var now = new Date();
+
+    /*
+     * Today
+     */
+    var todayStart = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate()
+    );
+
+    /*
+     * This week.
+     *
+     * Monday = first day of the week.
+     */
+    var weekStart = new Date(todayStart);
+
+    var day = weekStart.getDay();
+
+    /*
+     * JavaScript:
+     * Sunday = 0
+     * Monday = 1
+     * ...
+     * Saturday = 6
+     */
+    var daysFromMonday = (day + 6) % 7;
+
+    weekStart.setDate(
+        weekStart.getDate() - daysFromMonday
+    );
+
+    /*
+     * This month.
+     */
+    var monthStart = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        1
+    );
+
+    /*
+     * GoatCounter TOTAL counter.
+     *
+     * /counter/TOTAL.json is the public counter endpoint.
+     *
+     * start/end are supplied as YYYY-MM-DD.
+     */
+    function makeUrl(startDate) {
+        return goatCounter +
+            '/counter/TOTAL.json' +
+            '?start=' + encodeURIComponent(formatDate(startDate)) +
+            '&end=' + encodeURIComponent(formatDate(now));
+    }
+
+    /*
+     * All-time total.
+     */
+    var totalUrl =
+        goatCounter + '/counter/TOTAL.json';
+
+    /*
+     * Fetch a GoatCounter counter.
+     */
+    function fetchCount(url) {
+        return fetch(url, {
+            method: 'GET',
+            cache: 'no-store'
+        })
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error(
+                    'GoatCounter returned HTTP ' +
+                    response.status
+                );
+            }
+
+            return response.json();
+        })
+        .then(function (data) {
+
+            /*
+             * GoatCounter returns:
+             *
+             * {
+             *     "count": "1,234",
+             *     "count_unique": "1,234"
+             * }
+             *
+             * count is a formatted string.
+             */
+            if (!data || typeof data.count === 'undefined') {
+                throw new Error(
+                    'Invalid GoatCounter response'
+                );
+            }
+
+            /*
+             * Remove thousands separators and convert
+             * to a number.
+             */
+            return Number(
+                String(data.count).replace(/,/g, '')
+            ) || 0;
+        });
+    }
+
+    /*
+     * Only load the counters when they become visible.
+     */
+    var observer = new IntersectionObserver(
+        function (entries) {
+
             entries.forEach(function (entry) {
-                if (entry.isIntersecting) {
-                    observer.unobserve(entry.target);
 
-                    var now = Date.now();
-                    var startOfDay = new Date().setHours(0, 0, 0, 0);
-                    var siteCreationDate = new Date('2020-01-01').getTime();
-
-                    // When hitting /api/share/{shareId}, the endpoints are:
-                    // /stats?startAt=...&endAt=...
-                    // /active
-                    var todayUrl = baseUrl + '/stats?startAt=' + startOfDay + '&endAt=' + now;
-                    var totalUrl = baseUrl + '/stats?startAt=' + siteCreationDate + '&endAt=' + now;
-                    var activeUrl = baseUrl + '/active';
-
-                    Promise.all([
-                        fetch(todayUrl).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }),
-                        fetch(totalUrl).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }),
-                        fetch(activeUrl).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-                    ])
-                    .then(function (results) {
-                        var todayData = results[0];
-                        var totalData = results[1];
-                        var activeData = results[2];
-
-                        function parseStat(data, key) {
-                            if (!data) return 0;
-                            if (typeof data[key] === 'number') return data[key];
-                            if (data[key] && typeof data[key].value === 'number') return data[key].value;
-                            return 0;
-                        }
-
-                        function parseActive(data) {
-                            if (!data) return 0;
-                            if (typeof data === 'number') return data;
-                            if (typeof data.visitors === 'number') return data.visitors;
-                            if (typeof data.x === 'number') return data.x;
-                            if (Array.isArray(data) && data.length > 0) {
-                                var item = data[0];
-                                return item.y || item.x || item.visitors || 0;
-                            }
-                            return 0;
-                        }
-
-                        var todayVisitors = parseStat(todayData, 'visitors') || parseStat(todayData, 'pageviews');
-                        var totalVisitors = parseStat(totalData, 'visitors') || parseStat(totalData, 'pageviews');
-                        var onlineVisitors = parseActive(activeData);
-
-                        animateCounter('today-visitors', todayVisitors);
-                        animateCounter('total-visitors', totalVisitors);
-                        animateCounter('online-visitors', onlineVisitors);
-                    })
-                    .catch(function () {
-                        counterSection.hidden = true;
-                    });
+                if (!entry.isIntersecting) {
+                    return;
                 }
-            });
-        }, { threshold: 0.5 });
 
-        observer.observe(counterSection);
-    });
+                observer.unobserve(entry.target);
+
+                /*
+                 * Request all four counters.
+                 */
+                Promise.all([
+                    fetchCount(makeUrl(todayStart)),
+                    fetchCount(makeUrl(weekStart)),
+                    fetchCount(makeUrl(monthStart)),
+                    fetchCount(totalUrl)
+                ])
+                .then(function (counts) {
+
+                    animateCounter(
+                        'today-visitors',
+                        counts[0]
+                    );
+
+                    animateCounter(
+                        'week-visitors',
+                        counts[1]
+                    );
+
+                    animateCounter(
+                        'month-visitors',
+                        counts[2]
+                    );
+
+                    animateCounter(
+                        'total-visitors',
+                        counts[3]
+                    );
+                })
+                .catch(function (error) {
+
+                    /*
+                     * Don't show broken/incorrect counters.
+                     */
+                    console.error(
+                        'GoatCounter visitor counter:',
+                        error
+                    );
+
+                    counterSection.hidden = true;
+                });
+            });
+
+        },
+        {
+            threshold: 0.1
+        }
+    );
+
+    observer.observe(counterSection);
+});
 </script>

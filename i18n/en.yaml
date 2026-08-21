@@ -35,8 +35,9 @@ contact_subtitle: "Our team is ready to answer your questions and provide suppor
 contact_us: "Contact"
 
 today_visitors: "Today's Visitors"
+this_week_visitors: "This Week Visitors"
+this_month_visitors: "This Month Visitors"
 total_visitors: "Total Visitors"
-online_now: "Online Now"
 
 home: "Home"
 about: "About"
