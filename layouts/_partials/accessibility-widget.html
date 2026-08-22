@@ -1,371 +1,372 @@
 <div class="site-tools-box">
-    <!-- Floating Toggle Button with SVG -->
-    <button id="a11y-toggle" type="button" aria-label="{{ i18n `a11y_btn_label` }}" title="{{ i18n `a11y_btn_label` }}">
-        <svg class="a11y-svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28"
-            height="28">
+    <button id="a11y-toggle"
+            type="button"
+            aria-label="{{ i18n `a11y_btn_label` }}"
+            title="{{ i18n `a11y_btn_label` }}"
+            aria-expanded="false"
+            aria-controls="a11y-menu">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 24 24"
+             fill="currentColor"
+             width="28"
+             height="28"
+             aria-hidden="true">
             <path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z" />
         </svg>
     </button>
 
-    <!-- Panel Menu -->
-    <div id="a11y-menu" class="a11y-hidden" role="region" aria-label="{{ i18n `a11y_title` }}">
-        <div class="a11y-header">
-            <h3 class="a11y-title">{{ i18n "a11y_title" }}</h3>
-        </div>
+    <div id="a11y-menu"
+         role="region"
+         aria-label="{{ i18n `a11y_title` }}"
+         hidden>
 
-        <div class="a11y-control-row">
-            <span class="a11y-label">{{ i18n "a11y_font_size" }}</span>
-            <div class="a11y-btn-group">
-                <button id="a11y-font-decrease" type="button" aria-label="Decrease Font Size">{{ i18n "a11y_decrease" }}</button>
-                <button id="a11y-font-reset" type="button" aria-label="Reset Font Size">{{ i18n "a11y_reset" }}</button>
-                <button id="a11y-font-increase" type="button" aria-label="Increase Font Size">{{ i18n "a11y_increase" }}</button>
+        <header>
+            <h3>{{ i18n "a11y_title" }}</h3>
+        </header>
+
+        <section>
+            <span>{{ i18n "a11y_font_size" }}</span>
+
+            <div>
+                <button id="a11y-font-decrease"
+                        type="button"
+                        aria-label="Decrease Font Size">
+                    {{ i18n "a11y_decrease" }}
+                </button>
+
+                <button id="a11y-font-reset"
+                        type="button"
+                        aria-label="Reset Font Size">
+                    {{ i18n "a11y_reset" }}
+                </button>
+
+                <button id="a11y-font-increase"
+                        type="button"
+                        aria-label="Increase Font Size">
+                    {{ i18n "a11y_increase" }}
+                </button>
             </div>
-        </div>
+        </section>
 
-        <div class="a11y-control-row">
-            <button id="a11y-contrast-toggle" class="a11y-toggle-btn" type="button">
+        <section>
+            <button id="a11y-contrast-toggle"
+                    type="button"
+                    aria-pressed="false">
                 <span>{{ i18n "a11y_contrast" }}</span>
-                <span class="a11y-status-indicator"></span>
+                <i aria-hidden="true"></i>
             </button>
-        </div>
+        </section>
 
-        <div class="a11y-control-row">
-            <button id="a11y-links-toggle" class="a11y-toggle-btn" type="button">
+        <section>
+            <button id="a11y-links-toggle"
+                    type="button"
+                    aria-pressed="false">
                 <span>{{ i18n "a11y_links" }}</span>
-                <span class="a11y-status-indicator"></span>
+                <i aria-hidden="true"></i>
             </button>
-        </div>
+        </section>
+
     </div>
 </div>
 
 <style>
-    /* Local Component Scoped Variables */
-    .site-tools-box {
-        --a11y-primary: #0284c7;
-        --a11y-primary-hover: #0369a1;
-        --a11y-bg: #ffffff;
-        --a11y-text: #0f172a;
-        --a11y-text-muted: #64748b;
-        --a11y-border: #e2e8f0;
-        --a11y-btn-bg: #f8fafc;
-        --a11y-btn-hover: #f1f5f9;
-        --a11y-active-bg: #e0f2fe;
-        --a11y-active-text: #0369a1;
-        --a11y-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+.site-tools-box {
+    --primary: #0284c7;
+    --primary-hover: #0369a1;
+    --bg: #fff;
+    --text: #0f172a;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --button-bg: #f8fafc;
+    --button-hover: #f1f5f9;
+    --active-bg: #e0f2fe;
+    --active-text: #0369a1;
+    --shadow:
+        0 10px 25px -5px rgb(0 0 0 / 10%),
+        0 8px 10px -6px rgb(0 0 0 / 10%);
 
-        /* FORCED VISIBILITY & POSITIONING */
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        position: fixed !important;
-        bottom: max(24px, env(safe-area-inset-bottom)) !important;
-        right: 24px !important;
-        z-index: 2147483647 !important; /* Max allowed z-index */
-        font-family: inherit !important;
-        direction: inherit;
+    position: fixed;
+    inset-inline-end: 24px;
+    bottom: max(24px, env(safe-area-inset-bottom));
+    z-index: 2147483647;
+    direction: inherit;
+
+    /* Floating button */
+    > #a11y-toggle {
+        all: unset;
+        box-sizing: border-box;
+        display: grid;
+        place-items: center;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: var(--primary);
+        color: #fff;
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgb(0 0 0 / 25%);
+        transition:
+            transform .2s cubic-bezier(.34, 1.56, .64, 1),
+            background-color .2s ease;
+        -webkit-tap-highlight-color: transparent;
+
+        &:hover {
+            background: var(--primary-hover);
+            transform: scale(1.08);
+        }
+
+        &:focus-visible {
+            outline: 3px solid #38bdf8;
+            outline-offset: 3px;
+        }
+
+        svg {
+            display: block;
+            pointer-events: none;
+        }
     }
 
-    /* Support Arabic (RTL) Automatically */
-    html[lang="ar"] .site-tools-box,
-    [dir="rtl"] .site-tools-box {
-        right: auto !important;
-        left: 24px !important;
-        direction: inherit;
-    }
-
-    /* Floating Trigger Button */
-    .site-tools-box #a11y-toggle {
-        all: unset !important;
-        box-sizing: border-box !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 56px !important;
-        height: 56px !important;
-        border-radius: 50% !important;
-        background-color: var(--a11y-primary) !important;
-        color: #ffffff !important;
-        cursor: pointer !important;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
-        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease !important;
-        -webkit-tap-highlight-color: transparent !important;
-    }
-
-    .site-tools-box #a11y-toggle:hover {
-        background-color: var(--a11y-primary-hover) !important;
-        transform: scale(1.08) !important;
-    }
-
-    .site-tools-box #a11y-toggle:focus-visible {
-        outline: 3px solid #38bdf8 !important;
-        outline-offset: 3px !important;
-    }
-
-    .site-tools-box .a11y-svg-icon {
-        display: block !important;
-        pointer-events: none !important;
-    }
-
-    /* Menu Card Panel */
-    .site-tools-box #a11y-menu {
-        position: absolute !important;
-        bottom: 70px !important;
-        right: 0 !important;
-        width: 290px !important;
-        background-color: var(--a11y-bg) !important;
-        color: var(--a11y-text) !important;
-        padding: 20px !important;
-        border-radius: 16px !important;
-        border: 1px solid var(--a11y-border) !important;
-        box-shadow: var(--a11y-shadow) !important;
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 16px !important;
-        box-sizing: border-box !important;
-        opacity: 1;
-        transform: translateY(0);
-        transition: opacity 0.2s ease, transform 0.2s ease;
-    }
-
-    html[lang="ar"] .site-tools-box #a11y-menu,
-    [dir="rtl"] .site-tools-box #a11y-menu {
-        right: auto !important;
-        left: 0 !important;
-    }
-
-    /* Hide Panel */
-    .site-tools-box #a11y-menu.a11y-hidden {
-        display: none !important;
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    .site-tools-box .a11y-header {
-        border-bottom: 1px solid var(--a11y-border);
-        padding-bottom: 10px;
-    }
-
-    .site-tools-box .a11y-title {
-        margin: 0;
-        font-size: 1.05rem;
-        font-weight: 700;
-        color: var(--a11y-text);
-        line-height: 1.2;
-    }
-
-    .site-tools-box .a11y-control-row {
+    /* Menu */
+    > #a11y-menu {
+        position: absolute;
+        inset-inline-end: 0;
+        bottom: 70px;
+        width: 290px;
+        box-sizing: border-box;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 16px;
+        padding: 20px;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        background: var(--bg);
+        color: var(--text);
+        box-shadow: var(--shadow);
+
+        &[hidden] {
+            display: none;
+        }
+
+        header {
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+
+            h3 {
+                margin: 0;
+                color: var(--text);
+                font-size: 1.05rem;
+                font-weight: 700;
+                line-height: 1.2;
+            }
+        }
+
+        section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            > span {
+                color: var(--muted);
+                font-size: .85rem;
+                font-weight: 600;
+            }
+
+            > div {
+                display: flex;
+                gap: 6px;
+
+                button {
+                    flex: 1;
+                }
+            }
+
+            button {
+                all: unset;
+                box-sizing: border-box;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                padding: 10px 12px;
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                background: var(--button-bg);
+                color: var(--text);
+                font-size: .875rem;
+                font-weight: 600;
+                text-align: center;
+                cursor: pointer;
+                transition:
+                    background-color .15s ease,
+                    border-color .15s ease;
+
+                &:hover {
+                    background: var(--button-hover);
+                    border-color: #cbd5e1;
+                }
+
+                &:focus-visible {
+                    outline: 2px solid var(--primary);
+                    outline-offset: 1px;
+                }
+
+                /* Toggle buttons */
+                &[aria-pressed="true"] {
+                    background: var(--active-bg);
+                    color: var(--active-text);
+                    border-color: #bae6fd;
+                }
+
+                i {
+                    width: 10px;
+                    height: 10px;
+                    flex: 0 0 10px;
+                    margin-inline-start: 12px;
+                    border-radius: 50%;
+                    background: #cbd5e1;
+                }
+
+                &[aria-pressed="true"] i {
+                    background: var(--primary);
+                }
+            }
+        }
     }
 
-    .site-tools-box .a11y-label {
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: var(--a11y-text-muted);
-    }
-
-    /* Reset Theme Button Styles Explicitly */
-    .site-tools-box button:not(#a11y-toggle) {
-        all: unset !important;
-        box-sizing: border-box !important;
-        border: 1px solid var(--a11y-border) !important;
-        background-color: var(--a11y-btn-bg) !important;
-        color: var(--a11y-text) !important;
-        padding: 10px 12px !important;
-        border-radius: 8px !important;
-        font-size: 0.875rem !important;
-        font-weight: 600 !important;
-        cursor: pointer !important;
-        transition: all 0.15s ease !important;
-        text-align: center !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }
-
-    .site-tools-box button:not(#a11y-toggle):hover {
-        background-color: var(--a11y-btn-hover) !important;
-        border-color: #cbd5e1 !important;
-    }
-
-    .site-tools-box button:not(#a11y-toggle):focus-visible {
-        outline: 2px solid var(--a11y-primary) !important;
-        outline-offset: 1px !important;
-    }
-
-    .site-tools-box .a11y-btn-group {
-        display: flex;
-        gap: 6px;
-        width: 100%;
-    }
-
-    .site-tools-box .a11y-btn-group button {
-        flex: 1;
-    }
-
-    /* Toggle Button Layouts & Active States */
-    .site-tools-box .a11y-toggle-btn {
-        position: relative !important;
-        display: flex !important;
-        width: 100% !important;
-        justify-content: center !important;
-        align-items: center !important;
-        padding: 10px 12px !important;
-    }
-
-    .site-tools-box .a11y-status-indicator {
-        width: 10px !important;
-        height: 10px !important;
-        min-width: 10px !important;
-        max-width: 10px !important;
-        flex: 0 0 10px !important;
-        border-radius: 50% !important;
-        background-color: #cbd5e1 !important;
-        display: block !important;
-        margin-inline-start: 12px !important;
-        margin-inline-end: 0 !important;
-    }
-
-    /* Active state styles when toggled on */
-    .site-tools-box .a11y-toggle-btn.a11y-active {
-        background-color: var(--a11y-active-bg) !important;
-        color: var(--a11y-active-text) !important;
-        border-color: #bae6fd !important;
-    }
-
-    .site-tools-box .a11y-toggle-btn.a11y-active .a11y-status-indicator {
-        background-color: var(--a11y-primary) !important;
-    }
-
-    /* Global Theme Styles for Contrast & Link Highlights */
-    body.a11y-high-contrast {
-        background-color: #000000 !important;
-        color: #ffffff !important;
-    }
-
-    body.a11y-high-contrast *:not(.site-tools-box, .site-tools-box *) {
-        background-color: #000000 !important;
-        color: #ffff00 !important;
-        border-color: #ffffff !important;
-    }
-
-    body.a11y-highlight-links a {
-        text-decoration: underline !important;
-        outline: 3px solid #ffff00 !important;
-        background-color: #000000 !important;
-        color: #ffff00 !important;
-    }
-
-    /* Mobile Breakpoint updated to 768px */
+    /* Mobile */
     @media (max-width: 768px) {
-        .site-tools-box {
-            bottom: max(16px, env(safe-area-inset-bottom)) !important;
-            right: 16px !important;
+        inset-inline-end: 16px;
+        bottom: max(16px, env(safe-area-inset-bottom));
+
+        > #a11y-toggle {
+            width: 48px;
+            height: 48px;
         }
 
-        html[lang="ar"] .site-tools-box,
-        [dir="rtl"] .site-tools-box {
-            left: 16px !important;
-            right: auto !important;
-        }
-
-        /* Slightly smaller trigger button on mobile */
-        .site-tools-box #a11y-toggle {
-            width: 48px !important;
-            height: 48px !important;
-        }
-
-        /* Make menu adapt to screen width */
-        .site-tools-box #a11y-menu {
-            bottom: 60px !important;
-            width: calc(100vw - 32px) !important;
-            max-width: 320px !important;
-            position: absolute !important;
+        > #a11y-menu {
+            bottom: 60px;
+            width: calc(100vw - 32px);
+            max-width: 320px;
         }
     }
+}
+
+
+/* High contrast */
+body[data-a11y-contrast] {
+    background: #000 !important;
+    color: #fff !important;
+
+    *:not(.site-tools-box, .site-tools-box *) {
+        background: #000 !important;
+        color: #ff0 !important;
+        border-color: #fff !important;
+    }
+}
+
+
+/* Link highlighting */
+body[data-a11y-links] a {
+    text-decoration: underline !important;
+    outline: 3px solid #ff0 !important;
+    background: #000 !important;
+    color: #ff0 !important;
+}
 </style>
 
 <script>
-    (function () {
-        const STORAGE_KEY = 'hugo_a11y_settings';
-        const defaults = { fontSize: 100, highContrast: false, highlightLinks: false };
-        let settings = Object.assign({}, defaults, JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'));
+(function () {
+    const STORAGE_KEY = 'hugo_a11y_settings';
 
-        function applySettings() {
-            document.documentElement.style.fontSize = settings.fontSize + '%';
+    const defaults = {
+        fontSize: 100,
+        highContrast: false,
+        highlightLinks: false
+    };
 
-            const body = document.body;
-            const contrastBtn = document.getElementById('a11y-contrast-toggle');
-            const linksBtn = document.getElementById('a11y-links-toggle');
+    let settings = {
+        ...defaults,
+        ...JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
+    };
 
-            // Contrast state
-            body.classList.toggle('a11y-high-contrast', settings.highContrast);
-            if (contrastBtn) {
-                contrastBtn.classList.toggle('a11y-active', settings.highContrast);
-            }
+    const menu = document.getElementById('a11y-menu');
+    const toggle = document.getElementById('a11y-toggle');
+    const contrast = document.getElementById('a11y-contrast-toggle');
+    const links = document.getElementById('a11y-links-toggle');
 
-            // Links state
-            body.classList.toggle('a11y-highlight-links', settings.highlightLinks);
-            if (linksBtn) {
-                linksBtn.classList.toggle('a11y-active', settings.highlightLinks);
-            }
+    function applySettings() {
+        document.documentElement.style.fontSize = `${settings.fontSize}%`;
+
+        document.body.toggleAttribute(
+            'data-a11y-contrast',
+            settings.highContrast
+        );
+
+        document.body.toggleAttribute(
+            'data-a11y-links',
+            settings.highlightLinks
+        );
+
+        contrast.setAttribute(
+            'aria-pressed',
+            settings.highContrast
+        );
+
+        links.setAttribute(
+            'aria-pressed',
+            settings.highlightLinks
+        );
+    }
+
+    function saveSettings() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+    }
+
+    function update(setting, value) {
+        settings[setting] = value;
+        applySettings();
+        saveSettings();
+    }
+
+    toggle.addEventListener('click', (event) => {
+        event.stopPropagation();
+
+        const open = menu.hidden;
+
+        menu.hidden = !open;
+        toggle.setAttribute('aria-expanded', open);
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!event.target.closest('.site-tools-box')) {
+            menu.hidden = true;
+            toggle.setAttribute('aria-expanded', 'false');
         }
+    });
 
-        function saveSettings() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+    document.getElementById('a11y-font-increase').addEventListener('click', () => {
+        if (settings.fontSize < 150) {
+            update('fontSize', settings.fontSize + 10);
         }
+    });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            applySettings();
+    document.getElementById('a11y-font-decrease').addEventListener('click', () => {
+        if (settings.fontSize > 80) {
+            update('fontSize', settings.fontSize - 10);
+        }
+    });
 
-            const toggleBtn = document.getElementById('a11y-toggle');
-            const menu = document.getElementById('a11y-menu');
+    document.getElementById('a11y-font-reset').addEventListener('click', () => {
+        update('fontSize', 100);
+    });
 
-            toggleBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                menu.classList.toggle('a11y-hidden');
-            });
+    contrast.addEventListener('click', () => {
+        update('highContrast', !settings.highContrast);
+    });
 
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.site-tools-box')) {
-                    menu.classList.add('a11y-hidden');
-                }
-            });
+    links.addEventListener('click', () => {
+        update('highlightLinks', !settings.highlightLinks);
+    });
 
-            document.getElementById('a11y-font-increase').addEventListener('click', () => {
-                if (settings.fontSize < 150) {
-                    settings.fontSize += 10;
-                    applySettings();
-                    saveSettings();
-                }
-            });
-
-            document.getElementById('a11y-font-decrease').addEventListener('click', () => {
-                if (settings.fontSize > 80) {
-                    settings.fontSize -= 10;
-                    applySettings();
-                    saveSettings();
-                }
-            });
-
-            document.getElementById('a11y-font-reset').addEventListener('click', () => {
-                settings.fontSize = 100;
-                applySettings();
-                saveSettings();
-            });
-
-            document.getElementById('a11y-contrast-toggle').addEventListener('click', () => {
-                settings.highContrast = !settings.highContrast;
-                applySettings();
-                saveSettings();
-            });
-
-            document.getElementById('a11y-links-toggle').addEventListener('click', () => {
-                settings.highlightLinks = !settings.highlightLinks;
-                applySettings();
-                saveSettings();
-            });
-        });
-    })();
+    applySettings();
+})();
 </script>
