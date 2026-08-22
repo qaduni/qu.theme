@@ -206,17 +206,25 @@
 
     /* Toggle Button Layouts & Active States */
     .site-tools-box .a11y-toggle-btn {
-        display: flex;
+        position: relative !important;
+        display: flex !important;
         width: 100% !important;
-        justify-content: space-between !important;
+        justify-content: center !important;
+        align-items: center !important;
+        padding: 10px 12px !important;
     }
 
     .site-tools-box .a11y-status-indicator {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background-color: #cbd5e1;
-        transition: background-color 0.2s ease;
+        width: 10px !important;
+        height: 10px !important;
+        min-width: 10px !important;
+        max-width: 10px !important;
+        flex: 0 0 10px !important;
+        border-radius: 50% !important;
+        background-color: #cbd5e1 !important;
+        display: block !important;
+        margin-inline-start: 12px !important;
+        margin-inline-end: 0 !important;
     }
 
     /* Active state styles when toggled on */
