@@ -138,12 +138,21 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const observer = new MutationObserver(() => {
-        const dropdownBtn = document.querySelector('.pf-dropdown-trigger');
-        if (dropdownBtn && !dropdownBtn.hasAttribute('aria-label')) {
-            dropdownBtn.setAttribute('aria-label', '{{ i18n "filter_label" }}');
-        }
-    });
+    const fixFilterLabel = () => {
+        document.querySelectorAll('pagefind-filter-dropdown').forEach(filter => {
+            const button = filter.querySelector('.pf-dropdown-trigger');
+            const label = filter.getAttribute('label');
 
-    observer.observe(document.body, { childList: true, subtree: true });
+            if (button && label && !button.hasAttribute('aria-label')) {
+                button.setAttribute('aria-label', label);
+            }
+        });
+    };
+
+    fixFilterLabel();
+
+    new MutationObserver(fixFilterLabel).observe(document.body, {
+        childList: true,
+        subtree: true
+    });
 });
