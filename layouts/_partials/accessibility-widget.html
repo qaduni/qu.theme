@@ -1,24 +1,13 @@
 <div class="site-tools-box">
-    <button id="a11y-toggle"
-            type="button"
-            aria-label="{{ i18n `a11y_btn_label` }}"
-            title="{{ i18n `a11y_btn_label` }}"
-            aria-expanded="false"
-            aria-controls="a11y-menu">
-        <svg xmlns="http://www.w3.org/2000/svg"
-             viewBox="0 0 24 24"
-             fill="currentColor"
-             width="28"
-             height="28"
-             aria-hidden="true">
+    <button id="a11y-toggle" type="button" aria-label="{{ i18n `a11y_btn_label` }}" title="{{ i18n `a11y_btn_label` }}"
+        aria-expanded="false" aria-controls="a11y-menu">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28" height="28"
+            aria-hidden="true">
             <path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z" />
         </svg>
     </button>
 
-    <div id="a11y-menu"
-         role="region"
-         aria-label="{{ i18n `a11y_title` }}"
-         hidden>
+    <div id="a11y-menu" role="region" aria-label="{{ i18n `a11y_title` }}" hidden>
 
         <header>
             <h3>{{ i18n "a11y_title" }}</h3>
@@ -28,39 +17,29 @@
             <span>{{ i18n "a11y_font_size" }}</span>
 
             <div>
-                <button id="a11y-font-decrease"
-                        type="button"
-                        aria-label="Decrease Font Size">
+                <button id="a11y-font-decrease" type="button" aria-label="Decrease Font Size">
                     {{ i18n "a11y_decrease" }}
                 </button>
 
-                <button id="a11y-font-reset"
-                        type="button"
-                        aria-label="Reset Font Size">
+                <button id="a11y-font-reset" type="button" aria-label="Reset Font Size">
                     {{ i18n "a11y_reset" }}
                 </button>
 
-                <button id="a11y-font-increase"
-                        type="button"
-                        aria-label="Increase Font Size">
+                <button id="a11y-font-increase" type="button" aria-label="Increase Font Size">
                     {{ i18n "a11y_increase" }}
                 </button>
             </div>
         </section>
 
         <section>
-            <button id="a11y-contrast-toggle"
-                    type="button"
-                    aria-pressed="false">
+            <button id="a11y-contrast-toggle" type="button" aria-pressed="false">
                 <span>{{ i18n "a11y_contrast" }}</span>
                 <i aria-hidden="true"></i>
             </button>
         </section>
 
         <section>
-            <button id="a11y-links-toggle"
-                    type="button"
-                    aria-pressed="false">
+            <button id="a11y-links-toggle" type="button" aria-pressed="false">
                 <span>{{ i18n "a11y_links" }}</span>
                 <i aria-hidden="true"></i>
             </button>
@@ -70,303 +49,303 @@
 </div>
 
 <style>
-.site-tools-box {
-    --primary: #0284c7;
-    --primary-hover: #0369a1;
-    --bg: #fff;
-    --text: #0f172a;
-    --muted: #64748b;
-    --border: #e2e8f0;
-    --button-bg: #f8fafc;
-    --button-hover: #f1f5f9;
-    --active-bg: #e0f2fe;
-    --active-text: #0369a1;
-    --shadow:
-        0 10px 25px -5px rgb(0 0 0 / 10%),
-        0 8px 10px -6px rgb(0 0 0 / 10%);
+    .site-tools-box {
+        --primary: #0284c7;
+        --primary-hover: #0369a1;
+        --bg: #fff;
+        --text: #0f172a;
+        --muted: #64748b;
+        --border: #e2e8f0;
+        --button-bg: #f8fafc;
+        --button-hover: #f1f5f9;
+        --active-bg: #e0f2fe;
+        --active-text: #0369a1;
+        --shadow:
+            0 10px 25px -5px rgb(0 0 0 / 10%),
+            0 8px 10px -6px rgb(0 0 0 / 10%);
 
-    position: fixed;
-    inset-inline-end: 24px;
-    bottom: max(24px, env(safe-area-inset-bottom));
-    z-index: 2147483647;
-    direction: inherit;
+        position: fixed;
+        inset-inline-end: 24px;
+        bottom: max(24px, env(safe-area-inset-bottom));
+        z-index: 2147483647;
+        direction: inherit;
 
-    /* Floating button */
-    > #a11y-toggle {
-        all: unset;
-        box-sizing: border-box;
-        display: grid;
-        place-items: center;
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        background: var(--primary);
-        color: #fff;
-        cursor: pointer;
-        box-shadow: 0 4px 14px rgb(0 0 0 / 25%);
-        transition:
-            transform .2s cubic-bezier(.34, 1.56, .64, 1),
-            background-color .2s ease;
-        -webkit-tap-highlight-color: transparent;
+        /* Floating button */
+        >#a11y-toggle {
+            all: unset;
+            box-sizing: border-box;
+            display: grid;
+            place-items: center;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgb(0 0 0 / 25%);
+            transition:
+                transform .2s cubic-bezier(.34, 1.56, .64, 1),
+                background-color .2s ease;
+            -webkit-tap-highlight-color: transparent;
 
-        &:hover {
-            background: var(--primary-hover);
-            transform: scale(1.08);
-        }
+            &:hover {
+                background: var(--primary-hover);
+                transform: scale(1.08);
+            }
 
-        &:focus-visible {
-            outline: 3px solid #38bdf8;
-            outline-offset: 3px;
-        }
+            &:focus-visible {
+                outline: 3px solid #38bdf8;
+                outline-offset: 3px;
+            }
 
-        svg {
-            display: block;
-            pointer-events: none;
-        }
-    }
-
-    /* Menu */
-    > #a11y-menu {
-        position: absolute;
-        inset-inline-end: 0;
-        bottom: 70px;
-        width: 290px;
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        padding: 20px;
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        background: var(--bg);
-        color: var(--text);
-        box-shadow: var(--shadow);
-
-        &[hidden] {
-            display: none;
-        }
-
-        header {
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
-
-            h3 {
-                margin: 0;
-                color: var(--text);
-                font-size: 1.05rem;
-                font-weight: 700;
-                line-height: 1.2;
+            svg {
+                display: block;
+                pointer-events: none;
             }
         }
 
-        section {
+        /* Menu */
+        >#a11y-menu {
+            position: absolute;
+            inset-inline-end: 0;
+            bottom: 70px;
+            width: 290px;
+            box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 16px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--bg);
+            color: var(--text);
+            box-shadow: var(--shadow);
 
-            > span {
-                color: var(--muted);
-                font-size: .85rem;
-                font-weight: 600;
+            &[hidden] {
+                display: none;
             }
 
-            > div {
+            header {
+                padding-bottom: 10px;
+                border-bottom: 1px solid var(--border);
+
+                h3 {
+                    margin: 0;
+                    color: var(--text);
+                    font-size: 1.05rem;
+                    font-weight: 700;
+                    line-height: 1.2;
+                }
+            }
+
+            section {
                 display: flex;
-                gap: 6px;
+                flex-direction: column;
+                gap: 8px;
+
+                >span {
+                    color: var(--muted);
+                    font-size: .85rem;
+                    font-weight: 600;
+                }
+
+                >div {
+                    display: flex;
+                    gap: 6px;
+
+                    button {
+                        flex: 1;
+                    }
+                }
 
                 button {
-                    flex: 1;
+                    all: unset;
+                    box-sizing: border-box;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 100%;
+                    padding: 10px 12px;
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    background: var(--button-bg);
+                    color: var(--text);
+                    font-size: .875rem;
+                    font-weight: 600;
+                    text-align: center;
+                    cursor: pointer;
+                    transition:
+                        background-color .15s ease,
+                        border-color .15s ease;
+
+                    &:hover {
+                        background: var(--button-hover);
+                        border-color: #cbd5e1;
+                    }
+
+                    &:focus-visible {
+                        outline: 2px solid var(--primary);
+                        outline-offset: 1px;
+                    }
+
+                    /* Toggle buttons */
+                    &[aria-pressed="true"] {
+                        background: var(--active-bg);
+                        color: var(--active-text);
+                        border-color: #bae6fd;
+                    }
+
+                    i {
+                        width: 10px;
+                        height: 10px;
+                        flex: 0 0 10px;
+                        margin-inline-start: 12px;
+                        border-radius: 50%;
+                        background: #cbd5e1;
+                    }
+
+                    &[aria-pressed="true"] i {
+                        background: var(--primary);
+                    }
                 }
             }
+        }
 
-            button {
-                all: unset;
-                box-sizing: border-box;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 100%;
-                padding: 10px 12px;
-                border: 1px solid var(--border);
-                border-radius: 8px;
-                background: var(--button-bg);
-                color: var(--text);
-                font-size: .875rem;
-                font-weight: 600;
-                text-align: center;
-                cursor: pointer;
-                transition:
-                    background-color .15s ease,
-                    border-color .15s ease;
+        /* Mobile */
+        @media (max-width: 768px) {
+            inset-inline-end: 16px;
+            bottom: max(16px, env(safe-area-inset-bottom));
 
-                &:hover {
-                    background: var(--button-hover);
-                    border-color: #cbd5e1;
-                }
+            >#a11y-toggle {
+                width: 48px;
+                height: 48px;
+            }
 
-                &:focus-visible {
-                    outline: 2px solid var(--primary);
-                    outline-offset: 1px;
-                }
-
-                /* Toggle buttons */
-                &[aria-pressed="true"] {
-                    background: var(--active-bg);
-                    color: var(--active-text);
-                    border-color: #bae6fd;
-                }
-
-                i {
-                    width: 10px;
-                    height: 10px;
-                    flex: 0 0 10px;
-                    margin-inline-start: 12px;
-                    border-radius: 50%;
-                    background: #cbd5e1;
-                }
-
-                &[aria-pressed="true"] i {
-                    background: var(--primary);
-                }
+            >#a11y-menu {
+                bottom: 60px;
+                width: calc(100vw - 32px);
+                max-width: 320px;
             }
         }
     }
 
-    /* Mobile */
-    @media (max-width: 768px) {
-        inset-inline-end: 16px;
-        bottom: max(16px, env(safe-area-inset-bottom));
 
-        > #a11y-toggle {
-            width: 48px;
-            height: 48px;
-        }
+    /* High contrast */
+    body[data-a11y-contrast] {
+        background: #000 !important;
+        color: #fff !important;
 
-        > #a11y-menu {
-            bottom: 60px;
-            width: calc(100vw - 32px);
-            max-width: 320px;
+        *:not(.site-tools-box, .site-tools-box *) {
+            background: #000 !important;
+            color: #ff0 !important;
+            border-color: #fff !important;
         }
     }
-}
 
 
-/* High contrast */
-body[data-a11y-contrast] {
-    background: #000 !important;
-    color: #fff !important;
-
-    *:not(.site-tools-box, .site-tools-box *) {
+    /* Link highlighting */
+    body[data-a11y-links] a {
+        text-decoration: underline !important;
+        outline: 3px solid #ff0 !important;
         background: #000 !important;
         color: #ff0 !important;
-        border-color: #fff !important;
     }
-}
-
-
-/* Link highlighting */
-body[data-a11y-links] a {
-    text-decoration: underline !important;
-    outline: 3px solid #ff0 !important;
-    background: #000 !important;
-    color: #ff0 !important;
-}
 </style>
 
 <script>
-(function () {
-    const STORAGE_KEY = 'hugo_a11y_settings';
+    (function () {
+        const STORAGE_KEY = 'hugo_a11y_settings';
 
-    const defaults = {
-        fontSize: 100,
-        highContrast: false,
-        highlightLinks: false
-    };
+        const defaults = {
+            fontSize: 100,
+            highContrast: false,
+            highlightLinks: false
+        };
 
-    let settings = {
-        ...defaults,
-        ...JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
-    };
+        let settings = {
+            ...defaults,
+            ...JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
+        };
 
-    const menu = document.getElementById('a11y-menu');
-    const toggle = document.getElementById('a11y-toggle');
-    const contrast = document.getElementById('a11y-contrast-toggle');
-    const links = document.getElementById('a11y-links-toggle');
+        const menu = document.getElementById('a11y-menu');
+        const toggle = document.getElementById('a11y-toggle');
+        const contrast = document.getElementById('a11y-contrast-toggle');
+        const links = document.getElementById('a11y-links-toggle');
 
-    function applySettings() {
-        document.documentElement.style.fontSize = `${settings.fontSize}%`;
+        function applySettings() {
+            document.documentElement.style.fontSize = `${settings.fontSize}%`;
 
-        document.body.toggleAttribute(
-            'data-a11y-contrast',
-            settings.highContrast
-        );
+            document.body.toggleAttribute(
+                'data-a11y-contrast',
+                settings.highContrast
+            );
 
-        document.body.toggleAttribute(
-            'data-a11y-links',
-            settings.highlightLinks
-        );
+            document.body.toggleAttribute(
+                'data-a11y-links',
+                settings.highlightLinks
+            );
 
-        contrast.setAttribute(
-            'aria-pressed',
-            settings.highContrast
-        );
+            contrast.setAttribute(
+                'aria-pressed',
+                settings.highContrast
+            );
 
-        links.setAttribute(
-            'aria-pressed',
-            settings.highlightLinks
-        );
-    }
+            links.setAttribute(
+                'aria-pressed',
+                settings.highlightLinks
+            );
+        }
 
-    function saveSettings() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-    }
+        function saveSettings() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+        }
 
-    function update(setting, value) {
-        settings[setting] = value;
+        function update(setting, value) {
+            settings[setting] = value;
+            applySettings();
+            saveSettings();
+        }
+
+        toggle.addEventListener('click', (event) => {
+            event.stopPropagation();
+
+            const open = menu.hidden;
+
+            menu.hidden = !open;
+            toggle.setAttribute('aria-expanded', open);
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!event.target.closest('.site-tools-box')) {
+                menu.hidden = true;
+                toggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        document.getElementById('a11y-font-increase').addEventListener('click', () => {
+            if (settings.fontSize < 150) {
+                update('fontSize', settings.fontSize + 10);
+            }
+        });
+
+        document.getElementById('a11y-font-decrease').addEventListener('click', () => {
+            if (settings.fontSize > 80) {
+                update('fontSize', settings.fontSize - 10);
+            }
+        });
+
+        document.getElementById('a11y-font-reset').addEventListener('click', () => {
+            update('fontSize', 100);
+        });
+
+        contrast.addEventListener('click', () => {
+            update('highContrast', !settings.highContrast);
+        });
+
+        links.addEventListener('click', () => {
+            update('highlightLinks', !settings.highlightLinks);
+        });
+
         applySettings();
-        saveSettings();
-    }
-
-    toggle.addEventListener('click', (event) => {
-        event.stopPropagation();
-
-        const open = menu.hidden;
-
-        menu.hidden = !open;
-        toggle.setAttribute('aria-expanded', open);
-    });
-
-    document.addEventListener('click', (event) => {
-        if (!event.target.closest('.site-tools-box')) {
-            menu.hidden = true;
-            toggle.setAttribute('aria-expanded', 'false');
-        }
-    });
-
-    document.getElementById('a11y-font-increase').addEventListener('click', () => {
-        if (settings.fontSize < 150) {
-            update('fontSize', settings.fontSize + 10);
-        }
-    });
-
-    document.getElementById('a11y-font-decrease').addEventListener('click', () => {
-        if (settings.fontSize > 80) {
-            update('fontSize', settings.fontSize - 10);
-        }
-    });
-
-    document.getElementById('a11y-font-reset').addEventListener('click', () => {
-        update('fontSize', 100);
-    });
-
-    contrast.addEventListener('click', () => {
-        update('highContrast', !settings.highContrast);
-    });
-
-    links.addEventListener('click', () => {
-        update('highlightLinks', !settings.highlightLinks);
-    });
-
-    applySettings();
-})();
+    })();
 </script>
