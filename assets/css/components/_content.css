@@ -46,3 +46,31 @@
 .form-disabled-note a:hover {
     text-decoration-thickness: 2px;
 }
+
+.share-social {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.share-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background-color: #1d5287; /* The blue background visible in your hover state */
+    color: #ffffff;
+    opacity: 1; /* Ensures buttons are visible by default */
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.share-social a svg {
+    fill: currentColor;
+}
+
+.share-social a:hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
+}

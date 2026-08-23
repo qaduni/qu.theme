@@ -20,11 +20,11 @@
 
 <div class="content-wrapper">
     <div class="container">
-        {{/* 1. Get the directory path (e.g., "media/news/" or "media/announcements/") */}}
+        {{/* 1. Get the directory path */}}
         {{ $filePath := .File.Dir | default "" }}
 
-        {{/* 2. Determine category based on Front Matter, Path keywords, or Section */}}
-        {{ $category := "page" }} {{/* Default fallback */}}
+        {{/* 2. Determine category */}}
+        {{ $category := "page" }}
 
         {{ if or (.Params.type) (eq .Params.type "news") (in $filePath "news") }}
             {{ $category = "news" }}
@@ -32,12 +32,40 @@
             {{ $category = "announcements" }}
         {{ end }}
 
-        {{/* 3. Get localized label from i18n */}}
+        {{/* 3. Get localized label */}}
         {{ $filterLabel := i18n (printf "section_%s" $category) | default $category }}
 
         <article class="article-content" data-pagefind-body data-pagefind-filter="category:{{ $filterLabel }}">
             {{ .Content }}
         </article>
+
+        {{/* 4. Display Share Buttons for News and Announcements */}}
+        {{ if or (eq $category "news") (eq $category "announcements") }}
+        {{ $shareUrl := .Permalink | absURL }}
+        {{ $shareTitle := .Title }}
+        <div class="article-share">
+            <div class="share-social">
+                <span class="share-label">
+                    {{ i18n "share_this" | default "Share" }} :
+                </span>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ $shareUrl }}" target="_blank" rel="noopener" aria-label="Share on Facebook">
+                    <svg width="20" height="20"><use href="#icon-facebook"></use></svg>
+                </a>
+                <a href="https://twitter.com/intent/tweet?url={{ $shareUrl }}&text={{ $shareTitle | plainify }}" target="_blank" rel="noopener" aria-label="Share on Twitter">
+                    <svg width="20" height="20"><use href="#icon-twitter"></use></svg>
+                </a>
+                <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ $shareUrl }}" target="_blank" rel="noopener" aria-label="Share on LinkedIn">
+                    <svg width="20" height="20"><use href="#icon-linkedin"></use></svg>
+                </a>
+                <a href="https://t.me/share/url?url={{ $shareUrl }}&text={{ $shareTitle | plainify }}" target="_blank" rel="noopener" aria-label="Share on Telegram">
+                    <svg width="20" height="20"><use href="#icon-telegram"></use></svg>
+                </a>
+                <a href="https://api.whatsapp.com/send?text={{ $shareTitle | plainify }}%20{{ $shareUrl }}" target="_blank" rel="noopener" aria-label="Share on WhatsApp">
+                    <svg width="20" height="20"><use href="#icon-whatsapp"></use></svg>
+                </a>
+            </div>
+        </div>
+        {{ end }}
     </div>
 </div>
 {{ end }}

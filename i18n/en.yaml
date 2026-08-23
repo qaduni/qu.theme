@@ -25,6 +25,7 @@ all_announcements: "All Announcements"
 section_news: "News"
 section_announcements: "Announcements"
 section_page: "Page"
+share_this: "Share it on social media"
 
 filter_label: "Filter"
 search_news_placeholder: "Search news..."

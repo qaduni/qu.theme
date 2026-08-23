@@ -26,6 +26,7 @@ all_announcements: "جميع الإعلانات"
 section_news: "أخبار"
 section_announcements: "إعلانات"
 section_page: "صفحة"
+share_this: "شارك عبر مواقع التواصل الاجماعي"
 
 filter_label: "فلتر"
 search_news_placeholder: "إبحث في الاخبار..."
