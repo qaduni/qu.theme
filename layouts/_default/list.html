@@ -30,14 +30,21 @@
 
 <!-- Ignore search UI controls and repeated paginated lists from site index -->
 <section class="list-page" data-pagefind-ignore="all">
-    {{ $pfPlaceholder := cond $isAnn (i18n "search_announcements_placeholder") (i18n "search_news_placeholder") }}
-    
-    <div class="searchbox">
-        <pagefind-searchbox style="width: 100%;" placeholder="{{ $pfPlaceholder }}" max-results="10"></pagefind-searchbox>
-        <pagefind-filter-dropdown filter="category" label="{{ i18n `filter_label` }}"></pagefind-filter-dropdown>
-    </div>
-
     <div class="container">
+        {{ $pfPlaceholder := cond $isAnn (i18n "search_announcements_placeholder") (i18n "search_news_placeholder") }}
+        <div class="searchbox">
+            <pagefind-searchbox
+                style="width: 100%;"
+                placeholder="{{ $pfPlaceholder }}"
+                aria-label="{{ $pfPlaceholder }}"
+                max-results="10">
+            </pagefind-searchbox>
+            <pagefind-filter-dropdown
+                filter="category"
+                label="{{ i18n `filter_label` }}">
+            </pagefind-filter-dropdown>
+        </div>
+
         {{ with .Content }}
         <div class="article-content mb-2xl">{{ . }}</div>
         {{ end }}
