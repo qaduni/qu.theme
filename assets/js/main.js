@@ -156,3 +156,17 @@ document.addEventListener('DOMContentLoaded', () => {
         subtree: true
     });
 });
+
+document.addEventListener('click', function (event) {
+    const link = event.target.closest('a[data-lang-switch]');
+
+    if (!link) {
+        return;
+    }
+
+    const lang = link.dataset.langSwitch;
+
+    if (lang === 'ar' || lang === 'en') {
+        localStorage.setItem('theme_lang_preference', lang);
+    }
+});

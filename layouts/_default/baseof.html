@@ -8,36 +8,15 @@
     {{ hugo.Generator }}
 
     <script>
-        //     (function () {
-        //     var savedLang = localStorage.getItem('theme_lang_preference');
-        //     var currentPath = window.location.pathname; // e.g. "/", "/about", "/en", "/en/about"
-        //     var browserLang = (navigator.language || navigator.userLanguage || 'ar').toLowerCase();
+        (function () {
+            const path = window.location.pathname;
 
-        //     var targetLang = savedLang;
-        //     if (!targetLang) {
-        //         targetLang = browserLang.startsWith('en') ? 'en' : 'ar';
-        //         console.log("Target language determined:", targetLang);
-        //     }
-
-        //     // Check if current URL is under the English route (/en or /en/...)
-        //     var isCurrentlyEn = currentPath === '/en' || currentPath.startsWith('/en/');
-
-        //     if (targetLang === 'en' && !isCurrentlyEn) {
-        //         // Normalize leading slash to prevent double slashes like "/en//about"
-        //         var formattedPath = currentPath.startsWith('/') ? currentPath : '/' + currentPath;
-        //         var targetUrl = '/en' + (formattedPath === '/' ? '' : formattedPath);
-
-        //         console.log("Redirecting to English:", targetUrl);
-        //         window.location.href = targetUrl;
-
-        //     } else if (targetLang === 'ar' && isCurrentlyEn) {
-        //         // Strip out leading /en or /en/
-        //         var newPath = currentPath.replace(/^\/en(\/|$)/, '/') || '/';
-
-        //         console.log("Redirecting to Arabic:", newPath);
-        //         window.location.href = newPath;
-        //     }
-        // })();
+            if (path === '/en' || path.startsWith('/en/')) {
+                localStorage.setItem('theme_lang_preference', 'en');
+            } else if (path === '/ar' || path.startsWith('/ar/')) {
+                localStorage.setItem('theme_lang_preference', 'ar');
+            }
+        })();
         (function () {
             try {
                 var saved = JSON.parse(localStorage.getItem('hugo_a11y_settings') || '{ }');
