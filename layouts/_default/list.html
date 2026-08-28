@@ -5,21 +5,9 @@
 (hasPrefix .RelPermalink (printf "/%s%s" .Language.Lang $annSection))
 }}
 
-{{ $currentType := cond $isAnn "announcements" "news" }}
+{{ $categoryKey := cond $isAnn "announcements" "news" }}
+{{ $targetFilterValue := i18n (printf "section_%s" $categoryKey) | default $categoryKey }}
 {{ $pfPlaceholder := cond $isAnn (i18n "search_announcements_placeholder") (i18n "search_news_placeholder") }}
-
-<link href="/pagefind/pagefind-component-ui.css" rel="stylesheet">
-<script src="/pagefind/pagefind-component-ui.js"></script>
-
-<script>
-    const { configureInstance } = window.PagefindComponents;
-
-    configureInstance("default", {
-        filter: {
-            type: {{ $currentType }}
-        }
-    });
-</script>
 
 <section class="page-header">
     <div class="container">
@@ -43,12 +31,162 @@
 <section class="list-page" data-pagefind-ignore="all">
     <div class="container">
         <div class="searchbox">
-            <pagefind-searchbox
-                style="width: 100%;"
-                placeholder="{{ $pfPlaceholder }}"
-                aria-label="{{ $pfPlaceholder }}"
-                max-results="10">
-            </pagefind-searchbox>
+            <div class="searchbox custom-search-wrapper" style="position: relative; width: 100%; max-width: 700px; margin: 2rem auto;">
+                <input 
+                    type="search" 
+                    id="section-search-input" 
+                    placeholder="{{ $pfPlaceholder }}"
+                    autocomplete="off"
+                    style="width: 100%; height: 48px; padding: 0 1rem; border-radius: 8px; border: 1px solid #cbd5e1; font-family: 'Cairo', sans-serif; font-size: 1rem; outline: none; box-sizing: border-box;"
+                />
+
+                <!-- Dropdown Container -->
+                <div id="section-search-dropdown" style="display: none; position: absolute; top: 52px; left: 0; right: 0; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); max-height: 400px; overflow-y: auto; z-index: 50; padding: 0.5rem 0;"></div>
+            </div>
+
+            <style>
+                /* Styling for the dropdown links and active keyboard state */
+                .search-result-item {
+                    display: block;
+                    padding: 0.75rem 1rem;
+                    text-decoration: none;
+                    color: inherit;
+                    border-bottom: 1px solid #f8fafc;
+                    transition: background 0.15s ease;
+                    font-family: 'Cairo', sans-serif;
+                }
+                .search-result-item:last-child {
+                    border-bottom: none;
+                }
+                .search-result-item:hover,
+                .search-result-item.active {
+                    background-color: #f1f5f9;
+                    outline: none;
+                }
+                .search-result-title {
+                    font-weight: 700;
+                    color: #0f172a;
+                    margin-bottom: 4px;
+                    font-size: 0.95rem;
+                }
+                .search-result-excerpt {
+                    font-size: 0.85rem;
+                    color: #64748b;
+                    line-height: 1.4;
+                }
+            </style>
+
+            <script type="module">
+                const pagefind = await import("/pagefind/pagefind.js");
+                await pagefind.init();
+
+                const input = document.getElementById("section-search-input");
+                const dropdown = document.getElementById("section-search-dropdown");
+                const targetFilter = {{ $targetFilterValue }};
+
+                let debounceTimer = null;
+                let selectedIndex = -1;
+
+                // Helper: Highlight the active item when using Arrow keys
+                function updateActiveItem(items) {
+                    items.forEach((item, idx) => {
+                        if (idx === selectedIndex) {
+                            item.classList.add("active");
+                            item.scrollIntoView({ block: "nearest" });
+                        } else {
+                            item.classList.remove("active");
+                        }
+                    });
+                }
+
+                // Helper: Close dropdown
+                function closeDropdown() {
+                    dropdown.style.display = "none";
+                    dropdown.innerHTML = "";
+                    selectedIndex = -1;
+                }
+
+                // 1. Debounced Search Input Handling
+                input.addEventListener("input", (e) => {
+                    clearTimeout(debounceTimer);
+                    const query = e.target.value.trim();
+
+                    if (!query) {
+                        closeDropdown();
+                        return;
+                    }
+
+                    debounceTimer = setTimeout(async () => {
+                        const search = await pagefind.search(query, {
+                            filters: {
+                                category: targetFilter
+                            }
+                        });
+
+                        const results = await Promise.all(search.results.slice(0, 8).map(r => r.data()));
+                        selectedIndex = -1;
+
+                        if (results.length === 0) {
+                            dropdown.innerHTML = `<div style="padding: 1rem; color: #64748b; font-family: 'Cairo', sans-serif; text-align: center;">{{ i18n "no_results" | default "لا توجد نتائج" }}</div>`;
+                            dropdown.style.display = "block";
+                            return;
+                        }
+
+                        dropdown.innerHTML = results.map(item => `
+                            <a href="${item.url}" class="search-result-item" tabindex="-1">
+                                <div class="search-result-title">${item.meta.title || "بدون عنوان"}</div>
+                                <div class="search-result-excerpt">${item.excerpt}</div>
+                            </a>
+                        `).join("");
+
+                        dropdown.style.display = "block";
+                    }, 150); // 150ms debounce
+                });
+
+                // 2. Keyboard Navigation (Arrow keys, Enter, Escape)
+                input.addEventListener("keydown", (e) => {
+                    const items = dropdown.querySelectorAll(".search-result-item");
+                    if (dropdown.style.display === "none" || items.length === 0) {
+                        if (e.key === "Escape") closeDropdown();
+                        return;
+                    }
+
+                    switch (e.key) {
+                        case "ArrowDown":
+                            e.preventDefault();
+                            selectedIndex = (selectedIndex + 1) % items.length;
+                            updateActiveItem(items);
+                            break;
+
+                        case "ArrowUp":
+                            e.preventDefault();
+                            selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+                            updateActiveItem(items);
+                            break;
+
+                        case "Enter":
+                            e.preventDefault();
+                            if (selectedIndex >= 0 && items[selectedIndex]) {
+                                items[selectedIndex].click();
+                            } else if (items.length > 0) {
+                                items[0].click(); // Default to first item if none selected
+                            }
+                            break;
+
+                        case "Escape":
+                            e.preventDefault();
+                            closeDropdown();
+                            break;
+                    }
+                });
+
+                // 3. Close on outside click
+                document.addEventListener("click", (e) => {
+                    if (!e.target.closest(".custom-search-wrapper")) {
+                        closeDropdown();
+                    }
+                });
+            </script>
         </div>
 
         {{ with .Content }}
@@ -76,13 +214,13 @@
                     {{ $altText := "Placeholder" }}
 
                     {{ if and .Params.image (ne .Params.image "") }}
-                        {{ $imgPath = strings.TrimPrefix "/" .Params.image }}
-                        {{ $altText = .Params.imageAlt | default .Title }}
+                    {{ $imgPath = strings.TrimPrefix "/" .Params.image }}
+                    {{ $altText = .Params.imageAlt | default .Title }}
                     {{ end }}
 
-                    {{ partial "responsive-img.html" (dict 
-                    "src" $imgPath 
-                    "alt" $altText 
+                    {{ partial "responsive-img.html" (dict
+                    "src" $imgPath
+                    "alt" $altText
                     "sizes" "(max-width: 768px) 100vw, 33vw"
                     ) }}
                 </div>
@@ -100,7 +238,7 @@
         </div>
 
         {{ if gt $paginator.TotalPages 1 }}
-        <nav class="pagination" aria-label="{{ i18n "page_navigation" }}">
+        <nav class="pagination" aria-label="{{ i18n " page_navigation" }}">
             <ul class="pagination-list">
                 {{ if ne $paginator.PageNumber 1 }}
                 <li>
@@ -153,7 +291,8 @@
                 {{ else if ge $currentPage $upper_limit }}
                 {{ $show = (gt .PageNumber (sub $paginator.TotalPages $max_links)) }}
                 {{ else }}
-                {{ $show = (and (ge .PageNumber (sub $currentPage $adjacent_links)) (le .PageNumber (add $currentPage $adjacent_links))) }}
+                {{ $show = (and (ge .PageNumber (sub $currentPage $adjacent_links)) (le .PageNumber (add $currentPage
+                $adjacent_links))) }}
                 {{ end }}
 
                 {{ if $show }}
