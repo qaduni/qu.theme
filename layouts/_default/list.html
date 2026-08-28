@@ -5,12 +5,24 @@
 (hasPrefix .RelPermalink (printf "/%s%s" .Language.Lang $annSection))
 }}
 
+{{ $currentType := cond $isAnn "announcements" "news" }}
+{{ $pfPlaceholder := cond $isAnn (i18n "search_announcements_placeholder") (i18n "search_news_placeholder") }}
+
 <link href="/pagefind/pagefind-component-ui.css" rel="stylesheet">
-<script src="/pagefind/pagefind-component-ui.js" type="module"></script>
+<script src="/pagefind/pagefind-component-ui.js"></script>
+
+<script>
+    const { configureInstance } = window.PagefindComponents;
+
+    configureInstance("default", {
+        filter: {
+            type: {{ $currentType }}
+        }
+    });
+</script>
 
 <section class="page-header">
     <div class="container">
-        <!-- Main page metadata for Pagefind indexing -->
         <h1 data-pagefind-body data-pagefind-weight="20" data-pagefind-meta="title">{{ .Title }}</h1>
         <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
@@ -28,10 +40,8 @@
     </div>
 </section>
 
-<!-- Ignore search UI controls and repeated paginated lists from site index -->
 <section class="list-page" data-pagefind-ignore="all">
     <div class="container">
-        {{ $pfPlaceholder := cond $isAnn (i18n "search_announcements_placeholder") (i18n "search_news_placeholder") }}
         <div class="searchbox">
             <pagefind-searchbox
                 style="width: 100%;"
@@ -39,10 +49,6 @@
                 aria-label="{{ $pfPlaceholder }}"
                 max-results="10">
             </pagefind-searchbox>
-            <pagefind-filter-dropdown
-                filter="category"
-                label="{{ i18n `filter_label` }}">
-            </pagefind-filter-dropdown>
         </div>
 
         {{ with .Content }}
@@ -54,15 +60,9 @@
         <div class="list-items">
             {{ range $paginator.Pages }}
 
-            {{/* Detect if the page is in the announcements section */}}
-            {{ $annSection := "/media/announcements" }}
-            {{ $isAnn := or (hasPrefix .RelPermalink $annSection) (hasPrefix .RelPermalink (printf "/%s%s"
-            .Language.Lang $annSection)) }}
-
             <article class="list-item {{ if .Params.important }}priority-high{{ end }}"
                 data-title="{{ .Title | lower }}" data-description="{{ .Description | lower }}">
 
-                {{/* If it's an announcement, display the date badge; otherwise, render the responsive post image */}}
                 {{ if $isAnn }}
                 {{ if .Date }}
                 <div class="list-item-date">
@@ -100,7 +100,7 @@
         </div>
 
         {{ if gt $paginator.TotalPages 1 }}
-        <nav class="pagination" aria-label="{{ i18n " page_navigation" }}">
+        <nav class="pagination" aria-label="{{ i18n "page_navigation" }}">
             <ul class="pagination-list">
                 {{ if ne $paginator.PageNumber 1 }}
                 <li>
@@ -153,8 +153,7 @@
                 {{ else if ge $currentPage $upper_limit }}
                 {{ $show = (gt .PageNumber (sub $paginator.TotalPages $max_links)) }}
                 {{ else }}
-                {{ $show = (and (ge .PageNumber (sub $currentPage $adjacent_links)) (le .PageNumber (add $currentPage
-                $adjacent_links))) }}
+                {{ $show = (and (ge .PageNumber (sub $currentPage $adjacent_links)) (le .PageNumber (add $currentPage $adjacent_links))) }}
                 {{ end }}
 
                 {{ if $show }}
