@@ -24,16 +24,48 @@ pagefind-modal * {
     min-height: 48px !important;
 }
 
-.pagefind-site-badge {
+/* Style for search result items */
+.pagefind-ui__result-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Badge for Main Site */
+.pagefind-ui__result-link[href*="test.qu.edu.iq"]::before {
+    content: "Main Site";
     display: inline-block;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 600;
-    padding: 2px 8px;
-    margin-inline-end: 6px;
+    padding: 2px 6px;
     border-radius: 4px;
-    background-color: #0056b3;
-    color: #ffffff;
-    vertical-align: middle;
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+/* Badge for QA Site */
+.pagefind-ui__result-link[href*="qa.qu.edu.iq"]::before {
+    content: "QA Site";
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: #fef3c7;
+    color: #92400e;
+}
+
+/* Badge for SCR Site */
+.pagefind-ui__result-link[href*="scr.qu.edu.iq"]::before {
+    content: "SCR Site";
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: #dcfce7;
+    color: #15803d;
 }
 
 @media (max-width: 640px) {

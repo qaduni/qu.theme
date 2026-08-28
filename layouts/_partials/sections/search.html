@@ -26,17 +26,7 @@
             mergeFilter: {
                 site: site.name
             }
-        })),
-        processResult: function(result) {
-            // 1. Identify which site this result came from
-            const siteName = result.filters?.site?.[0] || "Main Site";
-
-            if (result.meta?.title) {
-                result.meta.title = `<span class="pagefind-site-badge">${siteName}</span> ${result.meta.title}`;
-            }
-
-            return result;
-        }
+        }))
     });
 </script>
 
