@@ -3,7 +3,7 @@
 <link href="/pagefind/pagefind-component-ui.css" rel="stylesheet">
 <script src="/pagefind/pagefind-component-ui.js"></script>
 
-<!-- Multi-site configuration -->
+<!-- Multisite configuration (runs before <pagefind-searchbox>) -->
 <script>
     const { configureInstance } = window.PagefindComponents;
 
@@ -37,26 +37,17 @@
             <p>{{ $homepageData.search.sub_title }}</p>
         </div>
 
-        <div class="search-layout">
-            <!-- 1. Search input primitive -->
-            <pagefind-input 
+        <div class="searchbox">
+            <pagefind-searchbox 
+                style="width: 100%;" 
                 placeholder="{{ $homepageData.search.placeholder }}" 
-                aria-label="{{ $homepageData.search.title }}">
-            </pagefind-input>
-
-            <!-- 2. Filters -->
-            <div class="search-filters">
-                <pagefind-filter-dropdown 
-                    filter="category" 
-                    label="{{ i18n `filter_label` }}">
-                </pagefind-filter-dropdown>
-            </div>
-
-            <!-- 3. Results Summary (e.g. "Showing 12 results for...") -->
-            <pagefind-summary></pagefind-summary>
-
-            <!-- 4. Modular Results Component -->
-            <pagefind-results></pagefind-results>
+                aria-label="{{ $homepageData.search.title }}"
+                max-results="10">
+            </pagefind-searchbox>
+            <pagefind-filter-dropdown 
+                filter="category" 
+                label="{{ i18n `filter_label` }}">
+            </pagefind-filter-dropdown>
         </div>
     </div>
 </section>
