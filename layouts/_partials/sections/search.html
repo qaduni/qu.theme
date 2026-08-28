@@ -1,9 +1,34 @@
-{{ $homepageData := index hugo.Data.homepage .Language.Lang}}
+{{ $homepageData := index hugo.Data.homepage .Language.Lang }}
 
-<link rel="preload" href="/pagefind/pagefind-component-ui.css" as="style" onload="this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="/pagefind/pagefind-component-ui.css"></noscript>
+<link href="/pagefind/pagefind-component-ui.css" rel="stylesheet">
 
-<script src="/pagefind/pagefind-component-ui.js" type="module" async></script>
+<script src="/pagefind/pagefind-component-ui.js"></script>
+
+<script>
+    const { configureInstance } = window.PagefindComponents;
+
+    const allSites = [
+        { name: "Main Site", url: "https://test.qu.edu.iq" },
+        { name: "QA Site", url: "https://qa.qu.edu.iq" },
+        { name: "SCR Site", url: "https://scr.qu.edu.iq" }
+    ];
+
+    const currentOrigin = window.location.origin.toLowerCase();
+    const currentSite = allSites.find(s => s.url.toLowerCase() === currentOrigin);
+    const externalSites = allSites.filter(s => s.url.toLowerCase() !== currentOrigin);
+
+    configureInstance("default", {
+        mergeFilter: {
+            site: currentSite ? currentSite.name : "Current Site"
+        },
+        mergeIndex: externalSites.map(site => ({
+            bundlePath: `${site.url.replace(/\/$/, "")}/pagefind`,
+            mergeFilter: {
+                site: site.name
+            }
+        }))
+    });
+</script>
 
 <section class="section">
     <div class="container">
