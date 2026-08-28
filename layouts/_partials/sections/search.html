@@ -3,14 +3,15 @@
 <link href="/pagefind/pagefind-component-ui.css" rel="stylesheet">
 <script src="/pagefind/pagefind-component-ui.js"></script>
 
-<!-- Multisite configuration (runs before <pagefind-searchbox>) -->
 <script>
     const { configureInstance } = window.PagefindComponents;
 
+    // 1. Just add new sites to this array in the future:
     const allSites = [
-        { name: "Main Site", url: "https://test.qu.edu.iq" },
-        { name: "QA Site", url: "https://qa.qu.edu.iq" },
-        { name: "SCR Site", url: "https://scr.qu.edu.iq" }
+        { name: "الموقع الرئيسي", url: "https://test.qu.edu.iq" },
+        { name: "ضمان الجودة", url: "https://qa.qu.edu.iq" },
+        { name: "البعثات والعلاقات الثقافية", url: "https://scr.qu.edu.iq" }
+        // Future sites added here will automatically get badges without CSS changes!
     ];
 
     const currentOrigin = window.location.origin.toLowerCase();
@@ -27,6 +28,24 @@
                 site: site.name
             }
         }))
+    });
+
+    // 2. Automatically attach data-site attribute to any rendered result link
+    const badgeObserver = new MutationObserver(() => {
+        document.querySelectorAll('pagefind-searchbox a:not([data-site])').forEach(link => {
+            const href = link.href.toLowerCase();
+            const matchedSite = allSites.find(s => href.includes(new URL(s.url).hostname));
+            
+            // Set the site name on the link (defaults to current site if local)
+            link.dataset.site = matchedSite ? matchedSite.name : (currentSite ? currentSite.name : "الموقع");
+        });
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+        const searchBox = document.querySelector(".searchbox");
+        if (searchBox) {
+            badgeObserver.observe(searchBox, { childList: true, subtree: true });
+        }
     });
 </script>
 

@@ -24,41 +24,18 @@ pagefind-modal * {
     min-height: 48px !important;
 }
 
-/* Site badges inside the searchbox dropdown results */
-pagefind-searchbox a[href*="test.qu.edu.iq"]::before {
-    content: "Main Site";
+pagefind-searchbox a[data-site]::before {
+    content: attr(data-site);
     display: inline-block;
     font-size: 0.72rem;
     font-weight: 700;
     padding: 2px 7px;
     margin-inline-end: 8px;
     border-radius: 4px;
-    background: #e0f2fe;
-    color: #0369a1;
-}
-
-pagefind-searchbox a[href*="qa.qu.edu.iq"]::before {
-    content: "QA Site";
-    display: inline-block;
-    font-size: 0.72rem;
-    font-weight: 700;
-    padding: 2px 7px;
-    margin-inline-end: 8px;
-    border-radius: 4px;
-    background: #fef3c7;
-    color: #92400e;
-}
-
-pagefind-searchbox a[href*="scr.qu.edu.iq"]::before {
-    content: "SCR Site";
-    display: inline-block;
-    font-size: 0.72rem;
-    font-weight: 700;
-    padding: 2px 7px;
-    margin-inline-end: 8px;
-    border-radius: 4px;
-    background: #dcfce7;
-    color: #15803d;
+    background-color: #f1f5f9;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+    vertical-align: middle;
 }
 
 @media (max-width: 640px) {
