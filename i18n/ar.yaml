@@ -70,3 +70,9 @@ a11y_increase: "أ+"
 a11y_contrast: "تباين عالٍ"
 a11y_links: "تمييز الروابط"
 a11y_btn_label: "خيارات إمكانية الوصول"
+
+# Search labels
+filter_site_label: "الموقع"
+site_main: "الموقع الرئيسي"
+site_qa: "ضمان الجودة"
+site_scr: "البعثات والعلاقات الثقافية"

@@ -6,21 +6,21 @@
 <script>
     const { configureInstance } = window.PagefindComponents;
 
-    // 1. Just add new sites to this array in the future:
+    // Translated site configurations using Hugo i18n
     const allSites = [
-        { name: "الموقع الرئيسي", url: "https://test.qu.edu.iq" },
-        { name: "ضمان الجودة", url: "https://qa.qu.edu.iq" },
-        { name: "البعثات والعلاقات الثقافية", url: "https://scr.qu.edu.iq" }
-        // Future sites added here will automatically get badges without CSS changes!
+        { name: {{ i18n "site_main" | default "Main Site" }}, url: "https://test.qu.edu.iq" },
+        { name: {{ i18n "site_qa" | default "QA Site" }}, url: "https://qa.qu.edu.iq" },
+        { name: {{ i18n "site_scr" | default "SCR Site" }}, url: "https://scr.qu.edu.iq" }
     ];
 
     const currentOrigin = window.location.origin.toLowerCase();
     const currentSite = allSites.find(s => s.url.toLowerCase() === currentOrigin);
     const externalSites = allSites.filter(s => s.url.toLowerCase() !== currentOrigin);
+    const currentSiteName = currentSite ? currentSite.name : allSites[0].name;
 
     configureInstance("default", {
         mergeFilter: {
-            site: currentSite ? currentSite.name : "Current Site"
+            site: currentSiteName
         },
         mergeIndex: externalSites.map(site => ({
             bundlePath: `${site.url.replace(/\/$/, "")}/pagefind`,
@@ -30,14 +30,19 @@
         }))
     });
 
-    // 2. Automatically attach data-site attribute to any rendered result link
+    // Automatically attach data-site attribute to rendered result links for badges
     const badgeObserver = new MutationObserver(() => {
         document.querySelectorAll('pagefind-searchbox a:not([data-site])').forEach(link => {
             const href = link.href.toLowerCase();
-            const matchedSite = allSites.find(s => href.includes(new URL(s.url).hostname));
+            const matchedSite = allSites.find(s => {
+                try {
+                    return href.includes(new URL(s.url).hostname);
+                } catch {
+                    return false;
+                }
+            });
             
-            // Set the site name on the link (defaults to current site if local)
-            link.dataset.site = matchedSite ? matchedSite.name : (currentSite ? currentSite.name : "الموقع");
+            link.dataset.site = matchedSite ? matchedSite.name : currentSiteName;
         });
     });
 
@@ -63,9 +68,17 @@
                 aria-label="{{ $homepageData.search.title }}"
                 max-results="10">
             </pagefind-searchbox>
+
+            <!-- Category Filter -->
             <pagefind-filter-dropdown 
                 filter="category" 
                 label="{{ i18n `filter_label` }}">
+            </pagefind-filter-dropdown>
+
+            <!-- 1. Site Filter Dropdown with Translated Label -->
+            <pagefind-filter-dropdown 
+                filter="site" 
+                label="{{ i18n `filter_site_label` }}">
             </pagefind-filter-dropdown>
         </div>
     </div>

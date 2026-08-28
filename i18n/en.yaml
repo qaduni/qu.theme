@@ -69,3 +69,9 @@ a11y_increase: "A+"
 a11y_contrast: "Toggle High Contrast"
 a11y_links: "Highlight Links"
 a11y_btn_label: "Accessibility Options"
+
+# Search labels
+filter_site_label: "Site"
+site_main: "Main Site"
+site_qa: "QA Site"
+site_scr: "SCR Site"
