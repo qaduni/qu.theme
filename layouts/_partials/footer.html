@@ -21,7 +21,7 @@
                         alt="Logo"
                         fetchpriority="high">
                     {{ end }}
-                    <span aria-hidden="true" style="font-size: 1.1rem;">{{ .Site.Title }}</span>
+                    <span aria-hidden="true" style="font-size: 1.1rem;">{{ $siteData.title }}</span>
                 </a>
                 <p>
                     {{ $siteData.description | default (i18n "site_description") }}

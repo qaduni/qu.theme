@@ -219,7 +219,7 @@
 }
 
 .nav-dropdown-parent > .nav-label::after {
-    content: '‹';
+    content: '›';
     font-size: 1.25rem;
     line-height: 1;
     margin-left: var(--spacing-sm);
@@ -227,7 +227,6 @@
 }
 
 [dir="rtl"] .nav-dropdown-parent > .nav-label::after {
-    content: '›';
     margin-left: 0;
     margin-right: var(--spacing-sm);
 }
