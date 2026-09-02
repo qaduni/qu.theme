@@ -1,0 +1,43 @@
+{{- $lang := .Language.Lang -}}
+{{- $langData := index hugo.Data.site $lang -}}
+{{- $domain := hugo.Data.site.global.official_domain -}}
+{{- $calName := $langData.calendar_title | default "Academic Calendar" -}}
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//{{ $domain }}//Academic Calendar//{{ $lang | upper }}
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:{{ $calName }}
+X-WR-TIMEZONE:UTC
+{{- range .Pages }}
+BEGIN:VEVENT
+UID:{{ .File.UniqueID }}-{{ $lang }}@{{ $domain }}
+DTSTAMP:{{ now.Format "20060102T150405Z" }}
+{{- if .Params.all_day }}
+{{- $startDate := time .Params.start_date }}
+DTSTART;VALUE=DATE:{{ $startDate.Format "20060102" }}
+{{- with .Params.end_date }}
+{{- /* RFC 5545: All-day DTEND is exclusive, add 1 day so the last day is covered */}}
+{{- $endDate := (time .).AddDate 0 0 1 }}
+DTEND;VALUE=DATE:{{ $endDate.Format "20060102" }}
+{{- else }}
+{{- /* Single-day event: DTEND is the following day */}}
+DTEND;VALUE=DATE:{{ ($startDate.AddDate 0 0 1).Format "20060102" }}
+{{- end }}
+{{- else }}
+DTSTART:{{ dateFormat "20060102T150405Z" (time .Params.start_date).UTC }}
+{{- with .Params.end_date }}
+DTEND:{{ dateFormat "20060102T150405Z" (time .).UTC }}
+{{- end }}
+{{- end }}
+SUMMARY:{{ .Title }}
+{{- with .Params.location }}
+LOCATION:{{ . }}
+{{- end }}
+{{- with .Plain }}
+DESCRIPTION:{{ replaceRE "\r?\n" "\\n" . }}
+{{- end }}
+STATUS:CONFIRMED
+END:VEVENT
+{{- end }}
+END:VCALENDAR
