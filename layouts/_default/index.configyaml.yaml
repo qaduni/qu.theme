@@ -175,7 +175,7 @@ collections:
     files:
       - name: "site_info"
         label: "معلومات الموقع"
-        file: "data/site/{{ `{{locale}}` }}.yml"
+        file: "data/site/{{ `{{locale}}` }}.yaml"
         i18n: true
         fields:
           - { label: "عنوان الموقع", name: "title", widget: "string", i18n: true }
@@ -186,7 +186,7 @@ collections:
 
       - name: "site_global"
         label: "الإعدادات التقنية"
-        file: "data/site/global.yml"
+        file: "data/site/global.yaml"
         i18n: false
         fields:
           - { label: "رابط الجهة العليا", name: "parent_url", widget: "string" }
@@ -211,7 +211,7 @@ collections:
 
       - name: "homepage"
         label: "محتوى الرئيسية"
-        file: "data/homepage/{{ `{{locale}}` }}.yml"
+        file: "data/homepage/{{ `{{locale}}` }}.yaml"
         i18n: true
         fields:
           - label: "قسم الهيرو (Hero)"
@@ -256,7 +256,7 @@ collections:
 
       - name: "menus"
         label: "قوائم التنقل"
-        file: "data/menus/{{ `{{locale}}` }}.yml"
+        file: "data/menus/{{ `{{locale}}` }}.yaml"
         i18n: true
         fields:
           - label: "القائمة الرئيسية (Main Menu)"
@@ -287,7 +287,7 @@ collections:
 
       - name: "footer"
         label: "تذييل الصفحة"
-        file: "data/footer/{{ `{{locale}}` }}.yml"
+        file: "data/footer/{{ `{{locale}}` }}.yaml"
         i18n: true
         fields:
           - label: "روابط مفيدة"
