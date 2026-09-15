@@ -10,6 +10,36 @@
     max-width: 80ch;
 }
 
+/* Expand content container when containing tables while keeping prose readable */
+.article-content:has(table),
+.article-content:has(.table-container),
+.article-content.has-table {
+    max-width: 100%;
+}
+
+.article-content:has(table) > p,
+.article-content:has(table) > h1,
+.article-content:has(table) > h2,
+.article-content:has(table) > h3,
+.article-content:has(table) > h4,
+.article-content:has(table) > h5,
+.article-content:has(table) > h6,
+.article-content:has(table) > ul,
+.article-content:has(table) > ol,
+.article-content:has(table) > blockquote,
+.article-content.has-table > p,
+.article-content.has-table > h1,
+.article-content.has-table > h2,
+.article-content.has-table > h3,
+.article-content.has-table > h4,
+.article-content.has-table > h5,
+.article-content.has-table > h6,
+.article-content.has-table > ul,
+.article-content.has-table > ol,
+.article-content.has-table > blockquote {
+    max-width: 85ch;
+}
+
 .article-content h2 {
     margin-top: var(--spacing-2xl);
 }

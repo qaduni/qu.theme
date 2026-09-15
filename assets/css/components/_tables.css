@@ -1,0 +1,274 @@
+/* 1. Responsive Container */
+.table-container,
+.table-responsive {
+    width: 100%;
+    margin-block: var(--spacing-xl);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-background);
+    box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.05);
+    position: relative;
+}
+
+/* Custom Scrollbar for Table Container */
+.table-container::-webkit-scrollbar,
+.table-responsive::-webkit-scrollbar,
+.article-content table::-webkit-scrollbar {
+    height: 7px;
+}
+
+.table-container::-webkit-scrollbar-track,
+.table-responsive::-webkit-scrollbar-track,
+.article-content table::-webkit-scrollbar-track {
+    background: var(--color-background-alt);
+    border-radius: var(--radius-full);
+}
+
+.table-container::-webkit-scrollbar-thumb,
+.table-responsive::-webkit-scrollbar-thumb,
+.article-content table::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: var(--radius-full);
+}
+
+.table-container::-webkit-scrollbar-thumb:hover,
+.table-responsive::-webkit-scrollbar-thumb:hover,
+.article-content table::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-muted);
+}
+
+/* 2. Base Table Styles */
+.table,
+.content-table,
+.article-content table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    text-align: start;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-text);
+}
+
+/* Direct table fallback if not wrapped in .table-container */
+.article-content>table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-block: var(--spacing-xl);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-background);
+    box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* When table is inside .table-container, keep standard table display */
+.table-container table,
+.table-responsive table {
+    display: table;
+    margin-block: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* 3. Table Header */
+.table thead,
+.content-table thead,
+.article-content table thead {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: #ffffff;
+}
+
+.table thead th,
+.content-table thead th,
+.article-content table thead th {
+    padding: 1rem 1.25rem;
+    font-weight: 700;
+    font-size: 0.9375rem;
+    color: #ffffff;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    border-bottom: 2px solid var(--color-primary-dark);
+}
+
+.table thead th:not(:last-child),
+.content-table thead th:not(:last-child),
+.article-content table thead th:not(:last-child) {
+    border-inline-end: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* 4. Table Body, Rows & Cells */
+.table tbody tr,
+.content-table tbody tr,
+.article-content table tbody tr {
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color var(--transition-fast);
+}
+
+/* Striped Alternating Rows */
+.table tbody tr:nth-child(even),
+.content-table tbody tr:nth-child(even),
+.article-content table tbody tr:nth-child(even) {
+    background-color: var(--color-background-alt);
+}
+
+/* Remove bottom border on the very last row */
+.table tbody tr:last-child,
+.content-table tbody tr:last-child,
+.article-content table tbody tr:last-child {
+    border-bottom: none;
+}
+
+/* Row Hover Interaction */
+.table tbody tr:hover,
+.content-table tbody tr:hover,
+.article-content table tbody tr:hover {
+    background-color: color-mix(in srgb, var(--color-primary) 6%, white);
+}
+
+.table td,
+.content-table td,
+.article-content table td {
+    padding: 0.875rem 1.25rem;
+    color: var(--color-text);
+    vertical-align: middle;
+}
+
+/* Subtle column separator */
+.table tbody td:not(:last-child),
+.content-table tbody td:not(:last-child),
+.article-content table tbody td:not(:last-child) {
+    border-inline-end: 1px solid var(--color-border-light);
+}
+
+/* 5. Alignments (Honors Markdown alignment syntax :---:, :---, ---:) */
+.table [align="center"],
+.content-table [align="center"],
+.article-content table [align="center"],
+.table .text-center,
+.content-table .text-center,
+.article-content table .text-center {
+    text-align: center;
+}
+
+.table [align="right"],
+.content-table [align="right"],
+.article-content table [align="right"],
+.table .text-right,
+.content-table .text-right,
+.article-content table .text-right {
+    text-align: right;
+}
+
+.table [align="left"],
+.content-table [align="left"],
+.article-content table [align="left"],
+.table .text-left,
+.content-table .text-left,
+.article-content table .text-left {
+    text-align: left;
+}
+
+/* First Column / Index Numbers (e.g. "ت" or sequence numbers) */
+.table tbody td:first-child[align="center"],
+.content-table tbody td:first-child[align="center"],
+.article-content table tbody td:first-child[align="center"] {
+    font-weight: 700;
+    color: var(--color-primary);
+    width: 1%;
+    white-space: nowrap;
+}
+
+/* 6. Action & Download Buttons inside Tables */
+.table td a,
+.content-table td a,
+.article-content table td a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 8%, white);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 22%, transparent);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    white-space: nowrap;
+    line-height: 1.4;
+    transition: all var(--transition-fast);
+}
+
+.table td a:hover,
+.content-table td a:hover,
+.article-content table td a:hover {
+    background: var(--color-primary);
+    color: #ffffff;
+    border-color: var(--color-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px -1px rgba(15, 76, 129, 0.25);
+    text-decoration: none;
+}
+
+/* PDF / Download Link Indicator */
+.table td a[href*=".pdf"]::after,
+.content-table td a[href*=".pdf"]::after,
+.article-content table td a[href*=".pdf"]::after,
+.table td a[download]::after,
+.content-table td a[download]::after,
+.article-content table td a[download]::after {
+    content: "";
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230f4c81' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/%3E%3Cpolyline points='7 10 12 15 17 10'/%3E%3Cline x1='12' y1='15' x2='12' y2='3'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    flex-shrink: 0;
+    transition: filter var(--transition-fast);
+}
+
+.table td a[href*=".pdf"]:hover::after,
+.content-table td a[href*=".pdf"]:hover::after,
+.article-content table td a[href*=".pdf"]:hover::after,
+.table td a[download]:hover::after,
+.content-table td a[download]:hover::after,
+.article-content table td a[download]:hover::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/%3E%3Cpolyline points='7 10 12 15 17 10'/%3E%3Cline x1='12' y1='15' x2='12' y2='3'/%3E%3C/svg%3E");
+}
+
+/* 7. Responsive Mobile Adjustments */
+@media (max-width: 768px) {
+
+    .table-container,
+    .table-responsive,
+    .article-content>table {
+        margin-block: var(--spacing-lg);
+        border-radius: var(--radius-md);
+    }
+
+    .table thead th,
+    .content-table thead th,
+    .article-content table thead th {
+        padding: 0.75rem 0.875rem;
+        font-size: 0.875rem;
+    }
+
+    .table td,
+    .content-table td,
+    .article-content table td {
+        padding: 0.75rem 0.875rem;
+        font-size: 0.875rem;
+    }
+
+    .table td a,
+    .content-table td a,
+    .article-content table td a {
+        padding: 0.35rem 0.75rem;
+        font-size: 0.8125rem;
+    }
+}
