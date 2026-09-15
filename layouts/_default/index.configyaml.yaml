@@ -1,11 +1,8 @@
-# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
-
 backend:
   name: github
   repo: "{{ site.Params.cms_repo | default `qaduni/qu.edu.iq` }}"
   branch: "{{ site.Params.cms_branch | default `main` }}"
-  auth_methods:
-    - token
+  auth_methods: [token]
 
 media_folder: "static/media"
 public_folder: "/media"
@@ -28,15 +25,17 @@ media_libraries:
 
 site_url: "{{ site.BaseURL }}"
 display_url: "{{ site.BaseURL }}"
+logout_redirect_url: "{{ site.BaseURL }}"
+app_title: لوحة التحكم
+logo:
+  src: "{{ resources.Get `images/logo.svg` }}"
+  show_in_header: true
 
 collections:
-  # ==========================================
-  # CONTENT COLLECTIONS
-  # ==========================================
   - name: "news"
     label: "الأخبار"
     label_singular: "خبر"
-    icon: news
+    icon: "news"
     description: "الاخبار تظهر في الصفحة الرئيسية ومركز الاخبار وتحتوي على غلاف."
     i18n: true
     folder: "content/media/news"
@@ -66,16 +65,8 @@ collections:
         pattern: &descriptionPattern
           - '^[a-zA-Z0-9\u0600-\u06FF\s.,،؟!:؛"''()«»\-]{30,120}$'
           - "يجب أن يكون الوصف بين 30 و 120 حرفًا."
-      - label: "الصورة"
-        name: "image"
-        widget: "image"
-        required: false
-        i18n: duplicate
-      - label: "وصف الصورة"
-        name: "imageAlt"
-        widget: string
-        i18n: true
-        required: true
+      - { label: "الصورة", name: "image", widget: "image", required: false, i18n: duplicate }
+      - { label: "وصف الصورة", name: "imageAlt", widget: "string", required: true, i18n: true }
       - label: "التاريخ"
         name: "date"
         widget: "datetime"
@@ -85,16 +76,12 @@ collections:
         default: "{{ `{{now}}` }}"
         required: true
         i18n: duplicate
-      - label: "المحتوى"
-        name: "body"
-        widget: "markdown"
-        i18n: true
-
+      - { label: "المحتوى", name: "body", widget: "markdown", i18n: true }
 
   - name: "announcements"
     label: "الإعلانات"
     label_singular: "إعلان"
-    icon: brand_awareness
+    icon: "brand_awareness"
     description: "الإعلانات تظهر في الصفحة الرئيسية ومركز الاخبار ولا تحتوي على غلاف."
     i18n: true
     folder: "content/media/announcements"
@@ -107,33 +94,16 @@ collections:
     media_folder: "/static/media"
     public_folder: "/media"
     fields:
-      - label: "العنوان"
-        name: "title"
-        widget: "string"
-        required: true
-        i18n: true
-        pattern: *titlePattern
-      - label: "الوصف"
-        name: "description"
-        widget: "text"
-        required: true
-        i18n: true
-        pattern: *descriptionPattern
+      - { label: "العنوان", name: "title", widget: "string", required: true, i18n: true, pattern: *titlePattern }
+      - { label: "الوصف", name: "description", widget: "text", required: true, i18n: true, pattern: *descriptionPattern }
       - label: "النوع"
         name: "type"
-        widget: select
+        widget: "select"
         options: ["administrative", "academic", "students", "general"]
         i18n: duplicate
         required: true
-      - label: "هل الاعلان مهم؟"
-        name: "important"
-        widget: "boolean"
-        default: false
-        i18n: duplicate
-      - label: "المحتوى"
-        name: "body"
-        widget: "markdown"
-        i18n: true
+      - { label: "هل الاعلان مهم؟", name: "important", widget: "boolean", default: false, i18n: duplicate }
+      - { label: "المحتوى", name: "body", widget: "markdown", i18n: true }
       - label: "التاريخ"
         name: "date"
         widget: "datetime"
@@ -143,10 +113,12 @@ collections:
         default: "{{ `{{now}}` }}"
         required: true
         i18n: duplicate
+
   - divider: true
+
   - name: "academic_calendar"
     label: "التقويم الأكاديمي"
-    icon: calendar_month
+    icon: "calendar_month"
     folder: "content/academics/academic_calendar"
     i18n: true
     create: true
@@ -159,18 +131,15 @@ collections:
       - { label: "طوال اليوم", name: "all_day", widget: "boolean", default: true, i18n: duplicate }
       - { label: "الموقع", name: "location", widget: "string", required: false, i18n: true }
       - { label: "الوصف", name: "body", widget: "markdown", required: false, i18n: true }
+
   - divider: true
-  # ==========================================
-  # CONTENT PAGES
-  # ==========================================
-  # Find the Arabic site context
+
   {{- $arSite := site -}}
   {{- range hugo.Sites -}}
     {{- if eq .Language.Lang "ar" -}}
       {{- $arSite = . -}}
     {{- end -}}
   {{- end -}}
-  # Dynamically generate folder collections for top-level content directories
   {{- range (readDir "content") }}
     {{- if and .IsDir (ne .Name "media") }}
       {{- $section := $arSite.GetPage .Name }}
@@ -190,26 +159,22 @@ collections:
     format: "frontmatter"
     slug: "{{ `{{slug}}` }}"
     fields:
-      - { label: "Title", name: "title", widget: "string", i18n: true }
-      - { label: "Description", name: "description", widget: "text", required: false, i18n: true }
-      - { label: "Body", name: "body", widget: "markdown", i18n: true }
+      - { label: "العنوان", name: "title", widget: "string", i18n: true }
+      - { label: "الوصف", name: "description", widget: "text", required: false, i18n: true }
+      - { label: "المحتوى", name: "body", widget: "markdown", i18n: true }
     {{- end }}
   {{- end }}
-  # ==========================================
-  # DATA FILE COLLECTIONS
-  # ==========================================
+
   - divider: true
+
   - name: "settings"
     label: "الإعدادات العامة"
     icon: "settings"
     i18n:
       structure: multiple_files
     files:
-      # ==========================================
-      # 1. SITE INFO & GLOBAL SETTINGS (data/site/)
-      # ==========================================
       - name: "site_info"
-        label: "معلومات الموقع (Site Info)"
+        label: "معلومات الموقع"
         file: "data/site/{{ `{{locale}}` }}.yml"
         i18n: true
         fields:
@@ -220,7 +185,7 @@ collections:
           - { label: "العنوان الجغرافي", name: "address", widget: "string", i18n: true }
 
       - name: "site_global"
-        label: "الإعدادات التقنية (Global Settings)"
+        label: "الإعدادات التقنية"
         file: "data/site/global.yml"
         i18n: false
         fields:
@@ -244,11 +209,8 @@ collections:
               - { label: "WhatsApp", name: "whatsapp", widget: "string", required: false }
               - { label: "TikTok", name: "tiktok", widget: "string", required: false }
 
-      # ==========================================
-      # 2. HOMEPAGE SETTINGS (data/homepage/)
-      # ==========================================
       - name: "homepage"
-        label: "محتوى الرئيسية (Homepage)"
+        label: "محتوى الرئيسية"
         file: "data/homepage/{{ `{{locale}}` }}.yml"
         i18n: true
         fields:
@@ -292,11 +254,8 @@ collections:
                       - { label: "أيقونة/صورة", name: "image", widget: "image", required: false, i18n: duplicate }
                       - { label: "الوصف المختصر", name: "description", widget: "text", required: false, i18n: true }
 
-      # ==========================================
-      # 3. MENUS SETTINGS (data/menus/)
-      # ==========================================
       - name: "menus"
-        label: "قوائم التنقل (Menus)"
+        label: "قوائم التنقل"
         file: "data/menus/{{ `{{locale}}` }}.yml"
         i18n: true
         fields:
@@ -311,7 +270,7 @@ collections:
               - { label: "المعرف (Identifier)", name: "identifier", widget: "string", required: false, i18n: duplicate }
               - { label: "العنصر الأب (Parent)", name: "parent", widget: "string", required: false, i18n: duplicate }
 
-          - label: "الشريط العلوي (Top Bar)"
+          - label: "الشريط العلوي"
             name: "top_bar"
             widget: "list"
             i18n: true
@@ -326,11 +285,8 @@ collections:
                 fields:
                   - { label: "رابط خارجي؟", name: "external", widget: "boolean", default: false, required: false, i18n: duplicate }
 
-      # ==========================================
-      # 4. FOOTER SETTINGS (data/footer/)
-      # ==========================================
       - name: "footer"
-        label: "تذييل الصفحة (Footer)"
+        label: "تذييل الصفحة"
         file: "data/footer/{{ `{{locale}}` }}.yml"
         i18n: true
         fields:
